@@ -18,10 +18,28 @@
             padding: 10px;
             font-size: 16px;
         }
+        .disclaimer-box {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <h2>MCQ CSV Generator</h2>
+
+    <!-- Disclaimer Box -->
+    <div class="disclaimer-box">
+        <h3>Disclaimer: Please make 5 MCQs on the provided material based on the following Bloom's Taxonomy levels:</h3>
+        <pre>
+What is the capital of France?|Paris|London|Berlin|Madrid|A
+What is 2 + 2?|3|4|5|6|B
+What is photosynthesis?|Process by which plants make food|A type of chemical reaction|A cell division process|A form of energy|A
+What is the boiling point of water?|100°C|0°C|50°C|200°C|A
+Which planet is closest to the sun?|Mercury|Earth|Mars|Venus|A
+        </pre>
+    </div>
 
     <!-- Filename Input Box -->
     <label for="filename">Filename (default: MCQ):</label>
