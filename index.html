@@ -33,17 +33,17 @@
     <div class="disclaimer-box">
         <h3>Prompt you should use in chatgt to make standard mcqs</h3>
         <pre>
-            make 5 mcqs onthe provided material
+            make 5 mcqs on the provided material
             on these levels of thinking (according to blooms taxonomy)
             1,2,3,4,5,6
             
-             that would be stricktly like this 
+             that would be strictly like this 
             question|answerA|answerB|answerC|answerD|correctAnswer
             FOR EXAMPLE
              What is the capital of France?|Paris|London|Berlin|Madrid|A
             What is 2 + 2?|3|4|5|6|B
-            make it easy to copy and dont type anything ther that i told
-            and dont number
+            make it easy to copy and don't type anything there that I told
+            and don't number
         </pre>
     </div>
 
@@ -80,8 +80,8 @@
                     const answerD = parts[4].trim();
                     const correctAnswer = parts[5].trim();
 
-                    // Build the row with correct answer in J column
-                    const row = `${question},${answerA},${answerB},${answerC},${answerD},,,,${correctAnswer}\n`;
+                    // Build the row with correct answer in J column (the 10th column)
+                    const row = `${question},${answerA},${answerB},${answerC},${answerD},,,,,${correctAnswer}\n`;
                     csvContent += row;
                 }
             });
@@ -116,7 +116,8 @@
                     const answerD = parts[4].trim();
                     const correctAnswer = parts[5].trim();
 
-                    const row = `${question},${answerA},${answerB},${answerC},${answerD},,,,${correctAnswer}\n`;
+                    // Format the row with the correct answer in J column
+                    const row = `${question},${answerA},${answerB},${answerC},${answerD},,,,,${correctAnswer}\n`;
                     csvContent += row;
                 }
             });
