@@ -4,164 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPTAnki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #007bff;
-            --background-light: #f4f4f4;
-            --white: #ffffff;
-            --text-dark: #333;
-            --error-bg: #f8d7da;
-            --error-text: #721c24;
-            --success-bg: #d4edda;
-            --success-text: #155724;
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --background-light: #f4f6f9;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
         }
         * {
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-        body {
-            font-family: 'Inter', 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--background-light);
-            color: var(--text-dark);
-            line-height: 1.6;
+            box-sizing: border-box;
         }
-        .app-container {
-            max-width: 900px;
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-light);
+        }
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: var(--white);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 100vh;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
             border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         .header h1 {
-            margin: 0;
-            font-size: 2rem;
             color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
         }
         .info-section {
-            background-color: #f0f4f8;
+            background-color: #f0f5ff;
             border-left: 5px solid var(--primary-color);
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 0.9em;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
         }
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
         .input-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
         }
-        #mcqText, #filename {
+        #filename, #mcqText {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
+            font-size: 1rem;
         }
         #mcqText {
-            min-height: 250px;
+            min-height: 300px;
             resize: vertical;
         }
         .button-group {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 1rem;
+            margin-top: 1rem;
         }
         .btn {
-            padding: 10px 20px;
+            padding: 0.75rem 1.5rem;
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
+            transition: background-color 0.3s ease;
         }
         .btn:hover {
-            opacity: 0.9;
-        }
-        .btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+            background-color: var(--secondary-color);
         }
         .btn-secondary {
-            background-color: #6c757d;
+            background-color: #6b7280;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
         }
         #validationMessage {
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 1rem;
+            padding: 1rem;
             border-radius: 4px;
-            font-size: 0.9em;
+            font-size: 0.9rem;
         }
         .error-message {
-            background-color: var(--error-bg);
-            color: var(--error-text);
-            border: 1px solid #f5c6cb;
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
         .success-message {
-            background-color: var(--success-bg);
-            color: var(--success-text);
-            border: 1px solid #c3e6cb;
+            background-color: #ecfdf5;
+            color: #064e3b;
+            border: 1px solid #d1fae5;
         }
-        .advanced-options {
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
-        .advanced-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .advanced-option label {
-            margin-left: 10px;
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <div class="header">
             <h1>GPTAnki</h1>
-            <button id="advancedToggle" class="btn btn-secondary">Advanced Options</button>
         </div>
 
         <div class="info-section">
-            <h3>MCQ Generation Prompt for ChatGPT</h3>
-            <pre>
-make 5 mcqs on the provided material
-on these levels of thinking (according to Bloom's Taxonomy)
-1,2,3,4,5,6
+            <h3>ChatGPT MCQ Generation Prompt</h3>
+            <pre>Make 5 MCQs on the material
+Bloom's Taxonomy levels: 1,2,3,4,5,6
 
-Format strictly as: 
-question|answerA|answerB|answerC|answerD|correctAnswer
+Format: question|answerA|answerB|answerC|answerD|correctAnswer
 
-EXAMPLE:
+Examples:
 What is the capital of France?|Paris|London|Berlin|Madrid|A
-What is 2 + 2?|3|4|5|6|B
-
-Copy-friendly format</pre>
-        </div>
-
-        <div id="advancedOptions" class="advanced-options" style="display:none;">
-            <div class="advanced-option">
-                <input type="checkbox" id="trimWhitespace" checked>
-                <label for="trimWhitespace">Trim Whitespace</label>
-            </div>
-            <div class="advanced-option">
-                <input type="checkbox" id="escapeSpecialChars" checked>
-                <label for="escapeSpecialChars">Escape Special Characters</label>
-            </div>
+What is 2 + 2?|3|4|5|6|B</pre>
         </div>
 
         <div class="input-group">
@@ -170,8 +145,8 @@ Copy-friendly format</pre>
         </div>
 
         <div class="input-group">
-            <label for="mcqText">Paste your MCQs (format: question|answerA|answerB|answerC|answerD|correctAnswer):</label>
-            <textarea id="mcqText" placeholder="Paste your multiple-choice questions here..."></textarea>
+            <label for="mcqText">Paste your MCQs (question|A|B|C|D|correct):</label>
+            <textarea id="mcqText" placeholder="Paste multiple-choice questions here..."></textarea>
         </div>
 
         <div id="validationMessage"></div>
@@ -184,13 +159,6 @@ Copy-friendly format</pre>
     </div>
 
     <script>
-        // Advanced options toggle
-        document.getElementById('advancedToggle').addEventListener('click', function() {
-            const advancedOptions = document.getElementById('advancedOptions');
-            advancedOptions.style.display = advancedOptions.style.display === 'none' ? 'block' : 'none';
-        });
-
-        // Validation function
         function validateMCQs(text) {
             const lines = text.trim().split('\n');
             const validationMessage = document.getElementById('validationMessage');
@@ -205,8 +173,8 @@ Copy-friendly format</pre>
 
             if (invalidLines.length > 0) {
                 validationMessage.innerHTML = `
-                    <strong>Invalid MCQ Format Detected!</strong><br>
-                    • Ensure each line has 6 parts separated by '|'<br>
+                    <strong>Invalid MCQ Format</strong><br>
+                    • Each line must have 6 parts (question|A|B|C|D|answer)<br>
                     • Correct answer must be A, B, C, or D<br>
                     • Invalid lines: ${invalidLines.length}
                 `;
@@ -215,56 +183,43 @@ Copy-friendly format</pre>
             }
 
             validationMessage.innerHTML = `
-                <strong>MCQs Validated Successfully!</strong><br>
+                <strong>MCQs Validated Successfully</strong><br>
                 • Total MCQs: ${lines.length}
-                • Columns: Question, A, B, C, D, Correct Answer
+                • Ready to generate CSV
             `;
             validationMessage.classList.add('success-message');
             return true;
         }
 
-        // CSV Generation Function
         function generateCSV() {
             const text = document.getElementById('mcqText').value;
             const filename = document.getElementById('filename').value || 'MCQ';
             const generateButton = document.getElementById('generateButton');
             const downloadButton = document.getElementById('downloadButton');
 
-            // Validation
             if (!validateMCQs(text)) {
                 downloadButton.style.display = 'none';
                 return;
             }
-
-            const trimWhitespace = document.getElementById('trimWhitespace').checked;
-            const escapeSpecialChars = document.getElementById('escapeSpecialChars').checked;
 
             const lines = text.trim().split('\n');
             let csvContent = '';
 
             lines.forEach(line => {
                 const parts = line.split('|');
-                const processedParts = parts.map(part => {
-                    let processed = trimWhitespace ? part.trim() : part;
-                    if (escapeSpecialChars) {
-                        processed = processed.replace(/"/g, '""');
-                    }
-                    return processed;
-                });
+                const [question, answerA, answerB, answerC, answerD, correctAnswer] = 
+                    parts.map(part => part.trim().replace(/"/g, '""'));
 
-                const [question, answerA, answerB, answerC, answerD, correctAnswer] = processedParts;
-
-                // Build the row with correct answer in J column
                 const row = `"${question}","${answerA}","${answerB}","${answerC}","${answerD}","","","","","${correctAnswer}"\n`;
                 csvContent += row;
             });
 
-            // Create Blob and show download button
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
             link.setAttribute('download', `${filename}.csv`);
+            
             downloadButton.style.display = 'inline-block';
             downloadButton.onclick = () => {
                 link.click();
@@ -272,13 +227,14 @@ Copy-friendly format</pre>
             };
         }
 
-        // Event Listeners
         document.getElementById('generateButton').addEventListener('click', generateCSV);
+        
         document.getElementById('clearButton').addEventListener('click', () => {
             document.getElementById('mcqText').value = '';
             document.getElementById('validationMessage').innerHTML = '';
             document.getElementById('downloadButton').style.display = 'none';
         });
+
         document.getElementById('mcqText').addEventListener('input', function() {
             validateMCQs(this.value);
         });
