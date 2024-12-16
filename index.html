@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ CSV Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h2>MCQ CSV Generator</h2>
+
+    <!-- Filename Input Box -->
+    <label for="filename">Filename (default: MCQ):</label>
+    <input type="text" id="filename" value="MCQ">
+    <br><br>
+
+    <!-- MCQ Text Area -->
+    <label for="mcqText">Paste your MCQs (format: question|answerA|answerB|answerC|answerD|correctAnswer):</label>
+    <textarea id="mcqText"></textarea>
+    <br><br>
+
+    <!-- Buttons -->
+    <button onclick="generateCSV()">Generate CSV</button>
+    <button id="downloadButton" onclick="downloadCSV()" style="display:none;">Download CSV</button>
+
+    <script>
+        // Function to generate the CSV from the input MCQs
+        function generateCSV() {
+            const text = document.getElementById('mcqText').value;
+            const filename = document.getElementById('filename').value || 'MCQ';
+            const lines = text.trim().split('\n');
+            let csvContent = '';
+
+            // Iterate through each line and format the data for CSV
+            lines.forEach(line => {
+                const parts = line.split('|');
+                if (parts.length === 6) {
+                    const question = parts[0].trim();
+                    const answerA = parts[1].trim();
+                    const answerB = parts[2].trim();
+                    const answerC = parts[3].trim();
+                    const answerD = parts[4].trim();
+                    const correctAnswer = parts[5].trim();
+
+                    // Build the row
+                    const row = `${question},${answerA},${answerB},${answerC},${answerD},,,${correctAnswer}\n`;
+                    csvContent += row;
+                }
+            });
+
+            // Create a Blob object with CSV data
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+            // Create a download link for the CSV file
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${filename}.csv`);
+
+            // Show the download button
+            document.getElementById('downloadButton').style.display = 'inline-block';
+        }
+
+        // Function to download the CSV file
+        function downloadCSV() {
+            const filename = document.getElementById('filename').value || 'MCQ';
+            const text = document.getElementById('mcqText').value;
+            const lines = text.trim().split('\n');
+            let csvContent = '';
+
+            lines.forEach(line => {
+                const parts = line.split('|');
+                if (parts.length === 6) {
+                    const question = parts[0].trim();
+                    const answerA = parts[1].trim();
+                    const answerB = parts[2].trim();
+                    const answerC = parts[3].trim();
+                    const answerD = parts[4].trim();
+                    const correctAnswer = parts[5].trim();
+
+                    const row = `${question},${answerA},${answerB},${answerC},${answerD},,,${correctAnswer}\n`;
+                    csvContent += row;
+                }
+            });
+
+            // Create Blob and download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${filename}.csv`);
+            link.click();
+        }
+    </script>
+
+</body>
+</html>
