@@ -111,7 +111,33 @@
             color: #064e3b;
             border: 1px solid #d1fae5;
         }
+        .card-type-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .card-type-radio {
+            display: none;
+        }
+        .card-type-label {
+            text-align: center;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .card-type-radio:checked + .card-type-label {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
         @media (max-width: 600px) {
+            .card-type-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
             .container {
                 padding: 1rem;
             }
@@ -128,15 +154,26 @@
         </div>
 
         <div class="info-section">
-            <h3>ChatGPT MCQ Generation Prompt</h3>
-            <pre>Make 5 MCQs on the material
-Bloom's Taxonomy levels: 1,2,3,4,5,6
-
-Format: question|answerA|answerB|answerC|answerD|correctAnswer
+            <h3>Card Type Selection & Input Guide</h3>
+            <pre>MCQ Format: question|A|B|C|D|correctAnswer
+Basic Format: question|A = front|B = back
+Cloze Deletion Format: text with {{c1::hidden}} parts
 
 Examples:
-What is the capital of France?|Paris|London|Berlin|Madrid|A
-What is 2 + 2?|3|4|5|6|B</pre>
+MCQ: What is the capital of France?|Paris|London|Berlin|Madrid|A
+Basic: France|Paris|Capital|A:Paris, B:Capital of France
+Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
+        </div>
+
+        <div class="card-type-group">
+            <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
+            <label for="mcqCardType" class="card-type-label">Multiple Choice</label>
+            
+            <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
+            <label for="basicCardType" class="card-type-label">Basic</label>
+            
+            <input type="radio" id="clozeDeletionCardType" name="cardType" class="card-type-radio" value="clozeDeletion">
+            <label for="clozeDeletionCardType" class="card-type-label">Cloze Deletion</label>
         </div>
 
         <div class="input-group">
@@ -145,8 +182,8 @@ What is 2 + 2?|3|4|5|6|B</pre>
         </div>
 
         <div class="input-group">
-            <label for="mcqText">Paste your MCQs (question|A|B|C|D|correct):</label>
-            <textarea id="mcqText" placeholder="Paste multiple-choice questions here..."></textarea>
+            <label for="mcqText" id="inputLabel">Paste your Multiple-Choice Questions:</label>
+            <textarea id="mcqText" placeholder="Paste multiple-choice questions or cards here..."></textarea>
         </div>
 
         <div id="validationMessage"></div>
@@ -159,32 +196,105 @@ What is 2 + 2?|3|4|5|6|B</pre>
     </div>
 
     <script>
-        function validateMCQs(text) {
+        const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
+        const mcqText = document.getElementById('mcqText');
+        const inputLabel = document.getElementById('inputLabel');
+        const filenameInput = document.getElementById('filename');
+
+        // Update input label and filename based on card type
+        cardTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                switch(this.value) {
+                    case 'mcq':
+                        inputLabel.textContent = 'Paste your Multiple-Choice Questions:';
+                        filenameInput.value = 'MCQ';
+                        break;
+                    case 'basic':
+                        inputLabel.textContent = 'Paste your Basic Cards:';
+                        filenameInput.value = 'Basic';
+                        break;
+                    case 'clozeDeletion':
+                        inputLabel.textContent = 'Paste your Cloze Deletion Cards:';
+                        filenameInput.value = 'ClozeDeletion';
+                        break;
+                }
+                // Clear validation message and textarea
+                document.getElementById('validationMessage').innerHTML = '';
+                document.getElementById('downloadButton').style.display = 'none';
+                mcqText.value = '';
+            });
+        });
+
+        function validateMCQs(text, cardType) {
             const lines = text.trim().split('\n');
             const validationMessage = document.getElementById('validationMessage');
             validationMessage.innerHTML = '';
             validationMessage.className = '';
 
-            const invalidLines = lines.filter(line => {
-                const parts = line.split('|');
-                return parts.length !== 6 || 
-                       !['A', 'B', 'C', 'D'].includes(parts[5].trim());
-            });
+            let isValid = true;
+            let errorMessage = '';
 
-            if (invalidLines.length > 0) {
-                validationMessage.innerHTML = `
-                    <strong>Invalid MCQ Format</strong><br>
-                    • Each line must have 6 parts (question|A|B|C|D|answer)<br>
-                    • Correct answer must be A, B, C, or D<br>
-                    • Invalid lines: ${invalidLines.length}
-                `;
+            switch(cardType) {
+                case 'mcq':
+                    const invalidMCQLines = lines.filter(line => {
+                        const parts = line.split('|');
+                        return parts.length !== 6 || 
+                               !['A', 'B', 'C', 'D'].includes(parts[5].trim());
+                    });
+
+                    if (invalidMCQLines.length > 0) {
+                        errorMessage = `
+                            <strong>Invalid MCQ Format</strong><br>
+                            • Each line must have 6 parts (question|A|B|C|D|answer)<br>
+                            • Correct answer must be A, B, C, or D<br>
+                            • Invalid lines: ${invalidMCQLines.length}
+                        `;
+                        isValid = false;
+                    }
+                    break;
+
+                case 'basic':
+                    const invalidBasicLines = lines.filter(line => {
+                        const parts = line.split('|');
+                        return parts.length !== 3;
+                    });
+
+                    if (invalidBasicLines.length > 0) {
+                        errorMessage = `
+                            <strong>Invalid Basic Card Format</strong><br>
+                            • Each line must have 3 parts (question|A:front|B:back)<br>
+                            • Invalid lines: ${invalidBasicLines.length}
+                        `;
+                        isValid = false;
+                    }
+                    break;
+
+                case 'clozeDeletion':
+                    const invalidClozeLines = lines.filter(line => {
+                        return !line.includes('{{') || !line.includes('::}}');
+                    });
+
+                    if (invalidClozeLines.length > 0) {
+                        errorMessage = `
+                            <strong>Invalid Cloze Deletion Card Format</strong><br>
+                            • Each line must contain Cloze deletions<br>
+                            • Use format: text with {{c1::hidden}} parts<br>
+                            • Invalid lines: ${invalidClozeLines.length}
+                        `;
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                validationMessage.innerHTML = errorMessage;
                 validationMessage.classList.add('error-message');
                 return false;
             }
 
             validationMessage.innerHTML = `
-                <strong>MCQs Validated Successfully</strong><br>
-                • Total MCQs: ${lines.length}
+                <strong>Cards Validated Successfully</strong><br>
+                • Total Cards: ${lines.length}
                 • Ready to generate CSV
             `;
             validationMessage.classList.add('success-message');
@@ -193,11 +303,12 @@ What is 2 + 2?|3|4|5|6|B</pre>
 
         function generateCSV() {
             const text = document.getElementById('mcqText').value;
+            const cardType = document.querySelector('input[name="cardType"]:checked').value;
             const filename = document.getElementById('filename').value || 'MCQ';
             const generateButton = document.getElementById('generateButton');
             const downloadButton = document.getElementById('downloadButton');
 
-            if (!validateMCQs(text)) {
+            if (!validateMCQs(text, cardType)) {
                 downloadButton.style.display = 'none';
                 return;
             }
@@ -207,10 +318,22 @@ What is 2 + 2?|3|4|5|6|B</pre>
 
             lines.forEach(line => {
                 const parts = line.split('|');
-                const [question, answerA, answerB, answerC, answerD, correctAnswer] = 
-                    parts.map(part => part.trim().replace(/"/g, '""'));
+                const sanitizedParts = parts.map(part => part.trim().replace(/"/g, '""'));
 
-                const row = `"${question}","${answerA}","${answerB}","${answerC}","${answerD}","","","","","${correctAnswer}"\n`;
+                let row;
+                switch(cardType) {
+                    case 'mcq':
+                        const [question, answerA, answerB, answerC, answerD, correctAnswer] = sanitizedParts;
+                        row = `"${question}","${answerA}","${answerB}","${answerC}","${answerD}","","","","","${correctAnswer}"\n`;
+                        break;
+                    case 'basic':
+                        const [basicQuestion, basicFront, basicBack] = sanitizedParts;
+                        row = `"${basicQuestion}","${basicFront}","${basicBack}"\n`;
+                        break;
+                    case 'clozeDeletion':
+                        row = `"${sanitizedParts[0]}"\n`;
+                        break;
+                }
                 csvContent += row;
             });
 
@@ -236,7 +359,8 @@ What is 2 + 2?|3|4|5|6|B</pre>
         });
 
         document.getElementById('mcqText').addEventListener('input', function() {
-            validateMCQs(this.value);
+            const cardType = document.querySelector('input[name="cardType"]:checked').value;
+            validateMCQs(this.value, cardType);
         });
     </script>
 </body>
