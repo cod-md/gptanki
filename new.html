@@ -38,12 +38,17 @@
             font-weight: 700;
         }
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
+        }
+        .disclaimer {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
         }
         #filename, #mcqText, #noteType {
             width: 100%;
@@ -104,6 +109,7 @@
             <h1>GPTAnki</h1>
         </div>
 
+        <!-- Note Type Selector -->
         <div class="input-group">
             <label for="noteType">Select Note Type:</label>
             <select id="noteType">
@@ -113,11 +119,14 @@
             </select>
         </div>
 
+        <!-- Filename Input Box with Disclaimer -->
         <div class="input-group">
-            <label for="filename">Filename (default: MCQ):</label>
+            <label for="filename">Filename:</label>
             <input type="text" id="filename" value="MCQ">
+            <p class="disclaimer">* If left empty, the filename will default to the selected note type.</p>
         </div>
 
+        <!-- Textarea for Questions -->
         <div class="input-group">
             <label for="mcqText">Paste your questions here:</label>
             <textarea id="mcqText" placeholder="Paste questions here..."></textarea>
@@ -125,6 +134,7 @@
 
         <div id="validationMessage"></div>
 
+        <!-- Action Buttons -->
         <div class="button-group">
             <button id="generateButton" class="btn">Generate CSV</button>
             <button id="downloadButton" class="btn" style="display:none;">Download CSV</button>
