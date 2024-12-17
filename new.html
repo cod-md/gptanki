@@ -19,38 +19,54 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-light);
         }
         .container {
             max-width: 800px;
-            margin: 2rem auto;
+            margin: 0 auto;
             padding: 2rem;
             background-color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         .header h1 {
             color: var(--primary-color);
             font-size: 2rem;
             font-weight: 700;
         }
-        .input-group {
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        .info-section {
+            background-color: #f0f5ff;
+            border-left: 5px solid var(--primary-color);
+            padding: 1rem;
             margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+        .input-group {
+            margin-bottom: 1rem;
         }
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
-        .disclaimer {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-top: 0.5rem;
-        }
-        #filename, #mcqText, #noteType {
+        #filename, #mcqText {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border-color);
@@ -101,6 +117,48 @@
             color: #064e3b;
             border: 1px solid #d1fae5;
         }
+        .card-type-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .card-type-radio {
+            display: none;
+        }
+        .card-type-label {
+            text-align: center;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .card-type-radio:checked + .card-type-label {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        @media (max-width: 600px) {
+            .card-type-group {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .container {
+                padding: 1rem;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .info-section pre {
+                font-size: 0.8rem;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+        }
     </style>
 </head>
 <body>
@@ -109,96 +167,221 @@
             <h1>GPTAnki</h1>
         </div>
 
-        <!-- Note Type Selector -->
-        <div class="input-group">
-            <label for="noteType">Select Note Type:</label>
-            <select id="noteType">
-                <option value="MCQ" selected>MCQ</option>
-                <option value="Basic">Basic</option>
-                <option value="Cloze">Cloze Deletion</option>
-            </select>
+        <div class="info-section">
+            <h3>Card Type Selection & Input Guide</h3>
+            <pre>Question Separator: ///
+
+MCQ Format: question|A|B|C|D|E|F|correctAnswer
+• Support for 4 or 5 choices
+• Correct answer in the last column
+
+Basic Format: question|correctAnswer
+• Question in first column
+• Answer in second column
+
+Cloze Deletion Format: text with {{c1::hidden}} parts
+• Cloze text in first column
+
+Examples:
+MCQ (4 choices): What is Paris?///France|Italy|Spain|Germany///A
+MCQ (5 choices): What is the capital?///Paris|London|Berlin|Madrid|Amsterdam///A
+Basic: France|Capital of France
+Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
         </div>
 
-        <!-- Filename Input Box with Disclaimer -->
+        <div class="card-type-group">
+            <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
+            <label for="mcqCardType" class="card-type-label">Multiple Choice</label>
+            
+            <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
+            <label for="basicCardType" class="card-type-label">Basic</label>
+            
+            <input type="radio" id="clozeDeletionCardType" name="cardType" class="card-type-radio" value="clozeDeletion">
+            <label for="clozeDeletionCardType" class="card-type-label">Cloze Deletion</label>
+        </div>
+
         <div class="input-group">
-            <label for="filename">Filename:</label>
+            <label for="filename">Filename (default: MCQ):</label>
             <input type="text" id="filename" value="MCQ">
-            <p class="disclaimer">* If left empty, the filename will default to the selected note type.</p>
         </div>
 
-        <!-- Textarea for Questions -->
         <div class="input-group">
-            <label for="mcqText">Paste your questions here:</label>
-            <textarea id="mcqText" placeholder="Paste questions here..."></textarea>
+            <label for="mcqText" id="inputLabel">Paste your Multiple-Choice Questions:</label>
+            <textarea id="mcqText" placeholder="Paste multiple-choice questions or cards here..."></textarea>
         </div>
 
         <div id="validationMessage"></div>
 
-        <!-- Action Buttons -->
         <div class="button-group">
             <button id="generateButton" class="btn">Generate CSV</button>
             <button id="downloadButton" class="btn" style="display:none;">Download CSV</button>
             <button id="clearButton" class="btn btn-secondary">Clear</button>
         </div>
+
+        <div class="footer">
+            Made with ❤️ by Muhammad Saadoon
+        </div>
     </div>
 
     <script>
-        function validateInput(text) {
+        const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
+        const mcqText = document.getElementById('mcqText');
+        const inputLabel = document.getElementById('inputLabel');
+        const filenameInput = document.getElementById('filename');
+
+        // Update input label and filename based on card type
+        cardTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                switch(this.value) {
+                    case 'mcq':
+                        inputLabel.textContent = 'Paste your Multiple-Choice Questions:';
+                        filenameInput.value = 'MCQ';
+                        break;
+                    case 'basic':
+                        inputLabel.textContent = 'Paste your Basic Cards:';
+                        filenameInput.value = 'Basic';
+                        break;
+                    case 'clozeDeletion':
+                        inputLabel.textContent = 'Paste your Cloze Deletion Cards:';
+                        filenameInput.value = 'ClozeDeletion';
+                        break;
+                }
+                // Clear validation message and textarea
+                document.getElementById('validationMessage').innerHTML = '';
+                document.getElementById('downloadButton').style.display = 'none';
+                mcqText.value = '';
+            });
+        });
+
+        function validateMCQs(text, cardType) {
             const lines = text.trim().split('///').filter(line => line.trim() !== '');
             const validationMessage = document.getElementById('validationMessage');
             validationMessage.innerHTML = '';
             validationMessage.className = '';
 
-            if (lines.length === 0) {
-                validationMessage.innerHTML = 'Please enter some content.';
+            let isValid = true;
+            let errorMessage = '';
+
+            switch(cardType) {
+                case 'mcq':
+                    const invalidMCQLines = lines.filter(line => {
+                        const parts = line.split('|');
+                        const questionPart = parts[0];
+                        const choiceParts = parts.slice(1, -1);
+                        const correctAnswer = parts[parts.length - 1].trim();
+                        
+                        return (choiceParts.length < 4 || choiceParts.length > 5) ||
+                               !['A', 'B', 'C', 'D', 'E'].slice(0, choiceParts.length).includes(correctAnswer);
+                    });
+
+                    if (invalidMCQLines.length > 0) {
+                        errorMessage = `
+                            <strong>Invalid MCQ Format</strong><br>
+                            • Each question must have 4-5 choices<br>
+                            • Use /// as separator<br>
+                            • Correct answer must be A/B/C/D/E matching choice count<br>
+                            • Invalid questions: ${invalidMCQLines.length}
+                        `;
+                        isValid = false;
+                    }
+                    break;
+
+                case 'basic':
+                    const invalidBasicLines = lines.filter(line => {
+                        const parts = line.split('|');
+                        return parts.length !== 2;
+                    });
+
+                    if (invalidBasicLines.length > 0) {
+                        errorMessage = `
+                            <strong>Invalid Basic Card Format</strong><br>
+                            • Each line must have 2 parts (question|answer)<br>
+                            • Use /// as separator if multiple cards<br>
+                            • Invalid lines: ${invalidBasicLines.length}
+                        `;
+                        isValid = false;
+                    }
+                    break;
+
+                case 'clozeDeletion':
+                    const invalidClozeLines = lines.filter(line => {
+                        return !line.includes('{{') || !line.includes('::}}');
+                    });
+
+                    if (invalidClozeLines.length > 0) {
+                        errorMessage = `
+                            <strong>Invalid Cloze Deletion Card Format</strong><br>
+                            • Each line must contain Cloze deletions<br>
+                            • Use format: text with {{c1::hidden}} parts<br>
+                            • Invalid lines: ${invalidClozeLines.length}
+                        `;
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                validationMessage.innerHTML = errorMessage;
                 validationMessage.classList.add('error-message');
                 return false;
             }
 
-            validationMessage.innerHTML = `Total Cards: ${lines.length}. Ready to generate CSV.`;
+            validationMessage.innerHTML = `
+                <strong>Cards Validated Successfully</strong><br>
+                • Total Cards: ${lines.length}
+                • Ready to generate CSV
+            `;
             validationMessage.classList.add('success-message');
             return true;
         }
 
         function generateCSV() {
-            const noteType = document.getElementById('noteType').value;
             const text = document.getElementById('mcqText').value;
-            const filename = document.getElementById('filename').value || noteType;
+            const cardType = document.querySelector('input[name="cardType"]:checked').value;
+            const filename = document.getElementById('filename').value || 'MCQ';
+            const generateButton = document.getElementById('generateButton');
             const downloadButton = document.getElementById('downloadButton');
 
-            if (!validateInput(text)) {
+            if (!validateMCQs(text, cardType)) {
                 downloadButton.style.display = 'none';
                 return;
             }
 
-            let csvContent = 'Question,Answer\n';
             const lines = text.trim().split('///').filter(line => line.trim() !== '');
+            let csvContent = '';
 
-            if (noteType === 'MCQ') {
-                csvContent = 'Question,Choice A,Choice B,Choice C,Choice D,Correct Answer\n';
-                lines.forEach(line => {
-                    const parts = line.split('|').map(part => part.trim().replace(/"/g, '""'));
-                    const [question, ...choices] = parts;
-                    const correctAnswer = choices.pop();
-                    csvContent += `"${question}","${choices.join('","')}","${correctAnswer}"\n`;
-                });
-            } else if (noteType === 'Basic') {
-                lines.forEach(line => {
-                    const [question, answer] = line.split('|').map(part => part.trim());
-                    csvContent += `"${question}","${answer}"\n`;
-                });
-            } else if (noteType === 'Cloze') {
-                lines.forEach(line => {
-                    csvContent += `"${line.trim()}"\n`;
-                });
-            }
+            lines.forEach(line => {
+                const parts = line.split('|');
+                const sanitizedParts = parts.map(part => part.trim().replace(/"/g, '""'));
+
+                let row;
+                switch(cardType) {
+                    case 'mcq':
+                        const questionPart = sanitizedParts[0];
+                        const choiceParts = sanitizedParts.slice(1, -1);
+                        const correctAnswer = sanitizedParts[sanitizedParts.length - 1];
+                        // Pad choices to 5 with empty strings
+                        const paddedChoices = choiceParts.concat(Array(5 - choiceParts.length).fill(''));
+                        // Choices in columns B-F, empty cells for G-I, correct answer in column J
+                        row = `"${questionPart}","${paddedChoices[0]}","${paddedChoices[1]}","${paddedChoices[2]}","${paddedChoices[3]}","${paddedChoices[4]}","","","","${correctAnswer}"\n`;
+                        break;
+                    case 'basic':
+                        const [basicQuestion, basicAnswer] = sanitizedParts;
+                        row = `"${basicQuestion}","${basicAnswer}"\n`;
+                        break;
+                    case 'clozeDeletion':
+                        row = `"${sanitizedParts[0]}"\n`;
+                        break;
+                }
+                csvContent += row;
+            });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
             link.setAttribute('download', `${filename}.csv`);
-
+            
             downloadButton.style.display = 'inline-block';
             downloadButton.onclick = () => {
                 link.click();
@@ -207,11 +390,5 @@
         }
 
         document.getElementById('generateButton').addEventListener('click', generateCSV);
+        
         document.getElementById('clearButton').addEventListener('click', () => {
-            document.getElementById('mcqText').value = '';
-            document.getElementById('validationMessage').innerHTML = '';
-            document.getElementById('downloadButton').style.display = 'none';
-        });
-    </script>
-</body>
-</html>
