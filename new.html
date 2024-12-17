@@ -45,7 +45,7 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
-        #filename, #mcqText {
+        #filename, #mcqText, #noteType {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border-color);
@@ -105,6 +105,15 @@
         </div>
 
         <div class="input-group">
+            <label for="noteType">Select Note Type:</label>
+            <select id="noteType">
+                <option value="MCQ" selected>MCQ</option>
+                <option value="Basic">Basic</option>
+                <option value="Cloze">Cloze Deletion</option>
+            </select>
+        </div>
+
+        <div class="input-group">
             <label for="filename">Filename (default: MCQ):</label>
             <input type="text" id="filename" value="MCQ">
         </div>
@@ -130,47 +139,21 @@
             validationMessage.innerHTML = '';
             validationMessage.className = '';
 
-            let isValid = true;
-            let errorMessage = '';
-
-            const invalidMCQLines = lines.filter(line => {
-                const parts = line.split('|');
-                const correctAnswer = parts[parts.length - 1].trim();
-                return (
-                    parts.length < 6 || parts.length > 8 || 
-                    !['A', 'B', 'C', 'D', 'E', 'F'].includes(correctAnswer)
-                );
-            });
-
-            if (invalidMCQLines.length > 0) {
-                errorMessage = `
-                    <strong>Invalid Format</strong><br>
-                    • Each question must have 4-6 choices<br>
-                    • Use /// as separator<br>
-                    • Correct answer must match choice count<br>
-                    • Invalid questions: ${invalidMCQLines.length}
-                `;
-                isValid = false;
-            }
-
-            if (!isValid) {
-                validationMessage.innerHTML = errorMessage;
+            if (lines.length === 0) {
+                validationMessage.innerHTML = 'Please enter some content.';
                 validationMessage.classList.add('error-message');
                 return false;
             }
 
-            validationMessage.innerHTML = `
-                <strong>Validated Successfully</strong><br>
-                • Total Cards: ${lines.length}<br>
-                • Ready to generate CSV
-            `;
+            validationMessage.innerHTML = `Total Cards: ${lines.length}. Ready to generate CSV.`;
             validationMessage.classList.add('success-message');
             return true;
         }
 
         function generateCSV() {
+            const noteType = document.getElementById('noteType').value;
             const text = document.getElementById('mcqText').value;
-            const filename = document.getElementById('filename').value || 'MCQ';
+            const filename = document.getElementById('filename').value || noteType;
             const downloadButton = document.getElementById('downloadButton');
 
             if (!validateInput(text)) {
@@ -178,17 +161,27 @@
                 return;
             }
 
+            let csvContent = 'Question,Answer\n';
             const lines = text.trim().split('///').filter(line => line.trim() !== '');
-            let csvContent = 'Question,Choice A,Choice B,Choice C,Choice D,Choice E,Choice F,Correct Answer\n';
 
-            lines.forEach(line => {
-                const parts = line.split('|').map(part => part.trim().replace(/"/g, '""'));
-                const [question, ...choices] = parts;
-                const correctAnswer = choices.pop();
-                const paddedChoices = choices.concat(Array(6 - choices.length).fill(''));
-
-                csvContent += `"${question}","${paddedChoices.join('","')}","${correctAnswer}"\n`;
-            });
+            if (noteType === 'MCQ') {
+                csvContent = 'Question,Choice A,Choice B,Choice C,Choice D,Correct Answer\n';
+                lines.forEach(line => {
+                    const parts = line.split('|').map(part => part.trim().replace(/"/g, '""'));
+                    const [question, ...choices] = parts;
+                    const correctAnswer = choices.pop();
+                    csvContent += `"${question}","${choices.join('","')}","${correctAnswer}"\n`;
+                });
+            } else if (noteType === 'Basic') {
+                lines.forEach(line => {
+                    const [question, answer] = line.split('|').map(part => part.trim());
+                    csvContent += `"${question}","${answer}"\n`;
+                });
+            } else if (noteType === 'Cloze') {
+                lines.forEach(line => {
+                    csvContent += `"${line.trim()}"\n`;
+                });
+            }
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -204,7 +197,6 @@
         }
 
         document.getElementById('generateButton').addEventListener('click', generateCSV);
-        
         document.getElementById('clearButton').addEventListener('click', () => {
             document.getElementById('mcqText').value = '';
             document.getElementById('validationMessage').innerHTML = '';
