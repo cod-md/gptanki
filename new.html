@@ -19,44 +19,23 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-light);
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 2rem auto;
             padding: 2rem;
             background-color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            min-height: 100vh;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
+            border-radius: 8px;
         }
         .header h1 {
             color: var(--primary-color);
             font-size: 2rem;
             font-weight: 700;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-        }
-        .info-section {
-            background-color: #f0f5ff;
-            border-left: 5px solid var(--primary-color);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 4px;
         }
         .input-group {
             margin-bottom: 1rem;
@@ -117,48 +96,6 @@
             color: #064e3b;
             border: 1px solid #d1fae5;
         }
-        .card-type-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        .card-type-radio {
-            display: none;
-        }
-        .card-type-label {
-            text-align: center;
-            padding: 0.75rem;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        .card-type-radio:checked + .card-type-label {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        @media (max-width: 600px) {
-            .card-type-group {
-                grid-template-columns: repeat(1, 1fr);
-            }
-            .container {
-                padding: 1rem;
-            }
-            .button-group {
-                flex-direction: column;
-            }
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            .info-section pre {
-                font-size: 0.8rem;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-        }
     </style>
 </head>
 <body>
@@ -167,40 +104,14 @@
             <h1>GPTAnki</h1>
         </div>
 
-        <div class="info-section">
-            <h3>Card Type Selection & Input Guide</h3>
-            <pre>Question Separator: ///
-
-MCQ Format: question|A|B|C|D|E|F|correctAnswer
-Basic Format: question|A = front|B = back
-Cloze Deletion Format: text with {{c1::hidden}} parts
-
-Examples:
-MCQ (4 choices): What is the capital of France?///Paris|London|Berlin|Madrid///A
-MCQ (5 choices): What is the capital of France?///Paris|London|Berlin|Madrid|Amsterdam///A
-Basic: France|Paris|Capital///A:Paris, B:Capital of France
-Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
-        </div>
-
-        <div class="card-type-group">
-            <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
-            <label for="mcqCardType" class="card-type-label">Multiple Choice</label>
-            
-            <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
-            <label for="basicCardType" class="card-type-label">Basic</label>
-            
-            <input type="radio" id="clozeDeletionCardType" name="cardType" class="card-type-radio" value="clozeDeletion">
-            <label for="clozeDeletionCardType" class="card-type-label">Cloze Deletion</label>
-        </div>
-
         <div class="input-group">
             <label for="filename">Filename (default: MCQ):</label>
             <input type="text" id="filename" value="MCQ">
         </div>
 
         <div class="input-group">
-            <label for="mcqText" id="inputLabel">Paste your Multiple-Choice Questions:</label>
-            <textarea id="mcqText" placeholder="Paste multiple-choice questions or cards here..."></textarea>
+            <label for="mcqText">Paste your questions here:</label>
+            <textarea id="mcqText" placeholder="Paste questions here..."></textarea>
         </div>
 
         <div id="validationMessage"></div>
@@ -210,43 +121,10 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             <button id="downloadButton" class="btn" style="display:none;">Download CSV</button>
             <button id="clearButton" class="btn btn-secondary">Clear</button>
         </div>
-
-        <div class="footer">
-            Made with ❤️ by Muhammad Saadoon
-        </div>
     </div>
 
     <script>
-        const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
-        const mcqText = document.getElementById('mcqText');
-        const inputLabel = document.getElementById('inputLabel');
-        const filenameInput = document.getElementById('filename');
-
-        // Update input label and filename based on card type
-        cardTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                switch(this.value) {
-                    case 'mcq':
-                        inputLabel.textContent = 'Paste your Multiple-Choice Questions:';
-                        filenameInput.value = 'MCQ';
-                        break;
-                    case 'basic':
-                        inputLabel.textContent = 'Paste your Basic Cards:';
-                        filenameInput.value = 'Basic';
-                        break;
-                    case 'clozeDeletion':
-                        inputLabel.textContent = 'Paste your Cloze Deletion Cards:';
-                        filenameInput.value = 'ClozeDeletion';
-                        break;
-                }
-                // Clear validation message and textarea
-                document.getElementById('validationMessage').innerHTML = '';
-                document.getElementById('downloadButton').style.display = 'none';
-                mcqText.value = '';
-            });
-        });
-
-        function validateMCQs(text, cardType) {
+        function validateInput(text) {
             const lines = text.trim().split('///').filter(line => line.trim() !== '');
             const validationMessage = document.getElementById('validationMessage');
             validationMessage.innerHTML = '';
@@ -255,62 +133,24 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             let isValid = true;
             let errorMessage = '';
 
-            switch(cardType) {
-                case 'mcq':
-                    const invalidMCQLines = lines.filter(line => {
-                        const parts = line.split('|');
-                        const questionPart = parts[0];
-                        const choiceParts = parts.slice(1, -1);
-                        const correctAnswer = parts[parts.length - 1].trim();
-                        
-                        return choiceParts.length < 4 || choiceParts.length > 6 ||
-                               !['A', 'B', 'C', 'D', 'E', 'F'].slice(0, choiceParts.length).includes(correctAnswer);
-                    });
+            const invalidMCQLines = lines.filter(line => {
+                const parts = line.split('|');
+                const correctAnswer = parts[parts.length - 1].trim();
+                return (
+                    parts.length < 6 || parts.length > 8 || 
+                    !['A', 'B', 'C', 'D', 'E', 'F'].includes(correctAnswer)
+                );
+            });
 
-                    if (invalidMCQLines.length > 0) {
-                        errorMessage = `
-                            <strong>Invalid MCQ Format</strong><br>
-                            • Each question must have 4-6 choices (4|5|6)<br>
-                            • Use /// as separator<br>
-                            • Correct answer must match choice count<br>
-                            • Invalid questions: ${invalidMCQLines.length}
-                        `;
-                        isValid = false;
-                    }
-                    break;
-
-                case 'basic':
-                    const invalidBasicLines = lines.filter(line => {
-                        const parts = line.split('|');
-                        return parts.length !== 3;
-                    });
-
-                    if (invalidBasicLines.length > 0) {
-                        errorMessage = `
-                            <strong>Invalid Basic Card Format</strong><br>
-                            • Each line must have 3 parts (question|A:front|B:back)<br>
-                            • Use /// as separator<br>
-                            • Invalid lines: ${invalidBasicLines.length}
-                        `;
-                        isValid = false;
-                    }
-                    break;
-
-                case 'clozeDeletion':
-                    const invalidClozeLines = lines.filter(line => {
-                        return !line.includes('{{') || !line.includes('::}}');
-                    });
-
-                    if (invalidClozeLines.length > 0) {
-                        errorMessage = `
-                            <strong>Invalid Cloze Deletion Card Format</strong><br>
-                            • Each line must contain Cloze deletions<br>
-                            • Use format: text with {{c1::hidden}} parts<br>
-                            • Invalid lines: ${invalidClozeLines.length}
-                        `;
-                        isValid = false;
-                    }
-                    break;
+            if (invalidMCQLines.length > 0) {
+                errorMessage = `
+                    <strong>Invalid Format</strong><br>
+                    • Each question must have 4-6 choices<br>
+                    • Use /// as separator<br>
+                    • Correct answer must match choice count<br>
+                    • Invalid questions: ${invalidMCQLines.length}
+                `;
+                isValid = false;
             }
 
             if (!isValid) {
@@ -320,8 +160,8 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             }
 
             validationMessage.innerHTML = `
-                <strong>Cards Validated Successfully</strong><br>
-                • Total Cards: ${lines.length}
+                <strong>Validated Successfully</strong><br>
+                • Total Cards: ${lines.length}<br>
                 • Ready to generate CSV
             `;
             validationMessage.classList.add('success-message');
@@ -330,41 +170,24 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
 
         function generateCSV() {
             const text = document.getElementById('mcqText').value;
-            const cardType = document.querySelector('input[name="cardType"]:checked').value;
             const filename = document.getElementById('filename').value || 'MCQ';
-            const generateButton = document.getElementById('generateButton');
             const downloadButton = document.getElementById('downloadButton');
 
-            if (!validateMCQs(text, cardType)) {
+            if (!validateInput(text)) {
                 downloadButton.style.display = 'none';
                 return;
             }
 
             const lines = text.trim().split('///').filter(line => line.trim() !== '');
-            let csvContent = '';
+            let csvContent = 'Question,Choice A,Choice B,Choice C,Choice D,Choice E,Choice F,Correct Answer\n';
 
             lines.forEach(line => {
-                const parts = line.split('|');
-                const sanitizedParts = parts.map(part => part.trim().replace(/"/g, '""'));
+                const parts = line.split('|').map(part => part.trim().replace(/"/g, '""'));
+                const [question, ...choices] = parts;
+                const correctAnswer = choices.pop();
+                const paddedChoices = choices.concat(Array(6 - choices.length).fill(''));
 
-                let row;
-                switch(cardType) {
-                    case 'mcq':
-                        const questionPart = sanitizedParts[0];
-                        const choiceParts = sanitizedParts.slice(1, -1);
-                        const correctAnswer = sanitizedParts[sanitizedParts.length - 1];
-                        const paddedChoices = choiceParts.concat(Array(6 - choiceParts.length).fill(''));
-                        row = `"${questionPart}","${paddedChoices[0]}","${paddedChoices[1]}","${paddedChoices[2]}","${paddedChoices[3]}","${paddedChoices[4]}","${paddedChoices[5]}","","","${correctAnswer}"\n`;
-                        break;
-                    case 'basic':
-                        const [basicQuestion, basicFront, basicBack] = sanitizedParts;
-                        row = `"${basicQuestion}","${basicFront}","${basicBack}"\n`;
-                        break;
-                    case 'clozeDeletion':
-                        row = `"${sanitizedParts[0]}"\n`;
-                        break;
-                }
-                csvContent += row;
+                csvContent += `"${question}","${paddedChoices.join('","')}","${correctAnswer}"\n`;
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -372,7 +195,7 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
             link.setAttribute('download', `${filename}.csv`);
-            
+
             downloadButton.style.display = 'inline-block';
             downloadButton.onclick = () => {
                 link.click();
@@ -387,5 +210,6 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             document.getElementById('validationMessage').innerHTML = '';
             document.getElementById('downloadButton').style.display = 'none';
         });
-
-        document.getElementById('mcqText</antArtifact>
+    </script>
+</body>
+</html>
