@@ -45,6 +45,12 @@
             font-size: 2rem;
             font-weight: 700;
         }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
         .info-section {
             background-color: #f0f5ff;
             border-left: 5px solid var(--primary-color);
@@ -136,13 +142,21 @@
         }
         @media (max-width: 600px) {
             .card-type-group {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(1, 1fr);
             }
             .container {
                 padding: 1rem;
             }
             .button-group {
                 flex-direction: column;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .info-section pre {
+                font-size: 0.8rem;
+                white-space: pre-wrap;
+                word-wrap: break-word;
             }
         }
     </style>
@@ -155,13 +169,16 @@
 
         <div class="info-section">
             <h3>Card Type Selection & Input Guide</h3>
-            <pre>MCQ Format: question|A|B|C|D|correctAnswer
+            <pre>Question Separator: ///
+
+MCQ Format: question|A|B|C|D|E|F|correctAnswer
 Basic Format: question|A = front|B = back
 Cloze Deletion Format: text with {{c1::hidden}} parts
 
 Examples:
-MCQ: What is the capital of France?|Paris|London|Berlin|Madrid|A
-Basic: France|Paris|Capital|A:Paris, B:Capital of France
+MCQ (4 choices): What is the capital of France?///Paris|London|Berlin|Madrid///A
+MCQ (5 choices): What is the capital of France?///Paris|London|Berlin|Madrid|Amsterdam///A
+Basic: France|Paris|Capital///A:Paris, B:Capital of France
 Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
         </div>
 
@@ -192,6 +209,10 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             <button id="generateButton" class="btn">Generate CSV</button>
             <button id="downloadButton" class="btn" style="display:none;">Download CSV</button>
             <button id="clearButton" class="btn btn-secondary">Clear</button>
+        </div>
+
+        <div class="footer">
+            Made with ❤️ by Muhammad Saadoon
         </div>
     </div>
 
@@ -226,7 +247,7 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
         });
 
         function validateMCQs(text, cardType) {
-            const lines = text.trim().split('\n');
+            const lines = text.trim().split('///').filter(line => line.trim() !== '');
             const validationMessage = document.getElementById('validationMessage');
             validationMessage.innerHTML = '';
             validationMessage.className = '';
@@ -238,16 +259,21 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                 case 'mcq':
                     const invalidMCQLines = lines.filter(line => {
                         const parts = line.split('|');
-                        return parts.length !== 6 || 
-                               !['A', 'B', 'C', 'D'].includes(parts[5].trim());
+                        const questionPart = parts[0];
+                        const choiceParts = parts.slice(1, -1);
+                        const correctAnswer = parts[parts.length - 1].trim();
+                        
+                        return choiceParts.length < 4 || choiceParts.length > 6 ||
+                               !['A', 'B', 'C', 'D', 'E', 'F'].slice(0, choiceParts.length).includes(correctAnswer);
                     });
 
                     if (invalidMCQLines.length > 0) {
                         errorMessage = `
                             <strong>Invalid MCQ Format</strong><br>
-                            • Each line must have 6 parts (question|A|B|C|D|answer)<br>
-                            • Correct answer must be A, B, C, or D<br>
-                            • Invalid lines: ${invalidMCQLines.length}
+                            • Each question must have 4-6 choices (4|5|6)<br>
+                            • Use /// as separator<br>
+                            • Correct answer must match choice count<br>
+                            • Invalid questions: ${invalidMCQLines.length}
                         `;
                         isValid = false;
                     }
@@ -263,6 +289,7 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                         errorMessage = `
                             <strong>Invalid Basic Card Format</strong><br>
                             • Each line must have 3 parts (question|A:front|B:back)<br>
+                            • Use /// as separator<br>
                             • Invalid lines: ${invalidBasicLines.length}
                         `;
                         isValid = false;
@@ -313,7 +340,7 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                 return;
             }
 
-            const lines = text.trim().split('\n');
+            const lines = text.trim().split('///').filter(line => line.trim() !== '');
             let csvContent = '';
 
             lines.forEach(line => {
@@ -323,8 +350,11 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                 let row;
                 switch(cardType) {
                     case 'mcq':
-                        const [question, answerA, answerB, answerC, answerD, correctAnswer] = sanitizedParts;
-                        row = `"${question}","${answerA}","${answerB}","${answerC}","${answerD}","","","","","${correctAnswer}"\n`;
+                        const questionPart = sanitizedParts[0];
+                        const choiceParts = sanitizedParts.slice(1, -1);
+                        const correctAnswer = sanitizedParts[sanitizedParts.length - 1];
+                        const paddedChoices = choiceParts.concat(Array(6 - choiceParts.length).fill(''));
+                        row = `"${questionPart}","${paddedChoices[0]}","${paddedChoices[1]}","${paddedChoices[2]}","${paddedChoices[3]}","${paddedChoices[4]}","${paddedChoices[5]}","","","${correctAnswer}"\n`;
                         break;
                     case 'basic':
                         const [basicQuestion, basicFront, basicBack] = sanitizedParts;
@@ -358,10 +388,4 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
             document.getElementById('downloadButton').style.display = 'none';
         });
 
-        document.getElementById('mcqText').addEventListener('input', function() {
-            const cardType = document.querySelector('input[name="cardType"]:checked').value;
-            validateMCQs(this.value, cardType);
-        });
-    </script>
-</body>
-</html>
+        document.getElementById('mcqText</antArtifact>
