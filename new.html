@@ -156,13 +156,11 @@
         <div class="info-section">
             <h3>Card Type Selection & Input Guide</h3>
             <pre>MCQ Format: question|A|B|C|D|correctAnswer
-True/False MCQ Format: question|true|false|correctAnswer
 Basic Format: question|A = front|B = back
 Cloze Deletion Format: text with {{c1::hidden}} parts
 
 Examples:
 MCQ: What is the capital of France?|Paris|London|Berlin|Madrid|A
-True/False: The sky is blue?|true|false|true
 Basic: France|Paris|Capital|A:Paris, B:Capital of France
 Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
         </div>
@@ -170,9 +168,6 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
         <div class="card-type-group">
             <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
             <label for="mcqCardType" class="card-type-label">Multiple Choice</label>
-            
-            <input type="radio" id="trueFalseCardType" name="cardType" class="card-type-radio" value="trueFalse">
-            <label for="trueFalseCardType" class="card-type-label">True/False</label>
             
             <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
             <label for="basicCardType" class="card-type-label">Basic</label>
@@ -214,10 +209,6 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                         inputLabel.textContent = 'Paste your Multiple-Choice Questions:';
                         filenameInput.value = 'MCQ';
                         break;
-                    case 'trueFalse':
-                        inputLabel.textContent = 'Paste your True/False Questions:';
-                        filenameInput.value = 'TrueFalse';
-                        break;
                     case 'basic':
                         inputLabel.textContent = 'Paste your Basic Cards:';
                         filenameInput.value = 'Basic';
@@ -247,32 +238,26 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                 case 'mcq':
                     const invalidMCQLines = lines.filter(line => {
                         const parts = line.split('|');
-                        return parts.length !== 6 || !['A', 'B', 'C', 'D'].includes(parts[5].trim());
+                        // Handle both the typical MCQs with 4 options and True/False questions with 2 options
+                        if (parts.length === 6) {
+                            const answer = parts[5].trim();
+                            return !['A', 'B', 'C', 'D'].includes(answer);  // Ensure correct answer is A, B, C, or D
+                        } else if (parts.length === 4) {
+                            // Handle True/False questions
+                            const answer = parts[3].trim();
+                            return !['A', 'B'].includes(answer);  // True/False answers should be A or B
+                        }
+                        return true;  // Invalid if not 4 or 6 parts
                     });
 
                     if (invalidMCQLines.length > 0) {
                         errorMessage = `
                             <strong>Invalid MCQ Format</strong><br>
-                            • Each line must have 6 parts (question|A|B|C|D|answer)<br>
-                            • Correct answer must be A, B, C, or D<br>
-                            • Invalid lines: ${invalidMCQLines.length}
-                        `;
-                        isValid = false;
-                    }
-                    break;
-
-                case 'trueFalse':
-                    const invalidTrueFalseLines = lines.filter(line => {
-                        const parts = line.split('|');
-                        return parts.length !== 4 || !['true', 'false'].includes(parts[3].trim());
-                    });
-
-                    if (invalidTrueFalseLines.length > 0) {
-                        errorMessage = `
-                            <strong>Invalid True/False Format</strong><br>
-                            • Each line must have 4 parts (question|true|false|correctAnswer)<br>
-                            • Correct answer must be 'true' or 'false'<br>
-                            • Invalid lines: ${invalidTrueFalseLines.length}
+                            • Each line must have 4 (True/False) or 6 (Multiple Choice) parts<br>
+                            • Correct answer must be A or B (for True/False), A, B, C, or D (for Multiple Choice)<br>
+                            • Invalid lines: ${invalidMCQLines.length}<br>
+                            <strong>Problematic Lines:</strong><br>
+                            ${invalidMCQLines.join('<br>')}
                         `;
                         isValid = false;
                     }
@@ -348,17 +333,22 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
                 let row;
                 switch(cardType) {
                     case 'mcq':
-                        const [question, answerA, answerB, answerC, answerD, correctAnswer] = sanitizedParts;
-                        row = `"${question}","${answerA}","${answerB}","${answerC}","${answerD}","","","","","${correctAnswer}"\n`;
+                        if (sanitizedParts.length === 6) {
+                            // Handle standard MCQ with 4 options
+                            const [question, answerA, answerB, answerC, answerD, correctAnswer] = sanitizedParts;
+                            row = `"${question}","${answerA}","${answerB}","${answerC}","${answerD}","","","","","${correctAnswer}"\n`;
+                        } else if (sanitizedParts.length === 4) {
+                            // Handle True/False questions
+                            const [question, answerTrue, answerFalse, correctAnswer] = sanitizedParts;
+                            row = `"${question}","${answerTrue}","${answerFalse}","","","${correctAnswer}"\n`;
+                        }
                         break;
-                    case 'trueFalse':
-                        const [trueFalseQuestion, trueAnswer, falseAnswer, correctAnswerTF] = sanitizedParts;
-                        row = `"${trueFalseQuestion}","${trueAnswer}","${falseAnswer}","${correctAnswerTF}"\n`;
-                        break;
+
                     case 'basic':
                         const [basicQuestion, basicFront, basicBack] = sanitizedParts;
                         row = `"${basicQuestion}","${basicFront}","${basicBack}"\n`;
                         break;
+
                     case 'clozeDeletion':
                         row = `"${sanitizedParts[0]}"\n`;
                         break;
@@ -380,16 +370,12 @@ Cloze: {{c1::Anthropic}} is an AI company founded in {{c2::2021}}.</pre>
         }
 
         document.getElementById('generateButton').addEventListener('click', generateCSV);
-        
-        document.getElementById('clearButton').addEventListener('click', () => {
+
+        document.getElementById('clearButton').addEventListener('click', function() {
             document.getElementById('mcqText').value = '';
+            document.getElementById('filename').value = 'MCQ';
             document.getElementById('validationMessage').innerHTML = '';
             document.getElementById('downloadButton').style.display = 'none';
-        });
-
-        document.getElementById('mcqText').addEventListener('input', function() {
-            const cardType = document.querySelector('input[name="cardType"]:checked').value;
-            validateMCQs(this.value, cardType);
         });
     </script>
 </body>
