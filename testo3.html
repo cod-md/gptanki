@@ -627,86 +627,92 @@ make it appear as a code for easy copy</pre>
             return true;
         }
 
-        function generateCSV() {
-            const text = document.getElementById('mcqText').value;
-            const cardType = document.querySelector('input[name="cardType"]:checked').value;
-            const filename = document.getElementById('filename').value || 'MCQ';
-            const generateButton = document.getElementById('generateButton');
-            const downloadButton = document.getElementById('downloadButton');
+       // This is the modified generateCSV function to place the correct answer in column J instead of H
 
-            if (!validateMCQs(text, cardType)) {
-                downloadButton.style.display = 'none';
-                return;
-            }
+function generateCSV() {
+    const text = document.getElementById('mcqText').value;
+    const cardType = document.querySelector('input[name="cardType"]:checked').value;
+    const filename = document.getElementById('filename').value || 'MCQ';
+    const generateButton = document.getElementById('generateButton');
+    const downloadButton = document.getElementById('downloadButton');
 
-            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
-            let csvContent = '';
+    if (!validateMCQs(text, cardType)) {
+        downloadButton.style.display = 'none';
+        return;
+    }
 
-            lines.forEach(line => {
-                if (!line.trim()) return; // Skip empty lines
-                
-                const parts = line.split('|');
-                const sanitizedParts = parts.map(part => part.trim().replace(/"/g, '""'));
+    const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+    let csvContent = '';
 
-                let row;
-                switch(cardType) {
-                    case 'mcq':
-                        // Determine the number of options
-                        let numOptions = 0;
-                        for (let i = 1; i < parts.length - 1; i++) {
-                            if (parts[i].trim() !== '') {
-                                numOptions++;
-                            }
-                        }
-                        
-                        // Build the CSV row with appropriate number of columns
-                        row = `"${sanitizedParts[0]}"`;  // Question
-                        
-                        // Add all options (up to 6)
-                        for (let i = 1; i <= 6; i++) {
-                            if (i <= numOptions) {
-                                row += `,${sanitizedParts[i] ? `"${sanitizedParts[i]}"` : `""`}`;
-                            } else {
-                                row += `,""`;  // Empty options for padding
-                            }
-                        }
-                        
-                        // Add the correct answer
-                        row += `,${sanitizedParts[parts.length - 1] ? `"${sanitizedParts[parts.length - 1]}"` : `""`}\n`;
-                        break;
+    lines.forEach(line => {
+        if (!line.trim()) return; // Skip empty lines
+        
+        const parts = line.split('|');
+        const sanitizedParts = parts.map(part => part.trim().replace(/"/g, '""'));
 
-                    case 'basic':
-                        const [basicQuestion, basicFront, basicBack] = sanitizedParts;
-                        row = `"${basicQuestion}","${basicFront}","${basicBack}"\n`;
-                        break;
-
-                    case 'clozeDeletion':
-                        row = `"${sanitizedParts[0]}"\n`;
-                        break;
+        let row;
+        switch(cardType) {
+            case 'mcq':
+                // Determine the number of options
+                let numOptions = 0;
+                for (let i = 1; i < parts.length - 1; i++) {
+                    if (parts[i].trim() !== '') {
+                        numOptions++;
+                    }
                 }
-                csvContent += row;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            
-            downloadButton.style.display = 'inline-flex';
-            downloadButton.classList.add('animate__animated', 'animate__fadeIn');
-            
-            downloadButton.onclick = () => {
-                const link = document.createElement('a');
-                link.setAttribute('href', url);
-                link.setAttribute('download', `${filename}.csv`);
-                link.click();
-                URL.revokeObjectURL(url);
                 
-                // Show success animation
-                downloadButton.classList.add('animate__animated', 'animate__pulse');
-                setTimeout(() => {
-                    downloadButton.classList.remove('animate__animated', 'animate__pulse');
-                }, 1000);
-            };
+                // Build the CSV row with appropriate number of columns
+                row = `"${sanitizedParts[0]}"`;  // Question
+                
+                // Add all options (up to 6)
+                for (let i = 1; i <= 6; i++) {
+                    if (i <= numOptions) {
+                        row += `,${sanitizedParts[i] ? `"${sanitizedParts[i]}"` : `""`}`;
+                    } else {
+                        row += `,""`;  // Empty options for padding
+                    }
+                }
+                
+                // Add two empty columns to shift the answer to column J
+                row += `,""`;
+                row += `,""`;
+                
+                // Add the correct answer (now in column J)
+                row += `,${sanitizedParts[parts.length - 1] ? `"${sanitizedParts[parts.length - 1]}"` : `""`}\n`;
+                break;
+
+            case 'basic':
+                const [basicQuestion, basicFront, basicBack] = sanitizedParts;
+                row = `"${basicQuestion}","${basicFront}","${basicBack}"\n`;
+                break;
+
+            case 'clozeDeletion':
+                row = `"${sanitizedParts[0]}"\n`;
+                break;
         }
+        csvContent += row;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    downloadButton.style.display = 'inline-flex';
+    downloadButton.classList.add('animate__animated', 'animate__fadeIn');
+    
+    downloadButton.onclick = () => {
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${filename}.csv`);
+        link.click();
+        URL.revokeObjectURL(url);
+        
+        // Show success animation
+        downloadButton.classList.add('animate__animated', 'animate__pulse');
+        setTimeout(() => {
+            downloadButton.classList.remove('animate__animated', 'animate__pulse');
+        }, 1000);
+    };
+}
 
         // Real-time validation as the user types
         mcqText.addEventListener('input', function() {
