@@ -409,10 +409,10 @@
             opacity: 1; 
         }
         
-        .guide-description {
+        .guide-description { /* This div will now be empty, but style remains for potential future use */
             font-size: 0.85rem;
             color: var(--text-secondary);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.75rem; /* This might need adjustment if always empty */
             line-height: 1.4;
         }
         
@@ -835,9 +835,10 @@
                                     Multiple Choice Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                    Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
-                                </div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
+                                    </div>
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
+
+Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 
 Examples:
@@ -858,9 +859,10 @@ Don't add extra text.
                                     Basic Cards Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                     Make 5 basic flashcards from the provided material covering key concepts.
-                                </div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
+                                     </div>
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make 5 basic flashcards from the provided material covering key concepts.
+
+Format strictly as:
 question|answer
 
 Examples:
@@ -881,9 +883,10 @@ Don't add extra text.
                                     Cloze Deletion Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                     Make 5 cloze deletion cards from the provided material with key terms hidden.
-                                </div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
+                                     </div>
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make 5 cloze deletion cards from the provided material with key terms hidden.
+
+Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
 
 Examples:
@@ -906,9 +909,10 @@ Don't add extra text.
                                     Multiple Choice Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                     Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
-                                </div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
+                                     </div>
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
+
+Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 
 Examples:
@@ -929,9 +933,10 @@ Don't add extra text.
                                     Basic Cards Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                    Extract all the basic flashcards from the provided material.
-                                </div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
+                                    </div>
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract all the basic flashcards from the provided material.
+
+Format strictly as:
 question|answer
 
 Examples:
@@ -952,9 +957,10 @@ Don't add extra text.
                                     Cloze Deletion Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                    Extract all the cloze deletion cards from the provided material.
-                                </div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
+                                    </div>
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract all the cloze deletion cards from the provided material.
+
+Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
 
 Examples:
@@ -1108,7 +1114,7 @@ Don't add extra text.
         const cardCountNumber = document.getElementById('cardCountNumber');
         const optionStats = document.getElementById('optionStats');
         const generateButton = document.getElementById('generateButton');
-        const downloadButton = document.getElementById('downloadButton'); // This is now an <a> tag
+        const downloadButton = document.getElementById('downloadButton'); 
         const clearButton = document.getElementById('clearButton');
 
         const allGuides = document.querySelectorAll('.format-guide');
@@ -1172,7 +1178,7 @@ Don't add extra text.
             validationMessage.classList.remove('show', 'error', 'success');
             validationMessage.innerHTML = ''; 
             downloadButton.style.display = 'none';
-            downloadButton.removeAttribute('href'); // Clear href if it was an anchor
+            downloadButton.removeAttribute('href'); 
             cardCount.classList.remove('show');
             cardCountNumber.textContent = '0';
             optionStats.textContent = '-';
@@ -1208,42 +1214,36 @@ Don't add extra text.
                     lines.forEach((line, index) => {
                         const parts = line.split('|');
                         const question = parts[0].trim();
-                        // MCQ format: Q | A | B | C | D? | E? | F? | CorrectLetter
-                        // Minimum parts: Q | A | B | C | CorrectLetter (5 parts for 3 options)
-                        // Maximum parts: Q | A | B | C | D | E | F | CorrectLetter (8 parts for 6 options)
-                        if (parts.length < 5 || parts.length > 8) { // Basic structural check
-                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - Incorrect number of fields separated by '|'.`);
+                        if (parts.length < 5 || parts.length > 8) { 
+                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - Incorrect number of fields separated by '|'. Expected 5-8 fields.`);
                              isValid = false;
-                             return; // next line
+                             return; 
                         }
                         const correctAnswerLetter = parts[parts.length - 1].trim().toUpperCase();
                         let numOptions = 0;
-                        // Options are from parts[1] to parts[length-2]
                         for (let i = 1; i < parts.length - 1; i++) {
                             if (parts[i].trim() !== '') {
                                 numOptions++;
                             }
                         }
                         
-                        // Check against the actual number of non-empty options found.
-                        // The number of fields for options is (parts.length - 2)
                         const optionFieldsCount = parts.length - 2;
 
                         const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && optionFieldsCount >= numOptions;
                         
-                        const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, optionFieldsCount); // Valid letters based on provided option *fields*
-                        const isAnswerValid = validAnswerLetters.includes(correctAnswerLetter) && parts[1 + validAnswerLetters.indexOf(correctAnswerLetter)].trim() !== ''; // Ensure the chosen answer option is not empty
+                        const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, optionFieldsCount); 
+                        const isAnswerValid = validAnswerLetters.includes(correctAnswerLetter) && parts[1 + validAnswerLetters.indexOf(correctAnswerLetter)].trim() !== ''; 
 
                         if (isFormatValid && isAnswerValid) {
                             validLines++;
-                            totalOptions += numOptions; // Count of actual non-empty options
+                            totalOptions += numOptions; 
                             mcqCount++;
                         } else {
                             let problem = '';
                             if (question === '') problem += 'Missing question. ';
                             if (numOptions < 3 || numOptions > 6) problem += `Found ${numOptions} non-empty options (expected 3-6). `;
                             if (!isAnswerValid && numOptions > 0) problem += `Invalid or empty answer choice "${correctAnswerLetter}" for ${optionFieldsCount} option fields. `;
-                             if (parts.length < 5 || parts.length > 8) problem += `Incorrect field count. `;
+                             if (parts.length < 5 || parts.length > 8) problem += `Incorrect field count for options and answer. `;
                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - ${problem.trim()}`);
                             isValid = false;
                         }
@@ -1344,7 +1344,7 @@ Don't add extra text.
                 validationMessage.classList.add('show', 'success');
                 cardCount.classList.add('show');
                 cardCountNumber.textContent = validLines;
-            } else if (lines.length > 0 && validLines === 0) { // Handles case where input exists but all lines are invalid
+            } else if (lines.length > 0 && validLines === 0) { 
                  validationMessage.innerHTML = `
                     <span class="status-icon">❌</span>
                     <div class="status-content">
@@ -1398,7 +1398,7 @@ Don't add extra text.
                 switch(cardType) {
                     case 'mcq':
                         const question = parts[0].trim();
-                        if (parts.length < 5 || parts.length > 8) {isValidRow = false; break;} // Skip malformed
+                        if (parts.length < 5 || parts.length > 8) {isValidRow = false; break;}
                         const correctAnswerLetter = parts[parts.length - 1].trim().toUpperCase();
                         let numOptions = 0;
                          for (let i = 1; i < parts.length - 1; i++) {
@@ -1410,8 +1410,6 @@ Don't add extra text.
                         if (question !== '' && numOptions >= 3 && numOptions <= 6 && optionFieldsCount >= numOptions && validAnswerLetters.includes(correctAnswerLetter) && parts[1 + validAnswerLetters.indexOf(correctAnswerLetter)].trim() !== '') {
                             row += sanitizedParts[0]; 
                             for (let i = 1; i <= 6; i++) { 
-                                // parts[i] might be undefined if fewer than 6 options were provided in the source line.
-                                // sanitizedParts[i] will also be undefined.
                                 row += `,${sanitizedParts[i] !== undefined ? sanitizedParts[i] : '""'}`;
                             }
                             row += `,"",""`; 
@@ -1467,18 +1465,14 @@ Don't add extra text.
             generateButton.disabled = false;
             generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
 
-            // Event listener for the anchor tag
-            downloadButton.onclick = function() {
+            downloadButton.onclick = function() { // Directly assign onclick for simplicity with <a> tag
                  setTimeout(() => {
                     URL.revokeObjectURL(url);
-                    // Optional: reset href to prevent re-downloading old data if button remains visible
-                    // downloadButton.removeAttribute('href'); 
                 }, 100);
                 downloadButton.classList.add('animate__animated', 'animate__pulse');
                 setTimeout(() => {
                     downloadButton.classList.remove('animate__animated', 'animate__pulse');
                 }, 1000);
-                // No need for { once: true } here as the function is reassigned or button is hidden/reshown
             };
         }
 
