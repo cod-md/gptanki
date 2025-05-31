@@ -788,26 +788,27 @@
                                 </div>
                             </div>
                             
-                            <!-- Format Guides for Generate Mode -->
+                         <!-- Format Guides for Generate Mode -->
                             <div id="generateMcqGuide" class="format-guide show">
                                 <div class="guide-title">
                                     <span>📖</span>
                                     Multiple Choice Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                    Paste your content and AI will generate multiple-choice questions. Each question will have 3-6 options with one correct answer.
+                                    Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
                                 </div>
-                                <div class="guide-content">Paste your study material here and AI will generate MCQs following this format:
-
+                                <div class="guide-content">Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 
-The AI will:
-- Create questions at different Bloom's taxonomy levels
-- Generate 3-6 answer options per question
-- Mark the correct answer with the appropriate letter (A-F)
-- Focus on key concepts from your material
+Examples:
+What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
+What is 2 + 2?|3|4|5|6|||B
 
-Simply paste your content and let AI do the work!</div>
+Note: Questions can have 3-6 options. Empty options are allowed with | separators.
+The last field is always the correct answer letter.
+Make it appear as code for easy copying.
+Don't number the questions.
+Don't add extra text.</div>
                             </div>
                             
                             <div id="generateBasicGuide" class="format-guide">
@@ -816,19 +817,20 @@ Simply paste your content and let AI do the work!</div>
                                     Basic Cards Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                    Paste your content and AI will generate basic question-answer flashcards covering the key concepts.
+                                    Make 5 basic flashcards from the provided material covering key concepts.
                                 </div>
-                                <div class="guide-content">Paste your study material here and AI will generate basic flashcards following this format:
-
+                                <div class="guide-content">Format strictly as:
 question|answer
 
-The AI will:
-- Extract key concepts and facts
-- Create clear, concise questions
-- Provide direct, accurate answers
-- Cover important information comprehensively
+Examples:
+What is the capital of France?|Paris
+What is the largest planet in our solar system?|Jupiter
+When did World War II end?|1945
 
-Simply paste your content and let AI create the flashcards!</div>
+Note: Create clear, concise question-answer pairs.
+Make it appear as code for easy copying.
+Don't number the questions.
+Don't add extra text.</div>
                             </div>
                             
                             <div id="generateClozeGuide" class="format-guide">
@@ -837,19 +839,22 @@ Simply paste your content and let AI create the flashcards!</div>
                                     Cloze Deletion Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                    Paste your content and AI will generate cloze deletion cards with key terms and concepts hidden.
+                                    Make 5 cloze deletion cards from the provided material with key terms hidden.
                                 </div>
-                                <div class="guide-content">Paste your study material here and AI will generate cloze deletion cards following this format:
+                                <div class="guide-content">Format strictly as:
+{{c1::word/phrase}} or {{c1::word/phrase::hint}}
 
-{{c1::hidden_text}} or {{c1::hidden_text::hint}}
+Examples:
+The capital of France is {{c1::Paris}}.
+{{c1::Photosynthesis}} is the process by which plants make food.
+The formula for water is {{c1::H2O::chemical formula}}.
+In {{c1::1969}}, humans first landed on the {{c2::moon}}.
 
-The AI will:
-- Identify key terms and concepts to hide
-- Create meaningful cloze deletions
-- Add helpful hints when appropriate
-- Use multiple deletions per sentence when beneficial
-
-Simply paste your content and let AI create the cloze cards!</div>
+Note: Use {{c1::text}} for basic deletion, {{c1::text::hint}} for hints.
+Use {{c2::text}}, {{c3::text}} for multiple deletions in same sentence.
+Make it appear as code for easy copying.
+Don't number the sentences.
+Don't add extra text.</div>
                             </div>
 
                             <!-- Format Guides for Extract Mode -->
@@ -859,23 +864,20 @@ Simply paste your content and let AI create the cloze cards!</div>
                                     Multiple Choice Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                    Paste your already formatted MCQ content and the system will extract and convert it to CSV format.
+                                    Extract all the MCQs from the provided material.
                                 </div>
-                                <div class="guide-content">Paste your pre-formatted MCQs here following this format:
-
+                                <div class="guide-content">Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 
 Examples:
 What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
 What is 2 + 2?|3|4|5|6|||B
 
-Rules:
-- One question per line
-- Separate with | (pipe) characters
-- Questions can have 3-6 options
-- Empty options use ||| separators
-- Last field is the correct answer letter (A-F)
-- No extra text or numbering needed</div>
+Note: Questions can have 3-6 options. Empty options are allowed with | separators.
+The last field is always the correct answer letter.
+Make it appear as code for easy copying.
+Don't number the questions.
+Don't add extra text.</div>
                             </div>
                             
                             <div id="extractBasicGuide" class="format-guide">
@@ -884,10 +886,9 @@ Rules:
                                     Basic Cards Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                    Paste your already formatted basic flashcard content and the system will extract and convert it to CSV format.
+                                    Extract all the basic flashcards from the provided material.
                                 </div>
-                                <div class="guide-content">Paste your pre-formatted flashcards here following this format:
-
+                                <div class="guide-content">Format strictly as:
 question|answer
 
 Examples:
@@ -895,53 +896,21 @@ What is the capital of France?|Paris
 What is the largest planet in our solar system?|Jupiter
 When did World War II end?|1945
 
-Rules:
-- One question-answer pair per line
-- Separate question and answer with | (pipe)
-- Keep questions clear and concise
-- Provide direct, accurate answers
-- No numbering or extra formatting needed</div>
+Note: Extract question-answer pairs from the material.
+Make it appear as code for easy copying.
+Don't number the questions.
+Don't add extra text.</div>
                             </div>
                             
-                            <div id="basicGuide" class="format-guide">
+                            <div id="extractClozeGuide" class="format-guide">
                                 <div class="guide-title">
                                     <span>📖</span>
-                                    Basic Cards Format Guide
+                                    Cloze Deletion Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                    Use this format for creating basic question-answer flashcards. Each line should contain a question and its corresponding answer.
+                                    Extract all the cloze deletion cards from the provided material.
                                 </div>
-                                <div class="guide-content">Create basic flashcards from the provided material.
-
-Format strictly as:
-question|answer
-
-Examples:
-What is the capital of France?|Paris
-What is the largest planet in our solar system?|Jupiter
-When did World War II end?|1945
-
-Rules:
-- One question-answer pair per line
-- Separate question and answer with |
-- Keep questions clear and concise
-- Provide direct, accurate answers
-- Don't number the cards
-- Make it appear as code for easy copying
-- Don't add extra text or explanations</div>
-                            </div>
-                            
-                            <div id="clozeGuide" class="format-guide">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Cloze Deletion Format Guide
-                                </div>
-                                <div class="guide-description">
-                                    Use this format for creating cloze deletion cards. Wrap the words to be hidden in {{c1::text}} format.
-                                </div>
-                                <div class="guide-content">Create cloze deletion cards from the provided material.
-
-Format strictly as:
+                                <div class="guide-content">Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
 
 Examples:
@@ -950,16 +919,12 @@ The capital of France is {{c1::Paris}}.
 The formula for water is {{c1::H2O::chemical formula}}.
 In {{c1::1969}}, humans first landed on the {{c2::moon}}.
 
-Rules:
-- Use {{c1::text}} for basic cloze deletion
-- Use {{c1::text::hint}} to add hints
-- Use {{c2::text}}, {{c3::text}} for multiple deletions in same sentence
-- One sentence per line
-- Don't number the cards
-- Make it appear as code for easy copying
-- Don't add extra text or explanations</div>
+Note: Extract sentences with cloze deletions from the material.
+Use {{c1::text}} for basic deletion, {{c1::text::hint}} for hints.
+Make it appear as code for easy copying.
+Don't number the sentences.
+Don't add extra text.</div>
                             </div>
-                        </div>
 
                         <!-- Input Section -->
                         <div class="input-section">
