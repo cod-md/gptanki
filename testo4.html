@@ -411,7 +411,13 @@
             padding: 1.5rem;
         }
         
-        .toggle-btn {
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .toggle-btn, .copy-btn {
             background: var(--primary);
             color: white;
             border: none;
@@ -420,10 +426,56 @@
             font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
         
-        .toggle-btn:hover {
+        .toggle-btn:hover, .copy-btn:hover {
             background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .copy-btn {
+            background: var(--success);
+        }
+        
+        .copy-btn:hover {
+            background: #059669;
+        }
+        
+        .copy-btn.copied {
+            background: var(--accent);
+        }
+        
+        .guide-type-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .guide-type-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .guide-type-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .guide-type-btn:hover:not(.active) {
+            border-color: var(--primary);
+            background: var(--bg-secondary);
         }
         
         .guide-content {
@@ -437,6 +489,7 @@
             max-height: 300px;
             overflow-y: auto;
             white-space: pre-wrap;
+            position: relative;
         }
         
         .guide-content::-webkit-scrollbar {
@@ -501,6 +554,15 @@
             to { opacity: 1; }
         }
         
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .copy-success {
+            animation: pulse 0.3s ease;
+        }
+        
         /* Responsive Design */
         @media (max-width: 1024px) {
             .content-grid {
@@ -528,6 +590,15 @@
             
             .form-body, .card-body {
                 padding: 1.5rem;
+            }
+            
+            .header-controls {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .guide-type-selector {
+                flex-direction: column;
             }
         }
         
@@ -681,17 +752,30 @@
                                 <span>📖</span>
                                 Format Guide
                             </h3>
-                            <button class="toggle-btn" id="infoToggle">Hide</button>
+                            <div class="header-controls">
+                                <button class="copy-btn" id="copyGuide">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"></path>
+                                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                    </svg>
+                                    Copy
+                                </button>
+                                <button class="toggle-btn" id="infoToggle">Hide</button>
+                            </div>
                         </div>
                         <div class="card-body" id="guideBody">
+                            <div class="guide-type-selector">
+                                <button class="guide-type-btn active" id="generateGuide">Generate MCQs</button>
+                                <button class="guide-type-btn" id="extractGuide">Extract MCQs</button>
+                            </div>
                             <div class="guide-content" id="guideContent">make 5 mcqs on the provided material
 on these levels of thinking (according to blooms taxonomy)
 1,2,3,4,5,6
-            
- that would be strictly like this 
+
+that would be strictly like this 
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 FOR EXAMPLE
- What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
+What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
 What is 2 + 2?|3|4|5|6|B
 
 Note: Questions can have 3, 4, 5, or 6 options. The format adapts automatically.
@@ -700,17 +784,6 @@ depending on how many options the question has.
 
 make it easy to copy and don't type anything there that I told
 and don't number
-make it appear as a code for easy copy
-
-
-Extract all mcqs from the provided material
-         
- that would be strictly like this 
-question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
-And the choices count should be as present in the material
-make it easy to copy and don't type anything there that I told
-and number them in order of the provided material
-Do not rephrase any question or choices it should be strictly as the source
 make it appear as a code for easy copy</div>
                         </div>
                     </div>
@@ -737,93 +810,21 @@ make it appear as a code for easy copy</div>
         const infoToggle = document.getElementById('infoToggle');
         const guideBody = document.getElementById('guideBody');
         const guideContent = document.getElementById('guideContent');
+        const copyGuide = document.getElementById('copyGuide');
+        const generateGuideBtn = document.getElementById('generateGuide');
+        const extractGuideBtn = document.getElementById('extractGuide');
 
-        // Toggle guide visibility
-        infoToggle.addEventListener('click', function() {
-            if (guideContent.style.display === 'none') {
-                guideContent.style.display = 'block';
-                this.textContent = 'Hide';
-            } else {
-                guideContent.style.display = 'none';
-                this.textContent = 'Show';
-            }
-        });
+        // Guide content templates
+        const guideTemplates = {
+            generate: `make 5 mcqs on the provided material
+on these levels of thinking (according to blooms taxonomy)
+1,2,3,4,5,6
 
-        // Update input label and filename based on card type
-        cardTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                switch(this.value) {
-                    case 'mcq':
-                        inputLabel.innerHTML = '📄 Multiple-Choice Questions';
-                        filenameInput.value = 'MCQ';
-                        break;
-                    case 'basic':
-                        inputLabel.innerHTML = '📄 Basic Cards';
-                        filenameInput.value = 'Basic';
-                        break;
-                    case 'clozeDeletion':
-                        inputLabel.innerHTML = '📄 Cloze Deletion Cards';
-                        filenameInput.value = 'ClozeDeletion';
-                        break;
-                }
-                // Reset validation and hide download
-                resetValidation();
-                if (mcqText.value.trim()) {
-                    mcqText.value = '';
-                }
-            });
-        });
+that would be strictly like this 
+question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
+FOR EXAMPLE
+What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
+What is 2 + 2?|3|4|5|6|B
 
-        function resetValidation() {
-            validationMessage.classList.remove('show', 'error');
-            document.getElementById('downloadButton').style.display = 'none';
-            cardCount.style.display = 'none';
-        }
-
-        function showMessage(isError, title, details) {
-            const statusIcon = validationMessage.querySelector('.status-icon');
-            const statusTitle = validationMessage.querySelector('.status-title');
-            const statusDetails = validationMessage.querySelector('.status-details');
-            
-            statusIcon.textContent = isError ? '❌' : '✅';
-            statusTitle.textContent = title;
-            statusDetails.textContent = details;
-            
-            validationMessage.classList.remove('error');
-            if (isError) {
-                validationMessage.classList.add('error');
-            }
-            validationMessage.classList.add('show');
-        }
-
-        function validateMCQs(text, cardType) {
-            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
-            resetValidation();
-
-            let isValid = true;
-            let validLines = 0;
-            let totalOptions = 0;
-            let validOptionCounts = {};
-
-            switch(cardType) {
-                case 'mcq':
-                    const invalidMCQLines = [];
-                    lines.forEach((line, index) => {
-                        const parts = line.split('|');
-                        let numOptions = 0;
-                        for (let i = 1; i < parts.length - 1; i++) {
-                            if (parts[i].trim() !== '') {
-                                numOptions++;
-                            }
-                        }
-                        
-                        if (numOptions >= 3 && numOptions <= 6 && parts.length >= numOptions + 2) {
-                            const answer = parts[parts.length - 1].trim();
-                            const validAnswers = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, numOptions);
-                            
-                            if (!validAnswers.includes(answer)) {
-                                invalidMCQLines.push(`Line ${index + 1}: Invalid answer`);
-                            } else {
-                                validLines++;
-                                totalOptions += numOptions;
-                                validOptionCounts[numOptions] = (validOptionCounts
+Note: Questions can have 3, 4, 5, or 6 options. The format adapts automatically.
+The last field is always the correct answer which must be a letter (
