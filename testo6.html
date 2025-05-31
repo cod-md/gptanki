@@ -44,7 +44,7 @@
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
             background: var(--bg-gradient);
@@ -863,7 +863,7 @@ Don't add extra text.
                                     Basic Cards Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                       </div>
+                                    </div>
                                 <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make 5 basic flashcards from the provided material covering key concepts.
 
 Format strictly as:
@@ -887,7 +887,7 @@ Don't add extra text.
                                     Cloze Deletion Generation Guide
                                 </div>
                                 <div class="guide-description">
-                                       </div>
+                                    </div>
                                 <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make 5 cloze deletion cards from the provided material with key terms hidden.
 
 Format strictly as:
@@ -913,7 +913,7 @@ Don't add extra text.
                                     Multiple Choice Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                       </div>
+                                    </div>
                                 <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
 
 Format strictly as:
@@ -1161,7 +1161,7 @@ Don't add extra text.
             }
             inputLabel.textContent = labelText;
             filenameInput.value = currentCardType === 'mcq' ? 'MCQ' : 
-                                  currentCardType === 'basic' ? 'Basic' : 'ClozeDeletion';
+                                currentCardType === 'basic' ? 'Basic' : 'ClozeDeletion';
         }
 
         modeRadios.forEach(radio => {
@@ -1290,8 +1290,13 @@ Don't add extra text.
                     break;
 
                 case 'clozeDeletion':
-                    const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/g;
+                    // MODIFIED LINE: Removed 'g' flag from the regex for more reliable line-by-line testing in a loop
+                    const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/; 
                     lines.forEach((line, index) => {
+                        // For regex with 'g' flag, if used in a loop like this on multiple strings,
+                        // it's better to reset lastIndex (clozeRegex.lastIndex = 0;) before each test,
+                        // or remove the 'g' flag if only checking for existence on each line.
+                        // Removing 'g' is simpler if we're not iterating matches on the same string.
                         if (clozeRegex.test(line)) {
                             validLines++;
                         } else {
@@ -1430,8 +1435,10 @@ Don't add extra text.
                         break;
 
                     case 'clozeDeletion':
-                        const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/g;
-                        if (clozeRegex.test(parts[0])) { 
+                        // This regex is defined inside the loop, so 'g' flag doesn't cause inter-line issues.
+                        // Removing 'g' here too for consistency if only one test is done, though not strictly necessary for fixing the bug.
+                        const clozeRegex_csv = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/; 
+                        if (parts.length === 1 && clozeRegex_csv.test(parts[0])) { // For cloze, expecting the full line in parts[0]
                              row += sanitizedParts[0]; 
                              isValidRow = true;
                         }
