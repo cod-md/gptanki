@@ -187,7 +187,7 @@
             position: relative;
         }
         
-        .mode-radio {
+        .mode-radio { /* This class is now for radio inputs specifically */
             display: none;
         }
         
@@ -265,21 +265,21 @@
         
         /* Card Type Selection */
         .card-type-section {
-            margin-bottom: 1.5rem; /* Will be followed by additional-options-wrapper */
+            margin-bottom: 1.5rem;
         }
         
         .card-type-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 0.75rem;
-            margin-bottom: 1.5rem; /* Space before additional options or guides */
+            margin-bottom: 1.5rem; 
         }
         
         .card-type-option {
             position: relative;
         }
         
-        .card-type-radio {
+        .card-type-radio { /* This class is now for radio inputs specifically */
             display: none;
         }
         
@@ -345,7 +345,6 @@
             z-index: 1;
         }
 
-        /* New Options Sections (Card Number & Difficulty) Wrapper */
         .additional-options-wrapper {
             display: grid; 
             grid-template-columns: 1fr; 
@@ -374,25 +373,19 @@
         .option-config-item { 
             position: relative;
         }
-        .card-number-custom-item, .difficulty-custom-item {
+        .card-number-custom-item { /* Removed .difficulty-custom-item as custom difficulty is removed */
             display: flex;
             flex-direction: column;
             gap: 0.5rem; 
         }
-        .card-number-custom-item .option-config-label,
-        .difficulty-custom-item .option-config-label {
+        .card-number-custom-item .option-config-label {
              width: 100%;
         }
-        .card-number-custom-item .custom-value-input,
-        .difficulty-custom-item .custom-value-input {
+        .card-number-custom-item .custom-value-input {
             width: 100%;
         }
-        .difficulty-custom-item .custom-value-input {
-            text-align: center;
-        }
 
-
-        .option-config-radio {
+        .option-config-input { /* Renamed from .option-config-radio */
             display: none;
         }
 
@@ -432,7 +425,7 @@
             opacity: 0.05;
         }
 
-        .option-config-radio:checked + .option-config-label {
+        .option-config-input:checked + .option-config-label { /* Changed selector */
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-color: transparent;
@@ -440,11 +433,11 @@
             box-shadow: var(--shadow-lg);
         }
 
-        .option-config-radio:checked + .option-config-label::before {
+        .option-config-input:checked + .option-config-label::before { /* Changed selector */
             opacity: 0;
         }
         
-        .custom-value-input {
+        .custom-value-input { /* Only for card number custom input now */
             width: 100%; 
             padding: 0.75rem; 
             border: 2px solid var(--border-hover);
@@ -476,7 +469,7 @@
             background: var(--bg-tertiary);
             border-radius: var(--radius);
             padding: 1rem;
-            margin-top: 1rem; /* Will now be below additional-options-wrapper or other guides */
+            margin-top: 1rem;
             border-left: 4px solid var(--primary);
             display: none;
             animation: slideDown 0.3s ease;
@@ -838,8 +831,8 @@
             .card-number-options-grid { 
                  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
             }
-            .difficulty-options-grid {
-                 grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+            .difficulty-options-grid { /* Max 6 items, can fit well */
+                 grid-template-columns: repeat(6, 1fr); 
             }
             
             .action-buttons {
@@ -882,6 +875,9 @@
         @media (max-width: 767px) {
             .header-title h1 {
                 font-size: 2rem;
+            }
+            .difficulty-options-grid { /* More responsive for small screens */
+                 grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
             }
             
             .form-header h2 {
@@ -980,15 +976,15 @@
                                     </h3>
                                     <div class="options-config-grid card-number-options-grid">
                                         <div class="option-config-item">
-                                            <input type="radio" id="cardNumber50" name="cardNumber" class="option-config-radio" value="50" checked>
+                                            <input type="radio" id="cardNumber50" name="cardNumber" class="option-config-input" value="50" checked>
                                             <label for="cardNumber50" class="option-config-label">50</label>
                                         </div>
                                         <div class="option-config-item">
-                                            <input type="radio" id="cardNumber100" name="cardNumber" class="option-config-radio" value="100">
+                                            <input type="radio" id="cardNumber100" name="cardNumber" class="option-config-input" value="100">
                                             <label for="cardNumber100" class="option-config-label">100</label>
                                         </div>
                                         <div class="option-config-item card-number-custom-item">
-                                            <input type="radio" id="cardNumberCustomRadio" name="cardNumber" class="option-config-radio" value="custom">
+                                            <input type="radio" id="cardNumberCustomRadio" name="cardNumber" class="option-config-input" value="custom">
                                             <label for="cardNumberCustomRadio" class="option-config-label">Custom</label>
                                             <input type="number" id="customCardNumberInput" class="custom-value-input" placeholder="Qty" min="1" style="display: none;">
                                         </div>
@@ -998,48 +994,44 @@
                                 <div class="options-config-section difficulty-section">
                                     <h3 class="section-title">
                                         <span>📊</span>
-                                        Difficulty
+                                        Difficulty Level(s)
                                     </h3>
                                     <div class="options-config-grid difficulty-options-grid">
                                         <div class="option-config-item">
-                                            <input type="radio" id="difficulty1" name="difficulty" class="option-config-radio" value="1" checked>
+                                            <input type="checkbox" id="difficulty1" name="difficultyLevel" class="option-config-input" value="1">
                                             <label for="difficulty1" class="option-config-label difficulty-label-box">1</label>
                                         </div>
                                         <div class="option-config-item">
-                                            <input type="radio" id="difficulty2" name="difficulty" class="option-config-radio" value="2">
+                                            <input type="checkbox" id="difficulty2" name="difficultyLevel" class="option-config-input" value="2">
                                             <label for="difficulty2" class="option-config-label difficulty-label-box">2</label>
                                         </div>
                                         <div class="option-config-item">
-                                            <input type="radio" id="difficulty3" name="difficulty" class="option-config-radio" value="3">
+                                            <input type="checkbox" id="difficulty3" name="difficultyLevel" class="option-config-input" value="3">
                                             <label for="difficulty3" class="option-config-label difficulty-label-box">3</label>
                                         </div>
                                         <div class="option-config-item">
-                                            <input type="radio" id="difficulty4" name="difficulty" class="option-config-radio" value="4">
+                                            <input type="checkbox" id="difficulty4" name="difficultyLevel" class="option-config-input" value="4">
                                             <label for="difficulty4" class="option-config-label difficulty-label-box">4</label>
                                         </div>
                                         <div class="option-config-item">
-                                            <input type="radio" id="difficulty5" name="difficulty" class="option-config-radio" value="5">
+                                            <input type="checkbox" id="difficulty5" name="difficultyLevel" class="option-config-input" value="5">
                                             <label for="difficulty5" class="option-config-label difficulty-label-box">5</label>
                                         </div>
                                         <div class="option-config-item">
-                                            <input type="radio" id="difficulty6" name="difficulty" class="option-config-radio" value="6">
+                                            <input type="checkbox" id="difficulty6" name="difficultyLevel" class="option-config-input" value="6">
                                             <label for="difficulty6" class="option-config-label difficulty-label-box">6</label>
-                                        </div>
-                                        <div class="option-config-item difficulty-custom-item">
-                                            <input type="radio" id="difficultyCustomRadio" name="difficulty" class="option-config-radio" value="custom">
-                                            <label for="difficultyCustomRadio" class="option-config-label difficulty-label-box">Custom</label>
-                                            <input type="text" id="customDifficultyInput" class="custom-value-input" placeholder="e.g. 1,3,5" style="display: none;">
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div id="generateMcqGuide" class="format-guide show">
                                 <div class="guide-title">
                                     <span>📖</span>
                                     Multiple Choice Generation Guide
                                 </div>
                                 <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> MCQs on the provided material<span class="guide-dynamic-bloom-info"> following Bloom's taxonomy level 1</span>.
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> MCQs on the provided material<span class="guide-dynamic-bloom-info"></span>.
 
 Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
@@ -1253,10 +1245,9 @@ Don't add extra text.
         function copyGuideContent(button) {
             const guide = button.closest('.format-guide');
             const guideContentElement = guide.querySelector('.guide-content');
-            
-            // Create a temporary clone to get text content without the button itself
             const tempClone = guideContentElement.cloneNode(true);
-            tempClone.querySelector('.guide-copy-btn').remove(); // Remove button from clone
+            const btnInClone = tempClone.querySelector('.guide-copy-btn');
+            if (btnInClone) btnInClone.remove();
             const guideContent = tempClone.textContent.trim();
             
             navigator.clipboard.writeText(guideContent).then(() => {
@@ -1266,14 +1257,12 @@ Don't add extra text.
                     Copied!
                 `;
                 button.classList.add('copied');
-                
                 setTimeout(() => {
                     button.innerHTML = originalHTML;
                     button.classList.remove('copied');
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
-                // Fallback for older browsers or if clipboard API fails
                 const textArea = document.createElement('textarea');
                 textArea.value = guideContent;
                 textArea.style.position = 'fixed'; 
@@ -1282,7 +1271,6 @@ Don't add extra text.
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    // (visual feedback as above)
                 } catch (err) {
                     console.error('Fallback copy failed: ', err);
                     alert('Copy failed, please copy the text manually.');
@@ -1298,8 +1286,8 @@ Don't add extra text.
         const inputLabel = document.getElementById('inputLabel');
         const filenameInput = document.getElementById('filename');
         const validationMessage = document.getElementById('validationMessage');
-        const cardCount = document.getElementById('cardCount');
-        const cardCountNumberEl = document.getElementById('cardCountNumber'); // Renamed for clarity
+        const cardCountInfo = document.getElementById('cardCount'); // Renamed for clarity
+        const cardCountNumberEl = document.getElementById('cardCountNumber');
         const optionStats = document.getElementById('optionStats');
         const generateButton = document.getElementById('generateButton');
         const downloadButton = document.getElementById('downloadButton'); 
@@ -1322,11 +1310,8 @@ Don't add extra text.
         const difficultySection = document.querySelector('.difficulty-section');
         const customCardNumberRadio = document.getElementById('cardNumberCustomRadio');
         const customCardNumberInput = document.getElementById('customCardNumberInput');
-        const cardNumberOptionRadios = document.querySelectorAll('input[name="cardNumber"]');
-
-        const customDifficultyRadio = document.getElementById('difficultyCustomRadio');
-        const customDifficultyInput = document.getElementById('customDifficultyInput');
-        const difficultyOptionRadios = document.querySelectorAll('input[name="difficulty"]');
+        const cardNumberOptionInputs = document.querySelectorAll('input[name="cardNumber"]'); // Radios + custom radio
+        const difficultyOptionCheckboxes = document.querySelectorAll('input[name="difficultyLevel"]');
 
 
         function updateGuideDisplay() {
@@ -1357,7 +1342,7 @@ Don't add extra text.
             filenameInput.value = currentCardType === 'mcq' ? 'MCQ' : 
                                 currentCardType === 'basic' ? 'Basic' : 'ClozeDeletion';
             
-            updateDynamicGuideContent(); // Update text after guide visibility changes
+            updateDynamicGuideContent();
         }
         
         function toggleDifficultySectionVisibility() {
@@ -1376,8 +1361,7 @@ Don't add extra text.
 
             if (!activeGuide) return;
 
-            // --- Update Card Count ---
-            let cardNumberToDisplay = '50'; // Default to 50 as it's initially checked
+            let cardNumberToDisplay = '50'; 
             if (customCardNumberRadio.checked) {
                 cardNumberToDisplay = customCardNumberInput.value.trim() || 'a custom number of';
             } else {
@@ -1387,83 +1371,69 @@ Don't add extra text.
 
             const countSpan = activeGuide.querySelector('.guide-dynamic-card-count');
             if (countSpan) {
-                // Update for generate modes and extract MCQ mode
                 if (currentMode === 'generate' || (currentMode === 'extract' && currentCardType === 'mcq')) {
                     countSpan.textContent = cardNumberToDisplay;
                 } else {
-                     // If the span somehow exists in other extract guides, revert to its original text or a generic one.
-                     // For basic/cloze extract, they don't have the count span as per their text.
-                     // Defaulting to '5' if the span is found but mode/type doesn't match specific update logic.
-                     // Better: set it based on initial HTML if no specific logic applies.
-                     // The HTML defaults are now "50", so if no logic applies, it stays "50".
+                    // For guides where count isn't dynamic (e.g. extract basic/cloze), ensure span isn't there or is static.
+                    // Current HTML has static text or no span for those.
                 }
             }
 
-            // --- Update Bloom's Taxonomy Info (only for Generate MCQ) ---
             const bloomInfoSpan = activeGuide.querySelector('.guide-dynamic-bloom-info');
-            if (bloomInfoSpan) {
+            if (bloomInfoSpan) { // This span should only be in generateMcqGuide
                 if (currentMode === 'generate' && currentCardType === 'mcq') {
-                    let difficultySetting = 'level 1'; // Default to 1 as it's initially checked
-                    if (customDifficultyRadio.checked) {
-                        const customVal = customDifficultyInput.value.trim();
-                        if (customVal) {
-                            const levels = customVal.split(',').map(s => s.trim()).filter(s => s);
-                            if (levels.length > 0) {
-                                difficultySetting = `level${levels.length > 1 ? 's' : ''} ${levels.join(', ')}`;
-                            } else {
-                                difficultySetting = 'custom levels (please specify)';
-                            }
-                        } else {
-                            difficultySetting = 'custom levels (please specify)';
+                    const selectedDifficultyLevels = [];
+                    difficultyOptionCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            selectedDifficultyLevels.push(checkbox.value);
                         }
+                    });
+
+                    let bloomTextPart = "following Bloom's taxonomy ";
+                    if (selectedDifficultyLevels.length > 0) {
+                        selectedDifficultyLevels.sort((a, b) => parseInt(a) - parseInt(b));
+                        const levelsString = selectedDifficultyLevels.join(', ');
+                        bloomTextPart += `level${selectedDifficultyLevels.length > 1 ? 's' : ''} ${levelsString}`;
                     } else {
-                        const checkedDiffRadio = document.querySelector('input[name="difficulty"]:checked');
-                        if (checkedDiffRadio) difficultySetting = `level ${checkedDiffRadio.value}`;
+                        bloomTextPart += "levels (1-6 suggested; select specific levels if desired)";
                     }
-                    bloomInfoSpan.textContent = ` following Bloom's taxonomy ${difficultySetting}.`;
+                    bloomInfoSpan.textContent = bloomTextPart + ".";
                 } else {
-                    // For other modes/card types, the bloomInfoSpan (if it exists) should revert to its original HTML content.
-                    // This is handled by `updateGuideDisplay` re-showing the guide, which has the default static text.
-                    // If this span is ONLY in generateMcqGuide, no specific reset needed here for other guides.
-                    // If extractMcqGuide had this span, it would need specific handling or a different class.
-                    // Current HTML: extractMcqGuide's Bloom's text is static.
+                    // If the span exists but it's not generate MCQ, reset to a generic or its original static state.
+                    // Since this span is intended only for generate MCQ, this case might not be hit if HTML is structured correctly.
+                    // For safety, could set a default:
+                     bloomInfoSpan.textContent = " following Bloom's taxonomy (select levels if generating MCQs).";
                 }
             }
         }
 
-
         modeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
-                updateGuideDisplay(); // This shows/hides guides AND calls updateDynamicGuideContent
+                updateGuideDisplay(); 
                 resetUIState();
-                toggleDifficultySectionVisibility(); // Then adjust difficulty section visibility
-                // updateDynamicGuideContent(); // Called by updateGuideDisplay
+                toggleDifficultySectionVisibility(); 
+                // updateDynamicGuideContent(); // Now called by updateGuideDisplay
             });
         });
 
         cardTypeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
-                updateGuideDisplay(); // Also calls updateDynamicGuideContent
+                updateGuideDisplay(); 
                 resetUIState();
-                // updateDynamicGuideContent(); // Called by updateGuideDisplay
+                // updateDynamicGuideContent(); // Now called by updateGuideDisplay
             });
         });
         
-        // Listeners for card number options
-        cardNumberOptionRadios.forEach(radio => radio.addEventListener('change', updateDynamicGuideContent));
+        cardNumberOptionInputs.forEach(input => input.addEventListener('change', updateDynamicGuideContent));
         customCardNumberInput.addEventListener('input', updateDynamicGuideContent);
-
-        // Listeners for difficulty options
-        difficultyOptionRadios.forEach(radio => radio.addEventListener('change', updateDynamicGuideContent));
-        customDifficultyInput.addEventListener('input', updateDynamicGuideContent);
-
+        difficultyOptionCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateDynamicGuideContent));
 
         function resetUIState() {
             validationMessage.classList.remove('show', 'error', 'success');
             validationMessage.innerHTML = ''; 
             downloadButton.style.display = 'none';
             downloadButton.removeAttribute('href'); 
-            cardCount.classList.remove('show');
+            cardCountInfo.classList.remove('show');
             cardCountNumberEl.textContent = '0';
             optionStats.textContent = '-';
         }
@@ -1478,100 +1448,178 @@ Don't add extra text.
             const invalidLinesList = []; 
 
             if (lines.length === 0) {
-                 validationMessage.innerHTML = `...`; // Content as before
+                validationMessage.innerHTML = `<span class="status-icon">⚠️</span><div class="status-content"><div class="status-title">Input Empty</div><div class="status-details">Please paste your content into the textarea.</div></div>`;
+                validationMessage.classList.remove('success'); 
+                validationMessage.classList.add('show', 'error'); 
+                cardCountInfo.classList.remove('show');
+                downloadButton.style.display = 'none';
                 return false;
             }
-            // ... (rest of validation logic remains the same) ...
+
             switch(cardType) {
                 case 'mcq':
                     lines.forEach((line, index) => {
                         const parts = line.split('|');
                         const question = parts[0].trim();
                         if (parts.length < 5 || parts.length > 8) { 
-                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - Incorrect number of fields separated by '|'. Expected 5-8 fields.`);
-                             isValid = false;
-                             return; 
+                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - Incorrect number of fields. Expected 5-8.`);
+                             isValid = false; return; 
                         }
                         const correctAnswerLetter = parts[parts.length - 1].trim().toUpperCase();
                         let numOptions = 0;
-                        for (let i = 1; i < parts.length - 1; i++) {
-                            if (parts[i].trim() !== '') {
-                                numOptions++;
-                            }
-                        }
-                        
+                        for (let i = 1; i < parts.length - 1; i++) { if (parts[i].trim() !== '') numOptions++; }
                         const optionFieldsCount = parts.length - 2;
                         const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && optionFieldsCount >= numOptions;
                         const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, optionFieldsCount); 
-                        const isAnswerValid = validAnswerLetters.includes(correctAnswerLetter) && (optionFieldsCount >= validAnswerLetters.indexOf(correctAnswerLetter) +1) && parts[1 + validAnswerLetters.indexOf(correctAnswerLetter)].trim() !== ''; 
+                        const answerIndex = validAnswerLetters.indexOf(correctAnswerLetter);
+                        const isAnswerValid = answerIndex !== -1 && (1 + answerIndex < parts.length -1) && parts[1 + answerIndex].trim() !== '';
 
                         if (isFormatValid && isAnswerValid) {
-                            validLines++;
-                            totalOptions += numOptions; 
-                            mcqCount++;
+                            validLines++; totalOptions += numOptions; mcqCount++;
                         } else {
                             let problem = '';
                             if (question === '') problem += 'Missing question. ';
-                            if (numOptions < 3 || numOptions > 6) problem += `Found ${numOptions} non-empty options (expected 3-6). `;
-                            if (!isAnswerValid && numOptions > 0) problem += `Invalid or empty answer choice "${correctAnswerLetter}" for ${optionFieldsCount} option fields. `;
-                             if (parts.length < 5 || parts.length > 8) problem += `Incorrect field count for options and answer. `;
+                            if (numOptions < 3 || numOptions > 6) problem += `Found ${numOptions} options (exp. 3-6). `;
+                            if (!isAnswerValid && numOptions > 0) problem += `Invalid/empty answer "${correctAnswerLetter}". `;
                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - ${problem.trim()}`);
                             isValid = false;
                         }
                     });
-
-                    if (invalidLinesList.length > 0) {
-                        errorMessage = `...`; // Content as before
-                    }
+                    if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid MCQ Format</strong><br>• Format: Question|OptA|...|CorrectLetter (3-6 options).<br>• Correct letter must match a non-empty option.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
                     break;
                 case 'basic':
                      lines.forEach((line, index) => {
                         const parts = line.split('|');
-                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
-                            validLines++;
-                        } else {
-                            invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`);
-                            isValid = false;
-                        }
+                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') validLines++;
+                        else { invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`); isValid = false; }
                     });
-                    if (invalidLinesList.length > 0) {
-                        errorMessage = `...`; // Content as before
-                    }
+                    if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid Basic Format</strong><br>• Format: Question|Answer.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
                     break;
                 case 'clozeDeletion':
-                    const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/; 
+                    const clozeRegex = /\{\{c\d+::.+?\}\}/; 
                     lines.forEach((line, index) => {
-                        if (clozeRegex.test(line)) {
-                            validLines++;
-                        } else {
-                            invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`);
-                            isValid = false;
-                        }
+                        if (clozeRegex.test(line)) validLines++;
+                        else { invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`); isValid = false; }
                     });
-                    if (invalidLinesList.length > 0) {
-                        errorMessage = `...`; // Content as before
-                    }
+                    if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid Cloze Format</strong><br>• Must contain {{c1::text}}.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
                     break;
             }
 
             if (!isValid || (validLines === 0 && lines.length > 0) ) { 
-                validationMessage.innerHTML = `...`; // Content as before
+                validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">Validation Error</div><div class="status-details">${errorMessage || 'No valid cards. Check format.'}</div></div>`;
+                validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
+                cardCountInfo.classList.remove('show'); downloadButton.style.display = 'none';
                 return false;
             }
             if (validLines > 0) { 
-                // ... success message update ...
-                cardCountNumberEl.textContent = validLines; // Use updated variable name
+                let successDetails = `Total Valid Cards: ${validLines}`;
+                if (cardType === 'mcq' && mcqCount > 0) {
+                    const avgOptions = (totalOptions / mcqCount).toFixed(1);
+                    optionStats.textContent = avgOptions;
+                    successDetails += `<br>Avg non-empty options/MCQ: ${avgOptions}`;
+                } else optionStats.textContent = '-';
+                validationMessage.innerHTML = `<span class="status-icon">✅</span><div class="status-content"><div class="status-title">Validated!</div><div class="status-details">${successDetails}</div></div>`;
+                validationMessage.classList.remove('error'); validationMessage.classList.add('show', 'success');
+                cardCountInfo.classList.add('show'); cardCountNumberEl.textContent = validLines;
             } else if (lines.length > 0 && validLines === 0) { 
-                 validationMessage.innerHTML = `...`; // Content as before
+                validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">Validation Error</div><div class="status-details">${errorMessage || 'No valid cards. Check format.'}</div></div>`;
+                validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
+                cardCountInfo.classList.remove('show'); downloadButton.style.display = 'none';
                 return false;
             }
             return true;
-        } // End of validateInput - rest of the function's content is the same
-
+        }
 
         function generateCSV() {
-            // ... (generateCSV logic remains the same) ...
-        } // End of generateCSV - function's content is the same
+            const text = mcqText.value;
+            const cardType = document.querySelector('input[name="cardType"]:checked').value;
+            let filename = filenameInput.value.trim() || 'AnkiCards';
+            
+            generateButton.disabled = true;
+            generateButton.innerHTML = `<svg class="spinner" style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...`;
+            downloadButton.style.display = 'none';
+            validationMessage.classList.remove('show', 'error', 'success');
+
+            if (!validateInput(text, cardType)) {
+                generateButton.disabled = false;
+                generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
+                return;
+            }
+
+            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+            let csvContent = '';
+            let validProcessedLines = 0;
+
+            lines.forEach(line => {
+                if (!line.trim()) return;
+                const parts = line.split('|');
+                const sanitizedParts = parts.map(part => {
+                    const trimmedPart = part.trim();
+                    const needsQuotes = trimmedPart.includes(',') || trimmedPart.includes('\n') || trimmedPart.includes('|') || trimmedPart.includes('"');
+                    let escapedPart = trimmedPart.replace(/"/g, '""');
+                    return needsQuotes ? `"${escapedPart}"` : escapedPart;
+                });
+
+                let row = '';
+                let isValidRowForProcessing = false; // Use a different flag for CSV generation phase
+                switch(cardType) {
+                    case 'mcq':
+                        // Re-validate just enough for CSV structuring, primary validation done in validateInput
+                        if (parts.length >= 5 && parts.length <= 8 && parts[0].trim() !== '') {
+                            row += sanitizedParts[0]; 
+                            for (let i = 1; i <= 6; i++) { 
+                                row += `,${sanitizedParts[i] !== undefined ? sanitizedParts[i] : '""'}`;
+                            }
+                            row += `,"",""`; 
+                            row += `,${sanitizedParts[parts.length - 1]}`; 
+                            isValidRowForProcessing = true;
+                        }
+                        break;
+                    case 'basic':
+                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
+                            row += `${sanitizedParts[0]},${sanitizedParts[1]}`;
+                            isValidRowForProcessing = true;
+                        }
+                        break;
+                    case 'clozeDeletion':
+                        const clozeRegex_csv = /\{\{c\d+::.+?\}\}/; 
+                        if (parts.length === 1 && clozeRegex_csv.test(parts[0])) { 
+                             row += sanitizedParts[0]; 
+                             isValidRowForProcessing = true;
+                        }
+                        break;
+                }
+                if(isValidRowForProcessing){
+                    csvContent += row + '\n';
+                    validProcessedLines++;
+                }
+            });
+            
+            if (validProcessedLines === 0) { // Should be caught by validateInput, but as a safeguard
+                validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">No Valid Data to Generate CSV</div><div class="status-details">Please check input and format.</div></div>`;
+                validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
+                generateButton.disabled = false;
+                generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
+                return;
+            }
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            downloadButton.href = url; 
+            downloadButton.setAttribute('download', `${filename}.csv`);
+            downloadButton.style.display = 'inline-flex';
+            downloadButton.classList.add('animate__animated', 'animate__fadeIn');
+
+            generateButton.disabled = false;
+            generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
+
+            downloadButton.onclick = function() { 
+                 setTimeout(() => { URL.revokeObjectURL(url); }, 100);
+                downloadButton.classList.add('animate__animated', 'animate__pulse');
+                setTimeout(() => { downloadButton.classList.remove('animate__animated', 'animate__pulse'); }, 1000);
+            };
+        }
 
         let validationTimeout;
         mcqText.addEventListener('input', function() {
@@ -1584,7 +1632,7 @@ Don't add extra text.
                 } else {
                      resetUIState(); 
                      validationMessage.classList.remove('show', 'error', 'success');
-                     cardCount.classList.remove('show');
+                     cardCountInfo.classList.remove('show');
                 }
             }, 500); 
         });
@@ -1594,62 +1642,46 @@ Don't add extra text.
         clearButton.addEventListener('click', function() {
             mcqText.value = '';
             resetUIState();
-            updateGuideDisplay(); 
+            // updateGuideDisplay(); // Called below after resetting options
             validationMessage.classList.remove('show', 'error', 'success');
-            cardCount.classList.remove('show');
-            // Reset card number and difficulty to defaults and update guide
-            document.getElementById('cardNumber50').checked = true;
-            document.getElementById('difficulty1').checked = true;
+            cardCountInfo.classList.remove('show');
+            
+            document.getElementById('cardNumber50').checked = true; // Reset card number
+            cardNumberOptionInputs.forEach(radio => { // Ensure other card number radios are unchecked if '50' is default
+                 if(radio.id !== 'cardNumber50') radio.checked = false;
+            });
             customCardNumberInput.style.display = 'none';
             customCardNumberInput.value = '';
-            customDifficultyInput.style.display = 'none';
-            customDifficultyInput.value = '';
-            updateDynamicGuideContent();
+            
+            difficultyOptionCheckboxes.forEach(checkbox => checkbox.checked = false); // Uncheck all difficulty levels
+            
+            updateGuideDisplay(); // This will also call updateDynamicGuideContent
+            toggleDifficultySectionVisibility(); // Ensure correct visibility after mode reset (if any)
         });
 
-        // JavaScript for custom input visibility (Number of Cards)
-        cardNumberOptionRadios.forEach(radio => {
+        // JavaScript for custom card number input visibility
+        cardNumberOptionInputs.forEach(radio => {
             radio.addEventListener('change', () => {
                 if (customCardNumberRadio.checked) {
                     customCardNumberInput.style.display = 'block';
-                    customCardNumberInput.focus();
+                    if(document.activeElement !== customCardNumberInput) customCardNumberInput.focus();
                 } else {
                     customCardNumberInput.style.display = 'none';
                 }
             });
         });
 
-        // JavaScript for custom input visibility (Difficulty)
-        difficultyOptionRadios.forEach(radio => {
-            radio.addEventListener('change', () => {
-                if (customDifficultyRadio.checked) {
-                    customDifficultyInput.style.display = 'block';
-                    customDifficultyInput.focus();
-                } else {
-                    customDifficultyInput.style.display = 'none';
-                }
-            });
-        });
-
-
         document.addEventListener('DOMContentLoaded', () => {
             updateGuideDisplay(); 
             toggleDifficultySectionVisibility(); 
-            // updateDynamicGuideContent(); // Already called by updateGuideDisplay
             
-            // Initial check for custom radios
             if (customCardNumberRadio && customCardNumberRadio.checked) {
                 customCardNumberInput.style.display = 'block';
             } else if (customCardNumberInput) {
                 customCardNumberInput.style.display = 'none';
             }
-            if (customDifficultyRadio && customDifficultyRadio.checked) {
-                customDifficultyInput.style.display = 'block';
-            } else if (customDifficultyInput) {
-                customDifficultyInput.style.display = 'none';
-            }
-            // Ensure initial guide text is correct based on default selections
-            updateDynamicGuideContent(); 
+            // No custom difficulty input to manage visibility for anymore.
+            // updateDynamicGuideContent(); // Called by updateGuideDisplay
         });
     </script>
 </body>
