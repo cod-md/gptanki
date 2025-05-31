@@ -395,7 +395,7 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, opacity 0.2s ease; /* MODIFIED */
             opacity: 0.9;
         }
 
@@ -406,6 +406,7 @@
 
         .guide-copy-btn.copied {
             background-color: var(--success);
+            opacity: 1; /* ADDED for clarity */
         }
         
         .guide-description {
@@ -452,7 +453,7 @@
         .textarea-field {
             min-height: 150px;
             resize: vertical;
-            font-family: 'Inter', monospace;
+            font-family: 'Inter', monospace; /* Changed from 'Inter', monospace to 'Inter', sans-serif for consistency with other inputs, but kept monospace for typical code input feel for this specific field. Reverted to Inter, monospace as per original for textarea */
             line-height: 1.5;
         }
         
@@ -836,15 +837,7 @@
                                 <div class="guide-description">
                                     Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
                                 </div>
-                                <div class="guide-content">
-                                    <button class="guide-copy-btn" onclick="copyGuideContent(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                        </svg>
-                                        Copy
-                                    </button>
-                                    Format strictly as:
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 
 Examples:
@@ -867,15 +860,7 @@ Don't add extra text.
                                 <div class="guide-description">
                                     Make 5 basic flashcards from the provided material covering key concepts.
                                 </div>
-                                <div class="guide-content">
-                                    <button class="guide-copy-btn" onclick="copyGuideContent(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                        </svg>
-                                        Copy
-                                    </button>
-                                    Format strictly as:
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 question|answer
 
 Examples:
@@ -898,15 +883,7 @@ Don't add extra text.
                                 <div class="guide-description">
                                     Make 5 cloze deletion cards from the provided material with key terms hidden.
                                 </div>
-                                <div class="guide-content">
-                                    <button class="guide-copy-btn" onclick="copyGuideContent(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                        </svg>
-                                        Copy
-                                    </button>
-                                    Format strictly as:
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
 
 Examples:
@@ -931,15 +908,7 @@ Don't add extra text.
                                 <div class="guide-description">
                                     Extract all the MCQs from the provided material.
                                 </div>
-                                <div class="guide-content">
-                                    <button class="guide-copy-btn" onclick="copyGuideContent(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                        </svg>
-                                        Copy
-                                    </button>
-                                    Format strictly as:
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
 
 Examples:
@@ -962,15 +931,7 @@ Don't add extra text.
                                 <div class="guide-description">
                                     Extract all the basic flashcards from the provided material.
                                 </div>
-                                <div class="guide-content">
-                                    <button class="guide-copy-btn" onclick="copyGuideContent(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 4h2a2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                        </svg>
-                                        Copy
-                                    </button>
-                                    Format strictly as:
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 question|answer
 
 Examples:
@@ -993,15 +954,7 @@ Don't add extra text.
                                 <div class="guide-description">
                                     Extract all the cloze deletion cards from the provided material.
                                 </div>
-                                <div class="guide-content">
-                                    <button class="guide-copy-btn" onclick="copyGuideContent(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 4h2a2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                        </svg>
-                                        Copy
-                                    </button>
-                                    Format strictly as:
+                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
 
 Examples:
@@ -1101,16 +1054,14 @@ Don't add extra text.
             // Get content excluding the button itself
             const guideContentElement = guide.querySelector('.guide-content');
             const guideContent = Array.from(guideContentElement.childNodes)
-                                     .filter(node => node !== button) // Exclude the copy button
-                                     .map(node => node.textContent || node.nodeValue)
-                                     .join('').trim();
+                                    .filter(node => node !== button) // Exclude the copy button
+                                    .map(node => node.textContent || node.nodeValue)
+                                    .join('').trim();
             
             navigator.clipboard.writeText(guideContent).then(() => {
                 const originalHTML = button.innerHTML;
                 button.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3">
-                        <polyline points="20,6 9,17 4,12"></polyline>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <polyline points="20 6 9 17 4 12"></polyline> </svg>
                     Copied!
                 `;
                 button.classList.add('copied');
@@ -1133,9 +1084,7 @@ Don't add extra text.
                     // Success feedback
                     const originalHTML = button.innerHTML;
                     button.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3">
-                            <polyline points="20,6 9,17 4,12"></polyline>
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <polyline points="20 6 9 17 4 12"></polyline> </svg>
                         Copied!
                     `;
                     button.classList.add('copied');
@@ -1145,7 +1094,7 @@ Don't add extra text.
                     }, 2000);
                 } catch (err) {
                     console.error('Fallback copy failed: ', err);
-                    alert('Copy failed, please copy the text manually: ' + guideContent);
+                    alert('Copy failed, please copy the text manually.');
                 } finally {
                     document.body.removeChild(textArea);
                 }
@@ -1236,16 +1185,16 @@ Don't add extra text.
         // Function to reset UI state (validation messages, download button)
         function resetUIState() {
             validationMessage.classList.remove('show', 'error', 'success');
-            validationMessage.innerHTML = '';
+            validationMessage.innerHTML = ''; // Clear content
             downloadButton.style.display = 'none';
             cardCount.classList.remove('show');
             cardCountNumber.textContent = '0';
             optionStats.textContent = '-';
-            // Only clear the textarea if it has content, and the current mode/card type changed
-            // This prevents clearing if the user just clicked generate/clear
-            if (mcqText.value.trim()) {
-                mcqText.value = '';
-            }
+            // Only clear the textarea if it has content.
+            // This prevents clearing if the user just clicked generate/clear after changing mode/type
+            // if (mcqText.value.trim()) { // Decided against auto-clearing textarea on mode/type change. User can use Clear button.
+            //     mcqText.value = ''; 
+            // }
         }
 
         function validateInput(text, cardType) {
@@ -1258,14 +1207,29 @@ Don't add extra text.
             let mcqCount = 0;
             const invalidLinesList = []; // To store details of problematic lines
 
+            if (lines.length === 0) {
+                 validationMessage.innerHTML = `
+                    <span class="status-icon">⚠️</span>
+                    <div class="status-content">
+                        <div class="status-title">Input Empty</div>
+                        <div class="status-details">Please paste your content into the textarea.</div>
+                    </div>
+                `;
+                validationMessage.classList.remove('success'); // ensure no success class
+                validationMessage.classList.add('show', 'error'); // use 'error' style for warning
+                cardCount.classList.remove('show');
+                downloadButton.style.display = 'none';
+                return false;
+            }
+
+
             switch(cardType) {
                 case 'mcq':
                     lines.forEach((line, index) => {
                         const parts = line.split('|');
                         const question = parts[0].trim();
-                        const correctAnswserLetter = parts[parts.length - 1].trim().toUpperCase();
+                        const correctAnswerLetter = parts[parts.length - 1].trim().toUpperCase();
 
-                        // Count non-empty options (excluding question and correct answer)
                         let numOptions = 0;
                         for (let i = 1; i < parts.length - 1; i++) {
                             if (parts[i].trim() !== '') {
@@ -1273,12 +1237,10 @@ Don't add extra text.
                             }
                         }
                         
-                        // Check if the line has a question, at least 3 options, and a correct answer letter
-                        const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && parts.length >= numOptions + 2;
+                        const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && parts.length >= (1 + numOptions + 1); // question + options + answer
                         
-                        // Check if the correct answer letter is valid for the number of options
                         const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, numOptions);
-                        const isAnswerValid = validAnswerLetters.includes(correctAnswserLetter);
+                        const isAnswerValid = validAnswerLetters.includes(correctAnswerLetter);
 
                         if (isFormatValid && isAnswerValid) {
                             validLines++;
@@ -1287,10 +1249,10 @@ Don't add extra text.
                         } else {
                             let problem = '';
                             if (question === '') problem += 'Missing question. ';
-                            if (numOptions < 3 || numOptions > 6) problem += `Found ${numOptions} options, expected 3-6. `;
-                            if (!isAnswerValid) problem += `Invalid answer letter "${correctAnswserLetter}" for ${numOptions} options. `;
-                            if (parts.length < numOptions + 2) problem += `Missing expected number of fields. `;
-                            invalidLinesList.push(`Line ${index + 1}: "${line}" - ${problem.trim()}`);
+                            if (numOptions < 3 || numOptions > 6) problem += `Found ${numOptions} options (expected 3-6). `;
+                            if (!isAnswerValid && numOptions > 0) problem += `Invalid answer letter "${correctAnswerLetter}" for ${numOptions} options. `;
+                            if (parts.length < (1 + numOptions + 1) && question !== '') problem += `Incorrect field count for the number of options. `;
+                            invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - ${problem.trim()}`);
                             isValid = false;
                         }
                     });
@@ -1298,8 +1260,8 @@ Don't add extra text.
                     if (invalidLinesList.length > 0) {
                         errorMessage = `
                             <strong>⚠️ Invalid Multiple Choice Format</strong><br>
-                            • Each line must have a question, 3 to 6 options, and a correct answer letter.<br>
-                            • The correct answer letter must correspond to an existing option (A, B, C, D, E, or F).<br>
+                            • Each line must have a question, 3 to 6 options (each separated by '|'), and a correct answer letter (A-F).<br>
+                            • Example: Question|OptA|OptB|OptC|A<br>
                             <br>
                             <strong>First problematic line(s):</strong><br>
                             ${invalidLinesList.slice(0, 3).join('<br>')}
@@ -1314,14 +1276,14 @@ Don't add extra text.
                         if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
                             validLines++;
                         } else {
-                            invalidLinesList.push(`Line ${index + 1}: "${line}"`);
+                            invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`);
                             isValid = false;
                         }
                     });
                     if (invalidLinesList.length > 0) {
                         errorMessage = `
                             <strong>⚠️ Invalid Basic Card Format</strong><br>
-                            • Each line must have exactly 2 parts separated by a pipe '|' (e.g., Question|Answer).<br>
+                            • Each line must be: Question|Answer.<br>
                             • Both question and answer must not be empty.<br>
                             <br>
                             <strong>First problematic line(s):</strong><br>
@@ -1337,14 +1299,14 @@ Don't add extra text.
                         if (clozeRegex.test(line)) {
                             validLines++;
                         } else {
-                            invalidLinesList.push(`Line ${index + 1}: "${line}"`);
+                            invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`);
                             isValid = false;
                         }
                     });
                     if (invalidLinesList.length > 0) {
                         errorMessage = `
                             <strong>⚠️ Invalid Cloze Deletion Card Format</strong><br>
-                            • Each line must contain at least one valid Cloze deletion using the format <code>{{c1::text}}</code> or <code>{{c1::text::hint}}</code>.<br>
+                            • Each line must contain <code>{{c1::text}}</code> or <code>{{c1::text::hint}}</code>.<br>
                             <br>
                             <strong>First problematic line(s):</strong><br>
                             ${invalidLinesList.slice(0, 3).join('<br>')}
@@ -1354,40 +1316,43 @@ Don't add extra text.
                     break;
             }
 
-            if (!isValid || validLines === 0) {
+            if (!isValid || validLines === 0 && lines.length > 0) { // Added lines.length > 0 to ensure error shows if input exists but no valid lines
                 validationMessage.innerHTML = `
                     <span class="status-icon">❌</span>
                     <div class="status-content">
                         <div class="status-title">Validation Error</div>
-                        <div class="status-details">${errorMessage || 'No valid cards found in the input.'}</div>
+                        <div class="status-details">${errorMessage || 'No valid cards found. Please check the format guide.'}</div>
                     </div>
                 `;
+                validationMessage.classList.remove('success');
                 validationMessage.classList.add('show', 'error');
                 cardCount.classList.remove('show');
                 downloadButton.style.display = 'none';
                 return false;
             }
+            
+            if (validLines > 0) { // Only show success if there are valid lines
+                let successDetails = `Total Valid Cards: ${validLines}`;
+                if (cardType === 'mcq' && mcqCount > 0) {
+                    const avgOptions = (totalOptions / mcqCount).toFixed(1);
+                    optionStats.textContent = avgOptions;
+                    successDetails += `<br>Average options per MCQ: ${avgOptions}`;
+                } else {
+                    optionStats.textContent = '-';
+                }
 
-            // Success message
-            let successDetails = `Total Valid Cards: ${validLines}`;
-            if (cardType === 'mcq' && mcqCount > 0) {
-                const avgOptions = (totalOptions / mcqCount).toFixed(1);
-                optionStats.textContent = avgOptions;
-                successDetails += `<br>Average options per MCQ: ${avgOptions}`;
-            } else {
-                optionStats.textContent = '-';
+                validationMessage.innerHTML = `
+                    <span class="status-icon">✅</span>
+                    <div class="status-content">
+                        <div class="status-title">Cards Validated Successfully!</div>
+                        <div class="status-details">${successDetails}</div>
+                    </div>
+                `;
+                validationMessage.classList.remove('error');
+                validationMessage.classList.add('show', 'success');
+                cardCount.classList.add('show');
+                cardCountNumber.textContent = validLines;
             }
-
-            validationMessage.innerHTML = `
-                <span class="status-icon">✅</span>
-                <div class="status-content">
-                    <div class="status-title">Cards Validated Successfully!</div>
-                    <div class="status-details">${successDetails}</div>
-                </div>
-            `;
-            validationMessage.classList.add('show', 'success');
-            cardCount.classList.add('show');
-            cardCountNumber.textContent = validLines;
             
             return true;
         }
@@ -1396,14 +1361,18 @@ Don't add extra text.
         function generateCSV() {
             const text = mcqText.value;
             const cardType = document.querySelector('input[name="cardType"]:checked').value;
-            const filename = filenameInput.value || 'AnkiCards';
+            let filename = filenameInput.value.trim() || 'AnkiCards';
+            if (!filename.toLowerCase().endsWith('.csv')) {
+                // filename += '.csv'; // Filename attribute handles extension
+            }
+
 
             // Reset button states and show loading
             generateButton.disabled = true;
-            generateButton.innerHTML = `<svg class="spinner w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...`;
+            generateButton.innerHTML = `<svg class="spinner" style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...`;
             downloadButton.style.display = 'none';
             validationMessage.classList.remove('show', 'error', 'success');
-            cardCount.classList.remove('show');
+            // cardCount.classList.remove('show'); // Keep card count visible if already shown
 
 
             if (!validateInput(text, cardType)) {
@@ -1414,12 +1383,12 @@ Don't add extra text.
 
             const lines = text.trim().split('\n').filter(line => line.trim() !== '');
             let csvContent = '';
+            let validProcessedLines = 0;
 
             lines.forEach(line => {
                 if (!line.trim()) return;
                 
                 const parts = line.split('|');
-                // Sanitize parts for CSV: replace " with "" and wrap in "" if contains , or newlines or pipes.
                 const sanitizedParts = parts.map(part => {
                     const trimmedPart = part.trim();
                     const needsQuotes = trimmedPart.includes(',') || trimmedPart.includes('\n') || trimmedPart.includes('|') || trimmedPart.includes('"');
@@ -1428,35 +1397,64 @@ Don't add extra text.
                 });
 
                 let row = '';
+                let isValidRow = false;
                 switch(cardType) {
                     case 'mcq':
-                        // Question is the first part
-                        row += sanitizedParts[0];
-
-                        // Options A-F (padded to 6)
-                        for (let i = 1; i <= 6; i++) {
-                            row += `,${sanitizedParts[i] || '""'}`; // Use existing option or empty string
+                        const question = parts[0].trim();
+                        const correctAnswerLetter = parts[parts.length - 1].trim().toUpperCase();
+                        let numOptions = 0;
+                        for (let i = 1; i < parts.length - 1; i++) {
+                            if (parts[i].trim() !== '') numOptions++;
                         }
-
-                        // Two empty columns (for Anki compatibility: Tags, Audio, etc. before answer)
-                        row += `,"",""`; 
-                        
-                        // Correct Answer is the last part
-                        row += `,${sanitizedParts[sanitizedParts.length - 1]}`;
+                        const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, numOptions);
+                        if (question !== '' && numOptions >= 3 && numOptions <= 6 && parts.length >= (1 + numOptions + 1) && validAnswerLetters.includes(correctAnswerLetter)) {
+                            row += sanitizedParts[0]; // Question
+                            for (let i = 1; i <= 6; i++) { // Options A-F
+                                row += `,${sanitizedParts[i] || '""'}`;
+                            }
+                            row += `,"",""`; // Two empty columns for Tags, etc.
+                            row += `,${sanitizedParts[sanitizedParts.length - 1]}`; // Correct Answer
+                            isValidRow = true;
+                        }
                         break;
 
                     case 'basic':
-                        // Assuming format is Question|Answer
-                        row += `${sanitizedParts[0]},${sanitizedParts[1]}`;
+                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
+                            row += `${sanitizedParts[0]},${sanitizedParts[1]}`;
+                            isValidRow = true;
+                        }
                         break;
 
                     case 'clozeDeletion':
-                        // Cloze deletion format: just the text content
-                        row += sanitizedParts[0];
+                        const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/g;
+                        if (clozeRegex.test(parts[0])) { // Assuming cloze is always the first part if no pipe
+                             row += sanitizedParts[0]; // Use the first part which is the full line for cloze
+                             isValidRow = true;
+                        }
                         break;
                 }
-                csvContent += row + '\n';
+                if(isValidRow){
+                    csvContent += row + '\n';
+                    validProcessedLines++;
+                }
             });
+            
+            if (validProcessedLines === 0) {
+                 // This case should ideally be caught by validateInput, but as a fallback:
+                validationMessage.innerHTML = `
+                    <span class="status-icon">❌</span>
+                    <div class="status-content">
+                        <div class="status-title">No Valid Data to Generate</div>
+                        <div class="status-details">No valid cards could be processed from the input. Please check your data and the format guide.</div>
+                    </div>
+                `;
+                validationMessage.classList.remove('success');
+                validationMessage.classList.add('show', 'error');
+                generateButton.disabled = false;
+                generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
+                return;
+            }
+
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -1473,26 +1471,28 @@ Don't add extra text.
             // Clean up URL object after download (optional, but good practice)
             downloadButton.addEventListener('click', () => {
                 setTimeout(() => URL.revokeObjectURL(url), 100); // Revoke after a short delay
-                // Add a pulse animation on download button after click
                 downloadButton.classList.add('animate__animated', 'animate__pulse');
                 setTimeout(() => {
                     downloadButton.classList.remove('animate__animated', 'animate__pulse');
                 }, 1000);
-            }, { once: true }); // Ensure this listener only runs once per click
+            }, { once: true }); 
         }
 
         // Debounce input event listener
         let validationTimeout;
         mcqText.addEventListener('input', function() {
             clearTimeout(validationTimeout);
+            downloadButton.style.display = 'none'; // Hide download button on new input
             validationTimeout = setTimeout(() => {
-                if (this.value.trim().length > 0) { // Validate if there's any content
+                if (this.value.trim().length > 0) { 
                     const cardType = document.querySelector('input[name="cardType"]:checked').value;
                     validateInput(this.value, cardType);
                 } else {
-                    resetUIState(); // Clear UI if input is empty
+                     resetUIState(); // Clear UI if input is empty, but keep filename
+                     validationMessage.classList.remove('show', 'error', 'success');
+                     cardCount.classList.remove('show');
                 }
-            }, 500); // Debounce time in ms
+            }, 500); 
         });
 
         // Event Listeners for action buttons
@@ -1500,10 +1500,11 @@ Don't add extra text.
 
         clearButton.addEventListener('click', function() {
             mcqText.value = '';
-            filenameInput.value = 'MCQ'; // Reset filename to default MCQ
+            // filenameInput.value = 'MCQ'; // Keep current filename or reset to default based on card type
             resetUIState();
-            // Ensure correct guide is shown after clearing
-            updateGuideDisplay(); 
+            updateGuideDisplay(); // This will also reset filenameInput based on current card type
+            validationMessage.classList.remove('show', 'error', 'success');
+            cardCount.classList.remove('show');
         });
 
         // Initial setup on page load
