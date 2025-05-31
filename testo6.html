@@ -35,6 +35,7 @@
             
             --radius: 12px;
             --radius-lg: 16px;
+            --radius-sm: 8px; /* Added for smaller elements like custom inputs */
         }
         
         * {
@@ -123,7 +124,6 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
-            /* align-items: start; */ /* MODIFIED: Removed this line, default is stretch */
         }
         
         /* Form Section */
@@ -132,8 +132,8 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-xl);
             overflow: hidden;
-            display: flex; /* MODIFIED: Added */
-            flex-direction: column; /* MODIFIED: Added */
+            display: flex; 
+            flex-direction: column; 
         }
         
         .form-header {
@@ -159,7 +159,7 @@
         
         .form-body {
             padding: 1.5rem;
-            flex-grow: 1; /* MODIFIED: Added */
+            flex-grow: 1; 
         }
         
         /* Mode Selection */
@@ -343,6 +343,137 @@
             position: relative;
             z-index: 1;
         }
+
+        /* New Options Sections (Card Number & Difficulty) Wrapper */
+        .additional-options-wrapper {
+            display: grid; 
+            grid-template-columns: 1fr; /* Default to single column */
+            gap: 1.5rem; 
+            margin-bottom: 1.5rem; 
+        }
+
+        /* General Options Section (Card Number & Difficulty) */
+        .options-config-section {
+            margin-bottom: 0; /* Handled by wrapper gap */
+        }
+
+        .options-config-grid {
+            display: grid;
+            gap: 0.75rem;
+            align-items: stretch; 
+        }
+
+        /* Card Number Specific Grid */
+        .card-number-options-grid {
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
+        }
+
+        /* Difficulty Specific Grid */
+        .difficulty-options-grid {
+            grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
+        }
+
+        .option-config-item { 
+            position: relative;
+        }
+        /* For items that contain a label and a custom input below it */
+        .card-number-custom-item, .difficulty-custom-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem; 
+        }
+        .card-number-custom-item .option-config-label,
+        .difficulty-custom-item .option-config-label {
+             width: 100%;
+        }
+        .card-number-custom-item .custom-value-input,
+        .difficulty-custom-item .custom-value-input {
+            width: 100%;
+        }
+        .difficulty-custom-item .custom-value-input {
+            text-align: center;
+        }
+
+
+        .option-config-radio {
+            display: none;
+        }
+
+        .option-config-label {
+            display: flex; 
+            align-items: center;
+            justify-content: center; 
+            padding: 0.8rem 1rem; 
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 500;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+            min-height: 48px; 
+        }
+
+        .option-config-label::before { 
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .option-config-label:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .option-config-label:hover::before {
+            opacity: 0.05;
+        }
+
+        .option-config-radio:checked + .option-config-label {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .option-config-radio:checked + .option-config-label::before {
+            opacity: 0;
+        }
+        
+        .custom-value-input {
+            width: 100%; 
+            padding: 0.75rem; /* Consistent padding */
+            border: 2px solid var(--border-hover);
+            border-radius: var(--radius-sm); 
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-value-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); /* Consistent focus */
+        }
+
+        /* Specific styles for difficulty boxes */
+        .difficulty-label-box {
+            padding: 0.75rem; 
+            min-width: 40px; 
+            font-size: 0.9rem; /* Slightly smaller for compact boxes */
+            aspect-ratio: 1 / 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         
         /* Format Guide */
         .format-guide {
@@ -381,7 +512,7 @@
             white-space: pre-wrap;
             overflow-x: auto;
             border: 1px solid var(--border);
-            position: relative; /* For copy button positioning */
+            position: relative; 
         }
 
         .guide-copy-btn {
@@ -412,10 +543,10 @@
             opacity: 1; 
         }
         
-        .guide-description { /* This div will now be empty, but style remains for potential future use */
+        .guide-description { 
             font-size: 0.85rem;
             color: var(--text-secondary);
-            margin-bottom: 0.75rem; /* This might need adjustment if always empty */
+            margin-bottom: 0.75rem; 
             line-height: 1.4;
         }
         
@@ -704,6 +835,17 @@
                 font-size: 1.5rem;
                 margin-bottom: 0.5rem;
             }
+
+            .additional-options-wrapper {
+                grid-template-columns: 1fr 1fr; /* Two columns on wider screens */
+                gap: 1rem; 
+            }
+            .card-number-options-grid { /* Ensure they don't get too wide */
+                 grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+            .difficulty-options-grid {
+                 grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+            }
             
             .action-buttons {
                 flex-direction: row;
@@ -721,15 +863,14 @@
         
 @media (min-width: 1024px) {
             .content-grid {
-                grid-template-columns: 1fr; /* Make it a single column layout */
-                /* gap: 3rem; */ /* Gap is not really effective for a single column in this context, can be removed or kept */
+                grid-template-columns: 1fr; 
             }
             
             .content-grid .sidebar {
-                display: none; /* Hide the sidebar if it's not meant to be shown below the form */
+                display: none; 
             }
             
-            .info-card { /* This style was fine, keeping it for consistency */
+            .info-card { 
                 margin-top: 0;
             }
         }
@@ -738,7 +879,8 @@
         @media (hover: hover) {
             .btn:hover,
             .card-type-label:hover,
-            .mode-label:hover {
+            .mode-label:hover,
+            .option-config-label:hover { /* Added for new options */
                 transform: translateY(-2px);
             }
         }
@@ -752,7 +894,7 @@
                 font-size: 1.1rem;
             }
             
-            .input-field {
+            .input-field, .custom-value-input { /* Added custom-value-input */
                 font-size: 16px; /* Prevents zoom on iOS */
             }
         }
@@ -836,7 +978,7 @@
                                 </div>
                             </div>
                             
-                           <div id="generateMcqGuide" class="format-guide show">
+                            <div id="generateMcqGuide" class="format-guide show">
                                 <div class="guide-title">
                                     <span>📖</span>
                                     Multiple Choice Generation Guide
@@ -983,9 +1125,69 @@ Don't number the sentences.
 Don't add extra text.
                                 </div>
                             </div>
-
                         </div>
 
+                        <div class="additional-options-wrapper">
+                            <div class="options-config-section card-number-section">
+                                <h3 class="section-title">
+                                    <span>🔢</span>
+                                    Number of Cards
+                                </h3>
+                                <div class="options-config-grid card-number-options-grid">
+                                    <div class="option-config-item">
+                                        <input type="radio" id="cardNumber50" name="cardNumber" class="option-config-radio" value="50" checked>
+                                        <label for="cardNumber50" class="option-config-label">50</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="cardNumber100" name="cardNumber" class="option-config-radio" value="100">
+                                        <label for="cardNumber100" class="option-config-label">100</label>
+                                    </div>
+                                    <div class="option-config-item card-number-custom-item">
+                                        <input type="radio" id="cardNumberCustomRadio" name="cardNumber" class="option-config-radio" value="custom">
+                                        <label for="cardNumberCustomRadio" class="option-config-label">Custom</label>
+                                        <input type="number" id="customCardNumberInput" class="custom-value-input" placeholder="Qty" min="1" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="options-config-section difficulty-section">
+                                <h3 class="section-title">
+                                    <span>📊</span>
+                                    Difficulty
+                                </h3>
+                                <div class="options-config-grid difficulty-options-grid">
+                                    <div class="option-config-item">
+                                        <input type="radio" id="difficulty1" name="difficulty" class="option-config-radio" value="1" checked>
+                                        <label for="difficulty1" class="option-config-label difficulty-label-box">1</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="difficulty2" name="difficulty" class="option-config-radio" value="2">
+                                        <label for="difficulty2" class="option-config-label difficulty-label-box">2</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="difficulty3" name="difficulty" class="option-config-radio" value="3">
+                                        <label for="difficulty3" class="option-config-label difficulty-label-box">3</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="difficulty4" name="difficulty" class="option-config-radio" value="4">
+                                        <label for="difficulty4" class="option-config-label difficulty-label-box">4</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="difficulty5" name="difficulty" class="option-config-radio" value="5">
+                                        <label for="difficulty5" class="option-config-label difficulty-label-box">5</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="difficulty6" name="difficulty" class="option-config-radio" value="6">
+                                        <label for="difficulty6" class="option-config-label difficulty-label-box">6</label>
+                                    </div>
+                                    <div class="option-config-item difficulty-custom-item">
+                                        <input type="radio" id="difficultyCustomRadio" name="difficulty" class="option-config-radio" value="custom">
+                                        <label for="difficultyCustomRadio" class="option-config-label difficulty-label-box">Custom</label>
+                                        <input type="text" id="customDifficultyInput" class="custom-value-input" placeholder="e.g. 7" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="input-section">
                             <div class="input-group">
                                 <label for="filename" class="input-label">📁 Filename</label>
@@ -1293,13 +1495,8 @@ Don't add extra text.
                     break;
 
                 case 'clozeDeletion':
-                    // MODIFIED LINE: Removed 'g' flag from the regex for more reliable line-by-line testing in a loop
                     const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/; 
                     lines.forEach((line, index) => {
-                        // For regex with 'g' flag, if used in a loop like this on multiple strings,
-                        // it's better to reset lastIndex (clozeRegex.lastIndex = 0;) before each test,
-                        // or remove the 'g' flag if only checking for existence on each line.
-                        // Removing 'g' is simpler if we're not iterating matches on the same string.
                         if (clozeRegex.test(line)) {
                             validLines++;
                         } else {
@@ -1438,10 +1635,8 @@ Don't add extra text.
                         break;
 
                     case 'clozeDeletion':
-                        // This regex is defined inside the loop, so 'g' flag doesn't cause inter-line issues.
-                        // Removing 'g' here too for consistency if only one test is done, though not strictly necessary for fixing the bug.
                         const clozeRegex_csv = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/; 
-                        if (parts.length === 1 && clozeRegex_csv.test(parts[0])) { // For cloze, expecting the full line in parts[0]
+                        if (parts.length === 1 && clozeRegex_csv.test(parts[0])) { 
                              row += sanitizedParts[0]; 
                              isValidRow = true;
                         }
@@ -1479,7 +1674,7 @@ Don't add extra text.
             generateButton.disabled = false;
             generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
 
-            downloadButton.onclick = function() { // Directly assign onclick for simplicity with <a> tag
+            downloadButton.onclick = function() { 
                  setTimeout(() => {
                     URL.revokeObjectURL(url);
                 }, 100);
@@ -1516,8 +1711,51 @@ Don't add extra text.
             cardCount.classList.remove('show');
         });
 
+        // JavaScript for custom input visibility
+        const customCardNumberRadio = document.getElementById('cardNumberCustomRadio');
+        const customCardNumberInput = document.getElementById('customCardNumberInput');
+        const cardNumberRadios = document.querySelectorAll('input[name="cardNumber"]');
+
+        cardNumberRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (customCardNumberRadio.checked) {
+                    customCardNumberInput.style.display = 'block';
+                    customCardNumberInput.focus();
+                } else {
+                    customCardNumberInput.style.display = 'none';
+                }
+            });
+        });
+
+        const customDifficultyRadio = document.getElementById('difficultyCustomRadio');
+        const customDifficultyInput = document.getElementById('customDifficultyInput');
+        const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
+
+        difficultyRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (customDifficultyRadio.checked) {
+                    customDifficultyInput.style.display = 'block';
+                    customDifficultyInput.focus();
+                } else {
+                    customDifficultyInput.style.display = 'none';
+                }
+            });
+        });
+
+
         document.addEventListener('DOMContentLoaded', () => {
             updateGuideDisplay(); 
+            // Initial check for custom radios (in case of pre-checked state from browser cache, though not default)
+             if (customCardNumberRadio && customCardNumberRadio.checked) {
+                customCardNumberInput.style.display = 'block';
+            } else if (customCardNumberInput) {
+                customCardNumberInput.style.display = 'none';
+            }
+            if (customDifficultyRadio && customDifficultyRadio.checked) {
+                customDifficultyInput.style.display = 'block';
+            } else if (customDifficultyInput) {
+                customDifficultyInput.style.display = 'none';
+            }
         });
     </script>
 </body>
