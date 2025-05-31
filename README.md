@@ -6,6 +6,8 @@
 
 GPTAnki simplifies Anki flashcard creation. It generates structured prompts for your preferred Large Language Model (LLM, e.g., ChatGPT, Claude, Gemini). You then use this prompt with your LLM and source text. Finally, paste the AI's output back into GPTAnki to parse, validate, and download an Anki-ready CSV file.
 
+https://raw.githubusercontent.com/cod-md/gptanki/refs/heads/main/Screenrecorder-2025-05-31-23-17-42-572%7E2.mp4
+
 ## 🚀 Key Features
 
 * **AI-Optimized Prompts:** Generates tailored prompts for LLMs.
