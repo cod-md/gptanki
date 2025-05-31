@@ -395,7 +395,7 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            transition: background-color 0.2s ease, opacity 0.2s ease; /* MODIFIED */
+            transition: background-color 0.2s ease, opacity 0.2s ease; 
             opacity: 0.9;
         }
 
@@ -406,7 +406,7 @@
 
         .guide-copy-btn.copied {
             background-color: var(--success);
-            opacity: 1; /* ADDED for clarity */
+            opacity: 1; 
         }
         
         .guide-description {
@@ -453,7 +453,7 @@
         .textarea-field {
             min-height: 150px;
             resize: vertical;
-            font-family: 'Inter', monospace; /* Changed from 'Inter', monospace to 'Inter', sans-serif for consistency with other inputs, but kept monospace for typical code input feel for this specific field. Reverted to Inter, monospace as per original for textarea */
+            font-family: 'Inter', monospace; 
             line-height: 1.5;
         }
         
@@ -906,7 +906,7 @@ Don't add extra text.
                                     Multiple Choice Extraction Guide
                                 </div>
                                 <div class="guide-description">
-                                    Extract all the MCQs from the provided material.
+                                    Make 5 MCQs on the provided material following Bloom's taxonomy levels (1-6).
                                 </div>
                                 <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Format strictly as:
 question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
@@ -1169,7 +1169,6 @@ Don't add extra text.
         modeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 updateGuideDisplay();
-                // Clear validation message and hide download button when mode or card type changes
                 resetUIState();
             });
         });
@@ -1177,24 +1176,17 @@ Don't add extra text.
         cardTypeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 updateGuideDisplay();
-                // Clear validation message and hide download button when mode or card type changes
                 resetUIState();
             });
         });
 
-        // Function to reset UI state (validation messages, download button)
         function resetUIState() {
             validationMessage.classList.remove('show', 'error', 'success');
-            validationMessage.innerHTML = ''; // Clear content
+            validationMessage.innerHTML = ''; 
             downloadButton.style.display = 'none';
             cardCount.classList.remove('show');
             cardCountNumber.textContent = '0';
             optionStats.textContent = '-';
-            // Only clear the textarea if it has content.
-            // This prevents clearing if the user just clicked generate/clear after changing mode/type
-            // if (mcqText.value.trim()) { // Decided against auto-clearing textarea on mode/type change. User can use Clear button.
-            //     mcqText.value = ''; 
-            // }
         }
 
         function validateInput(text, cardType) {
@@ -1205,7 +1197,7 @@ Don't add extra text.
             let validLines = 0;
             let totalOptions = 0;
             let mcqCount = 0;
-            const invalidLinesList = []; // To store details of problematic lines
+            const invalidLinesList = []; 
 
             if (lines.length === 0) {
                  validationMessage.innerHTML = `
@@ -1215,8 +1207,8 @@ Don't add extra text.
                         <div class="status-details">Please paste your content into the textarea.</div>
                     </div>
                 `;
-                validationMessage.classList.remove('success'); // ensure no success class
-                validationMessage.classList.add('show', 'error'); // use 'error' style for warning
+                validationMessage.classList.remove('success'); 
+                validationMessage.classList.add('show', 'error'); 
                 cardCount.classList.remove('show');
                 downloadButton.style.display = 'none';
                 return false;
@@ -1237,7 +1229,7 @@ Don't add extra text.
                             }
                         }
                         
-                        const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && parts.length >= (1 + numOptions + 1); // question + options + answer
+                        const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && parts.length >= (1 + numOptions + 1); 
                         
                         const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, numOptions);
                         const isAnswerValid = validAnswerLetters.includes(correctAnswerLetter);
@@ -1316,7 +1308,7 @@ Don't add extra text.
                     break;
             }
 
-            if (!isValid || validLines === 0 && lines.length > 0) { // Added lines.length > 0 to ensure error shows if input exists but no valid lines
+            if (!isValid || validLines === 0 && lines.length > 0) { 
                 validationMessage.innerHTML = `
                     <span class="status-icon">❌</span>
                     <div class="status-content">
@@ -1331,7 +1323,7 @@ Don't add extra text.
                 return false;
             }
             
-            if (validLines > 0) { // Only show success if there are valid lines
+            if (validLines > 0) { 
                 let successDetails = `Total Valid Cards: ${validLines}`;
                 if (cardType === 'mcq' && mcqCount > 0) {
                     const avgOptions = (totalOptions / mcqCount).toFixed(1);
@@ -1357,23 +1349,15 @@ Don't add extra text.
             return true;
         }
 
-        // Generate CSV function
         function generateCSV() {
             const text = mcqText.value;
             const cardType = document.querySelector('input[name="cardType"]:checked').value;
             let filename = filenameInput.value.trim() || 'AnkiCards';
-            if (!filename.toLowerCase().endsWith('.csv')) {
-                // filename += '.csv'; // Filename attribute handles extension
-            }
-
-
-            // Reset button states and show loading
+            
             generateButton.disabled = true;
             generateButton.innerHTML = `<svg class="spinner" style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...`;
             downloadButton.style.display = 'none';
             validationMessage.classList.remove('show', 'error', 'success');
-            // cardCount.classList.remove('show'); // Keep card count visible if already shown
-
 
             if (!validateInput(text, cardType)) {
                 generateButton.disabled = false;
@@ -1408,12 +1392,12 @@ Don't add extra text.
                         }
                         const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, numOptions);
                         if (question !== '' && numOptions >= 3 && numOptions <= 6 && parts.length >= (1 + numOptions + 1) && validAnswerLetters.includes(correctAnswerLetter)) {
-                            row += sanitizedParts[0]; // Question
-                            for (let i = 1; i <= 6; i++) { // Options A-F
+                            row += sanitizedParts[0]; 
+                            for (let i = 1; i <= 6; i++) { 
                                 row += `,${sanitizedParts[i] || '""'}`;
                             }
-                            row += `,"",""`; // Two empty columns for Tags, etc.
-                            row += `,${sanitizedParts[sanitizedParts.length - 1]}`; // Correct Answer
+                            row += `,"",""`; 
+                            row += `,${sanitizedParts[sanitizedParts.length - 1]}`; 
                             isValidRow = true;
                         }
                         break;
@@ -1427,8 +1411,8 @@ Don't add extra text.
 
                     case 'clozeDeletion':
                         const clozeRegex = /\{\{c\d+::(.*?)(?:::(.*?))?\}\}/g;
-                        if (clozeRegex.test(parts[0])) { // Assuming cloze is always the first part if no pipe
-                             row += sanitizedParts[0]; // Use the first part which is the full line for cloze
+                        if (clozeRegex.test(parts[0])) { 
+                             row += sanitizedParts[0]; 
                              isValidRow = true;
                         }
                         break;
@@ -1440,7 +1424,6 @@ Don't add extra text.
             });
             
             if (validProcessedLines === 0) {
-                 // This case should ideally be caught by validateInput, but as a fallback:
                 validationMessage.innerHTML = `
                     <span class="status-icon">❌</span>
                     <div class="status-content">
@@ -1455,22 +1438,19 @@ Don't add extra text.
                 return;
             }
 
-
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             
-            downloadButton.href = url; // Set href for download
+            downloadButton.href = url; 
             downloadButton.setAttribute('download', `${filename}.csv`);
             downloadButton.style.display = 'inline-flex';
             downloadButton.classList.add('animate__animated', 'animate__fadeIn');
 
-            // Restore generate button state
             generateButton.disabled = false;
             generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
 
-            // Clean up URL object after download (optional, but good practice)
             downloadButton.addEventListener('click', () => {
-                setTimeout(() => URL.revokeObjectURL(url), 100); // Revoke after a short delay
+                setTimeout(() => URL.revokeObjectURL(url), 100); 
                 downloadButton.classList.add('animate__animated', 'animate__pulse');
                 setTimeout(() => {
                     downloadButton.classList.remove('animate__animated', 'animate__pulse');
@@ -1478,38 +1458,34 @@ Don't add extra text.
             }, { once: true }); 
         }
 
-        // Debounce input event listener
         let validationTimeout;
         mcqText.addEventListener('input', function() {
             clearTimeout(validationTimeout);
-            downloadButton.style.display = 'none'; // Hide download button on new input
+            downloadButton.style.display = 'none'; 
             validationTimeout = setTimeout(() => {
                 if (this.value.trim().length > 0) { 
                     const cardType = document.querySelector('input[name="cardType"]:checked').value;
                     validateInput(this.value, cardType);
                 } else {
-                     resetUIState(); // Clear UI if input is empty, but keep filename
+                     resetUIState(); 
                      validationMessage.classList.remove('show', 'error', 'success');
                      cardCount.classList.remove('show');
                 }
             }, 500); 
         });
 
-        // Event Listeners for action buttons
         generateButton.addEventListener('click', generateCSV);
 
         clearButton.addEventListener('click', function() {
             mcqText.value = '';
-            // filenameInput.value = 'MCQ'; // Keep current filename or reset to default based on card type
             resetUIState();
-            updateGuideDisplay(); // This will also reset filenameInput based on current card type
+            updateGuideDisplay(); 
             validationMessage.classList.remove('show', 'error', 'success');
             cardCount.classList.remove('show');
         });
 
-        // Initial setup on page load
         document.addEventListener('DOMContentLoaded', () => {
-            updateGuideDisplay(); // Display the correct guide initially
+            updateGuideDisplay(); 
         });
     </script>
 </body>
