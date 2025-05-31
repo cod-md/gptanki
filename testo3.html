@@ -345,6 +345,24 @@
     </style>
 </head>
 <body>
+    <div class="card-type-group">
+                <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
+                <label for="mcqCardType" class="card-type-label">Multiple Choice</label>
+                
+                <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
+                <label for="basicCardType" class="card-type-label">Basic</label>
+                
+                <input type="radio" id="clozeDeletionCardType" name="cardType" class="card-type-radio" value="clozeDeletion">
+                <label for="clozeDeletionCardType" class="card-type-label">Cloze Deletion</label>
+            </div>
+
+            <div class="card-type-group" id="mcqModeGroup" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 1.5rem;">
+                <input type="radio" id="generateMode" name="mcqMode" class="card-type-radio" value="generate" checked>
+                <label for="generateMode" class="card-type-label">Generate MCQs</label>
+                
+                <input type="radio" id="extractMode" name="mcqMode" class="card-type-radio" value="extract">
+                <label for="extractMode" class="card-type-label">Extract MCQs</label>
+            </div>
     <div class="container">
         <div class="header">
             <h1>GPTAnki</h1>
