@@ -719,14 +719,17 @@
             }
         }
         
-        @media (min-width: 1024px) {
+@media (min-width: 1024px) {
             .content-grid {
-                grid-template-columns: 1fr 400px;
-                gap: 3rem;
-                /* No specific align-items here, so it inherits/defaults to stretch if not overridden by item's align-self */
+                grid-template-columns: 1fr; /* Make it a single column layout */
+                /* gap: 3rem; */ /* Gap is not really effective for a single column in this context, can be removed or kept */
             }
             
-            .info-card {
+            .content-grid .sidebar {
+                display: none; /* Hide the sidebar if it's not meant to be shown below the form */
+            }
+            
+            .info-card { /* This style was fine, keeping it for consistency */
                 margin-top: 0;
             }
         }
