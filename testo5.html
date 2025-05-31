@@ -903,5 +903,152 @@ Rules:
 - No numbering or extra formatting needed</div>
                             </div>
                             
-                            <div id="extractClozeGuide" class="format-guide">
-                                <div class
+                            <div id="basicGuide" class="format-guide">
+                                <div class="guide-title">
+                                    <span>📖</span>
+                                    Basic Cards Format Guide
+                                </div>
+                                <div class="guide-description">
+                                    Use this format for creating basic question-answer flashcards. Each line should contain a question and its corresponding answer.
+                                </div>
+                                <div class="guide-content">Create basic flashcards from the provided material.
+
+Format strictly as:
+question|answer
+
+Examples:
+What is the capital of France?|Paris
+What is the largest planet in our solar system?|Jupiter
+When did World War II end?|1945
+
+Rules:
+- One question-answer pair per line
+- Separate question and answer with |
+- Keep questions clear and concise
+- Provide direct, accurate answers
+- Don't number the cards
+- Make it appear as code for easy copying
+- Don't add extra text or explanations</div>
+                            </div>
+                            
+                            <div id="clozeGuide" class="format-guide">
+                                <div class="guide-title">
+                                    <span>📖</span>
+                                    Cloze Deletion Format Guide
+                                </div>
+                                <div class="guide-description">
+                                    Use this format for creating cloze deletion cards. Wrap the words to be hidden in {{c1::text}} format.
+                                </div>
+                                <div class="guide-content">Create cloze deletion cards from the provided material.
+
+Format strictly as:
+{{c1::word/phrase}} or {{c1::word/phrase::hint}}
+
+Examples:
+The capital of France is {{c1::Paris}}.
+{{c1::Photosynthesis}} is the process by which plants make food.
+The formula for water is {{c1::H2O::chemical formula}}.
+In {{c1::1969}}, humans first landed on the {{c2::moon}}.
+
+Rules:
+- Use {{c1::text}} for basic cloze deletion
+- Use {{c1::text::hint}} to add hints
+- Use {{c2::text}}, {{c3::text}} for multiple deletions in same sentence
+- One sentence per line
+- Don't number the cards
+- Make it appear as code for easy copying
+- Don't add extra text or explanations</div>
+                            </div>
+                        </div>
+
+                        <!-- Input Section -->
+                        <div class="input-section">
+                            <div class="input-group">
+                                <label for="filename" class="input-label">📁 Filename</label>
+                                <input type="text" id="filename" class="input-field" value="MCQ" placeholder="Enter filename without extension">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="mcqText" id="inputLabel" class="input-label">📄 Multiple-Choice Questions</label>
+                                <textarea id="mcqText" class="input-field textarea-field" placeholder="Paste your content here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Status Card -->
+                        <div id="validationMessage" class="status-card">
+                            <span class="status-icon">✅</span>
+                            <div class="status-content">
+                                <div class="status-title">Ready to Generate</div>
+                                <div class="status-details">Your content has been validated successfully</div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button id="generateButton" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                                </svg>
+                                Generate CSV
+                            </button>
+                            <button id="downloadButton" class="btn btn-success" style="display:none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                                Download CSV
+                            </button>
+                            <button id="clearButton" class="btn btn-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+                                </svg>
+                                Clear All
+                            </button>
+                        </div>
+                        
+                        <!-- Stats Card (moved to main section for mobile) -->
+                        <div class="info-card" id="cardCount">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span>📊</span>
+                                    Statistics
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="cardCountNumber">0</span>
+                                        <div class="stat-label">Valid Cards</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="optionStats">-</span>
+                                        <div class="stat-label">Avg Options</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar (for desktop) -->
+                <div class="sidebar">
+                    <!-- Stats Card duplicate for desktop (hidden on mobile) -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>GPTAnki - Create flashcards effortlessly with AI • Built with ❤️ for learners everywhere</p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
+        const mcqText = document.getElementById('mcqText');
+        const inputLabel = document.getElementById('inputLabel');
+        const filenameInput = document.getElementById('filename');
+        const validationMessage = document.getElementById('validationMessage');
+        const cardCount = document.getElementById('cardCount');
+        const cardCountNumber = document.getElementById('cardCountNumber');
+        const opt
