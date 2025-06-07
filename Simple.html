@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple GPTAnki ✨</title>
+    <style>
+        /* Simple, functional styling */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            background: #f4f4f4;
+            color: #333;
+            padding: 1rem;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        /* Basic layout for options */
+        .option-group {
+            margin-bottom: 1.5rem;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        .option-group h3 {
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Make the textarea and input fields functional */
+        .input-field {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .textarea-field {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        /* Hide elements by default */
+        .format-guide,
+        #downloadButton,
+        #validationMessage,
+        #cardCount {
+            display: none;
+        }
+
+        /* A class to make hidden elements visible */
+        .show {
+            display: block;
+        }
+
+        /* Simple styling for buttons */
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #e9e9e9;
+            text-decoration: none;
+            color: #333;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* Simple styling for status messages */
+        #validationMessage {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .status-card.success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .status-card.error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        /* Simple guide styling */
+        .guide-content {
+            background: #eee;
+            padding: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap; /* Allows text to wrap */
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>GPTAnki ✨</h1>
+            <p>Transform your content into powerful flashcards with AI</p>
+        </header>
+
+        <main>
+            <div class="option-group">
+                <h3>⚙️ Mode</h3>
+                <label>
+                    <input type="radio" id="generateMode" name="mode" value="generate" checked>
+                    Generate (Create new cards from text)
+                </label>
+                <label>
+                    <input type="radio" id="extractMode" name="mode" value="extract">
+                    Extract (Parse existing formatted cards)
+                </label>
+            </div>
+
+            <div class="option-group">
+                <h3>📋 Card Type</h3>
+                <label>
+                    <input type="radio" id="mcqCardType" name="cardType" value="mcq" checked>
+                    Multiple Choice
+                </label>
+                <label>
+                    <input type="radio" id="basicCardType" name="cardType" value="basic">
+                    Basic Cards (Question/Answer)
+                </label>
+                <label>
+                    <input type="radio" id="clozeDeletionCardType" name="cardType" value="clozeDeletion">
+                    Cloze Deletion
+                </label>
+            </div>
+            
+            <div id="generateMcqGuide" class="format-guide show">
+                <h4>Multiple Choice Generation Guide</h4>
+                <div class="guide-content">Format strictly as:
+question|answerA|answerB|answerC|answerD|correctAnswer
+
+Example:
+What is the capital of France?|Paris|London|Berlin|Madrid|A
+                </div>
+            </div>
+            <div id="generateBasicGuide" class="format-guide">
+                <h4>Basic Cards Generation Guide</h4>
+                <div class="guide-content">Format strictly as:
+question|answer
+
+Example:
+What is the capital of France?|Paris
+                </div>
+            </div>
+            <div id="generateClozeGuide" class="format-guide">
+                <h4>Cloze Deletion Generation Guide</h4>
+                <div class="guide-content">Format strictly as:
+{{c1::word/phrase}} some other text.
+
+Example:
+The capital of France is {{c1::Paris}}.
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="filename">📁 Filename</label>
+                <input type="text" id="filename" class="input-field" value="MCQ" placeholder="Enter filename without extension">
+            </div>
+
+            <div class="input-group">
+                <label for="mainInput" id="inputLabel">📄 Content for Multiple-Choice Question Generation</label>
+                <textarea id="mainInput" class="input-field textarea-field" placeholder="Paste your content here..."></textarea>
+            </div>
+
+            <div id="validationMessage" class="status-card"></div>
+
+            <div id="cardCount">
+                <p><strong>Valid Cards Found:</strong> <span id="cardCountNumber">0</span></p>
+            </div>
+
+            <div class="action-buttons">
+                <button id="generateButton" class="btn btn-primary">Generate CSV</button>
+                <a id="downloadButton" href="#" role="button" class="btn">Download CSV</a>
+                <button id="clearButton" class="btn">Clear All</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // === DOM ELEMENT SELECTION ===
+        // Select all the interactive elements from the HTML that we need to work with.
+        const modeRadios = document.querySelectorAll('input[name="mode"]');
+        const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
+        const mainInput = document.getElementById('mainInput');
+        const inputLabel = document.getElementById('inputLabel');
+        const filenameInput = document.getElementById('filename');
+        const validationMessage = document.getElementById('validationMessage');
+        const cardCountInfo = document.getElementById('cardCount');
+        const cardCountNumberEl = document.getElementById('cardCountNumber');
+        const generateButton = document.getElementById('generateButton');
+        const downloadButton = document.getElementById('downloadButton');
+        const clearButton = document.getElementById('clearButton');
+        const allGuides = document.querySelectorAll('.format-guide');
+
+        // === EVENT LISTENERS ===
+        // These functions run when a user interacts with the page.
+
+        // Add a 'change' listener to every Mode and Card Type radio button.
+        modeRadios.forEach(radio => radio.addEventListener('change', handleSelectionChange));
+        cardTypeRadios.forEach(radio => radio.addEventListener('change', handleSelectionChange));
+
+        // Run validation logic whenever the user types in the textarea.
+        mainInput.addEventListener('input', handleInput);
+
+        // Assign functions to the click event of each button.
+        generateButton.addEventListener('click', generateCSV);
+        clearButton.addEventListener('click', resetUIState);
+
+        // === CORE FUNCTIONS ===
+
+        /**
+         * This function is called whenever the user changes the Mode or Card Type.
+         * It updates the UI to show the correct instructions and resets the state.
+         */
+        function handleSelectionChange() {
+            updateGuideDisplay();
+            resetUIState();
+        }
+
+        /**
+         * This function runs on every keystroke in the textarea to provide real-time feedback.
+         */
+        function handleInput() {
+            // Hide previous results while the user is typing.
+            downloadButton.style.display = 'none';
+            validationMessage.classList.remove('show');
+            cardCountInfo.classList.remove('show');
+
+            const text = mainInput.value;
+            // Only validate if there is text, to avoid showing an error for an empty box.
+            if (text.trim().length > 0) {
+                const cardType = document.querySelector('input[name="cardType"]:checked').value;
+                validateInput(text, cardType);
+            }
+        }
+        
+        /**
+         * Shows the relevant guide and hides the others.
+         * Also updates the main input label and default filename.
+         */
+        function updateGuideDisplay() {
+            // Get the currently selected mode and card type.
+            const currentMode = document.querySelector('input[name="mode"]:checked').value;
+            const currentCardType = document.querySelector('input[name="cardType"]:checked').value;
+
+            // First, hide all guides.
+            allGuides.forEach(guide => guide.classList.remove('show'));
+
+            // Then, show the one that matches the current selection.
+            // Note: In this simple version, we only show guides for 'generate' mode.
+            const guideId = `${currentMode}${currentCardType.charAt(0).toUpperCase() + currentCardType.slice(1)}Guide`;
+            const activeGuide = document.getElementById(guideId);
+            if (activeGuide) {
+                activeGuide.classList.add('show');
+            }
+            
+            // Update the text label and filename suggestion for user convenience.
+            inputLabel.textContent = `📄 Content for ${currentCardType} Generation`;
+            filenameInput.value = currentCardType.charAt(0).toUpperCase() + currentCardType.slice(1);
+        }
+
+        /**
+         * Validates the text in the textarea based on the selected card type.
+         * @returns {boolean} - True if the input is valid, false otherwise.
+         */
+        function validateInput(text, cardType) {
+            // Split the text into lines and filter out any empty lines.
+            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+            let validLines = 0;
+            let isValid = true;
+
+            if (lines.length === 0) {
+                return false; // No lines to validate.
+            }
+
+            // Check each line against the format rules for the selected card type.
+            lines.forEach(line => {
+                const parts = line.split('|');
+                let lineIsValid = false;
+                switch (cardType) {
+                    case 'mcq':
+                        // A valid MCQ has a question, options, and a correct answer letter (e.g., 5-8 parts).
+                        if (parts.length >= 5 && parts.length <= 8 && parts[0].trim() !== '') {
+                           lineIsValid = true;
+                        }
+                        break;
+                    case 'basic':
+                        // A valid basic card has exactly two parts: question and answer.
+                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
+                            lineIsValid = true;
+                        }
+                        break;
+                    case 'clozeDeletion':
+                        // A valid cloze card must contain the `{{c1::...}}` syntax.
+                        if (line.includes('{{c1::') && line.includes('}}')) {
+                            lineIsValid = true;
+                        }
+                        break;
+                }
+                
+                if (lineIsValid) {
+                    validLines++;
+                } else {
+                    isValid = false; // If even one line is invalid, the whole input is marked as invalid.
+                }
+            });
+
+            // Display feedback to the user based on the validation result.
+            validationMessage.classList.add('show');
+            if (!isValid) {
+                validationMessage.textContent = 'Error: Some lines do not match the required format. Please check the guide.';
+                validationMessage.className = 'status-card error show';
+                cardCountInfo.classList.remove('show');
+                return false;
+            } else {
+                validationMessage.textContent = 'Success! All lines are formatted correctly.';
+                validationMessage.className = 'status-card success show';
+                // Show the statistics.
+                cardCountInfo.classList.add('show');
+                cardCountNumberEl.textContent = validLines;
+                return true;
+            }
+        }
+
+        /**
+         * Generates and triggers the download of the CSV file.
+         */
+        function generateCSV() {
+            const text = mainInput.value;
+            const cardType = document.querySelector('input[name="cardType"]:checked').value;
+            const filename = filenameInput.value.trim() || 'AnkiCards';
+
+            // First, re-validate the input before generating the file.
+            if (!validateInput(text, cardType)) {
+                alert('Please fix the errors in your input before generating the CSV.');
+                return;
+            }
+
+            // Process the text into a CSV-formatted string.
+            // Each line in the input becomes a row in the CSV.
+            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+            const csvContent = lines.map(line => {
+                // For simplicity, this version doesn't handle complex cases like commas within fields.
+                // It just replaces the pipe `|` with a comma `,`.
+                if (cardType === 'mcq' || cardType === 'basic') {
+                    return line.split('|').join(',');
+                }
+                // For Cloze, the line is the content itself.
+                return line;
+            }).join('\n');
+
+
+            // Create a "Blob", which is like a file in the browser's memory.
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+            // Create a temporary URL that points to the Blob.
+            const url = URL.createObjectURL(blob);
+
+            // Configure the download button.
+            downloadButton.href = url;
+            downloadButton.setAttribute('download', `${filename}.csv`);
+            downloadButton.style.display = 'inline-block'; // Make the button visible.
+        }
+
+        /**
+         * Clears all inputs and resets the interface to its initial state.
+         */
+        function resetUIState() {
+            mainInput.value = '';
+            validationMessage.textContent = '';
+            validationMessage.classList.remove('show', 'error', 'success');
+            downloadButton.style.display = 'none';
+            downloadButton.removeAttribute('href');
+            cardCountInfo.classList.remove('show');
+            cardCountNumberEl.textContent = '0';
+        }
+
+        // === INITIALIZATION ===
+        // Call this function once when the page loads to set the initial state.
+        handleSelectionChange();
+
+    </script>
+</body>
+</html>
