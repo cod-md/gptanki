@@ -1,1689 +1,1702 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPTAnki ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-tertiary: #f1f5f9;
-            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            
-            --border: #e2e8f0;
-            --border-hover: #cbd5e1;
-            
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            
-            --radius: 12px;
-            --radius-lg: 16px;
-            --radius-sm: 8px; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPTAnki ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style>
+:root {
+--primary: #6366f1;
+--primary-dark: #4f46e5;
+--secondary: #8b5cf6;
+--accent: #ec4899;
+--success: #10b981;
+--warning: #f59e0b;
+--error: #ef4444;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+        --border: #e2e8f0;
+        --border-hover: #cbd5e1;
         
-        .app-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         
-        /* Header */
+        --radius: 12px;
+        --radius-lg: 16px;
+        --radius-sm: 8px; 
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        line-height: 1.6;
+        color: var(--text-primary);
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .app-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        padding: 1.5rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='[http://www.w3.org/2000/svg'%3E%3Cg](http://www.w3.org/2000/svg'%3E%3Cg) fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        opacity: 0.1;
+    }
+    
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .header-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+    
+    .header-title h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .header-subtitle {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        font-weight: 300;
+        padding: 0 1rem;
+    }
+    
+    /* Main Content */
+    .main-content {
+        flex: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        width: 100%;
+    }
+    
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    /* Form Section */
+    .form-section {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        display: flex; 
+        flex-direction: column; 
+    }
+    
+    .form-header {
+        background: var(--bg-secondary);
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .form-header h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .form-header p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+    
+    .form-body {
+        padding: 1.5rem;
+        flex-grow: 1; 
+    }
+    
+    /* Mode Selection */
+    .mode-section {
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .mode-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .mode-option {
+        position: relative;
+    }
+    
+    .mode-radio { /* This class is now for radio inputs specifically */
+        display: none;
+    }
+    
+    .mode-label {
+        display: block;
+        padding: 1.25rem;
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        font-weight: 500;
+        background: var(--bg-primary);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .mode-label::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+    
+    .mode-label:hover {
+        border-color: var(--primary);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .mode-label:hover::before {
+        opacity: 0.05;
+    }
+    
+    .mode-radio:checked + .mode-label {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border-color: transparent;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .mode-radio:checked + .mode-label::before {
+        opacity: 0;
+    }
+    
+    .mode-label .icon {
+        font-size: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .mode-label .label-text {
+        position: relative;
+        z-index: 1;
+        font-weight: 600;
+    }
+    
+    .mode-label .label-desc {
+        position: relative;
+        z-index: 1;
+        font-size: 0.85rem;
+        opacity: 0.8;
+        font-weight: 400;
+    }
+    
+    /* Card Type Selection */
+    .card-type-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-type-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem; 
+    }
+    
+    .card-type-option {
+        position: relative;
+    }
+    
+    .card-type-radio { /* This class is now for radio inputs specifically */
+        display: none;
+    }
+    
+    .card-type-label {
+        display: block;
+        padding: 1rem;
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+        font-weight: 500;
+        background: var(--bg-primary);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .card-type-label::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+    
+    .card-type-label:hover {
+        border-color: var(--primary);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .card-type-label:hover::before {
+        opacity: 0.05;
+    }
+    
+    .card-type-radio:checked + .card-type-label {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border-color: transparent;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .card-type-radio:checked + .card-type-label::before {
+        opacity: 0;
+    }
+    
+    .card-type-label .icon {
+        font-size: 1.25rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .card-type-label .label-text {
+        position: relative;
+        z-index: 1;
+    }
+
+    .additional-options-wrapper {
+        display: grid; 
+        grid-template-columns: 1fr; 
+        gap: 1.5rem; 
+        margin-bottom: 1.5rem; 
+    }
+
+    .options-config-section {
+        margin-bottom: 0; 
+    }
+
+    .options-config-grid {
+        display: grid;
+        gap: 0.75rem;
+        align-items: stretch; 
+    }
+
+    .card-number-options-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
+    }
+
+    .difficulty-options-grid {
+        grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
+    }
+
+    .option-config-item { 
+        position: relative;
+    }
+    .card-number-custom-item { /* Removed .difficulty-custom-item as custom difficulty is removed */
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; 
+    }
+    .card-number-custom-item .option-config-label {
+         width: 100%;
+    }
+    .card-number-custom-item .custom-value-input {
+        width: 100%;
+    }
+
+    .option-config-input { /* Renamed from .option-config-radio */
+        display: none;
+    }
+
+    .option-config-label {
+        display: flex; 
+        align-items: center;
+        justify-content: center; 
+        padding: 0.8rem 1rem; 
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        font-weight: 500;
+        background: var(--bg-primary);
+        position: relative;
+        overflow: hidden;
+        min-height: 48px; 
+    }
+
+    .option-config-label::before { 
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .option-config-label:hover {
+        border-color: var(--primary);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .option-config-label:hover::before {
+        opacity: 0.05;
+    }
+
+    .option-config-input:checked + .option-config-label { /* Changed selector */
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border-color: transparent;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .option-config-input:checked + .option-config-label::before { /* Changed selector */
+        opacity: 0;
+    }
+    
+    .custom-value-input { /* Only for card number custom input now */
+        width: 100%; 
+        padding: 0.75rem; 
+        border: 2px solid var(--border-hover);
+        border-radius: var(--radius-sm); 
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        background: var(--bg-primary);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .custom-value-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); 
+    }
+
+    .difficulty-label-box {
+        padding: 0.75rem; 
+        min-width: 40px; 
+        font-size: 0.9rem; 
+        aspect-ratio: 1 / 1; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Format Guide */
+    .format-guide {
+        background: var(--bg-tertiary);
+        border-radius: var(--radius);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-left: 4px solid var(--primary);
+        display: none;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .format-guide.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .guide-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .guide-content {
+        background: var(--bg-primary);
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        color: var(--text-secondary);
+        white-space: pre-wrap;
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        position: relative; 
+    }
+
+    .guide-copy-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.4rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        transition: background-color 0.2s ease, opacity 0.2s ease; 
+        opacity: 0.9;
+    }
+
+    .guide-copy-btn:hover {
+        opacity: 1;
+        background-color: var(--primary-dark);
+    }
+
+    .guide-copy-btn.copied {
+        background-color: var(--success);
+        opacity: 1; 
+    }
+    
+    .guide-description { 
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem; 
+        line-height: 1.4;
+    }
+    
+    /* Input Fields */
+    .input-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .input-label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .input-field {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.2s ease;
+        background: var(--bg-primary);
+    }
+    
+    .input-field:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    .textarea-field {
+        min-height: 150px;
+        resize: vertical;
+        font-family: 'Inter', monospace; 
+        line-height: 1.5;
+    }
+    
+    /* Status Card */
+    .status-card {
+        background: var(--success);
+        color: white;
+        padding: 1rem;
+        border-radius: var(--radius);
+        margin-bottom: 1.5rem;
+        display: none;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .status-card.show {
+        display: flex;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .status-card.error {
+        background: var(--error);
+    }
+    
+    .status-icon {
+        font-size: 1.25rem;
+        margin-top: 0.125rem;
+    }
+    
+    .status-content {
+        flex: 1;
+    }
+    
+    .status-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        font-size: 0.95rem;
+    }
+    
+    .status-details {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        line-height: 1.4;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+        flex-direction: column;
+    }
+    
+    .btn {
+        padding: 0.875rem 1.25rem;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, var(--success), #059669);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .btn-secondary {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+        background: var(--border);
+        transform: translateY(-1px);
+    }
+    
+    /* Stats Card */
+    .info-card {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        margin-top: 1.5rem;
+        display: none;
+    }
+    
+    .info-card.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .card-header {
+        background: var(--bg-secondary);
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+        background: var(--bg-tertiary);
+        border-radius: var(--radius);
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        display: block;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+    }
+    
+    /* Footer */
+    .footer {
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border);
+        padding: 1.5rem 1rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+    
+    /* Animations */
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .spinner {
+        animation: spin 1s linear infinite;
+    }
+    
+    /* Responsive Design */
+    @media (min-width: 768px) {
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 1.5rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-            opacity: 0.1;
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .header-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            color: white;
-            margin-bottom: 0.5rem;
+            padding: 2rem 0;
         }
         
         .header-title h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 3rem;
         }
         
         .header-subtitle {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            font-weight: 300;
-            padding: 0 1rem;
+            font-size: 1.1rem;
         }
         
-        /* Main Content */
         .main-content {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-            width: 100%;
+            padding: 3rem 2rem;
         }
         
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
+        .form-header, .card-header {
+            padding: 2rem;
         }
         
-        /* Form Section */
-        .form-section {
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            display: flex; 
-            flex-direction: column; 
-        }
-        
-        .form-header {
-            background: var(--bg-secondary);
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .form-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .form-header p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .form-body {
-            padding: 1.5rem;
-            flex-grow: 1; 
-        }
-        
-        /* Mode Selection */
-        .mode-section {
-            margin-bottom: 2rem;
-        }
-        
-        .section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mode-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        
-        .mode-option {
-            position: relative;
-        }
-        
-        .mode-radio { /* This class is now for radio inputs specifically */
-            display: none;
-        }
-        
-        .mode-label {
-            display: block;
-            padding: 1.25rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-            font-weight: 500;
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mode-label::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .mode-label:hover {
-            border-color: var(--primary);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .mode-label:hover::before {
-            opacity: 0.05;
-        }
-        
-        .mode-radio:checked + .mode-label {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-color: transparent;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .mode-radio:checked + .mode-label::before {
-            opacity: 0;
-        }
-        
-        .mode-label .icon {
-            font-size: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .mode-label .label-text {
-            position: relative;
-            z-index: 1;
-            font-weight: 600;
-        }
-        
-        .mode-label .label-desc {
-            position: relative;
-            z-index: 1;
-            font-size: 0.85rem;
-            opacity: 0.8;
-            font-weight: 400;
-        }
-        
-        /* Card Type Selection */
-        .card-type-section {
-            margin-bottom: 1.5rem;
+        .form-body, .card-body {
+            padding: 2rem;
         }
         
         .card-type-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem; 
-        }
-        
-        .card-type-option {
-            position: relative;
-        }
-        
-        .card-type-radio { /* This class is now for radio inputs specifically */
-            display: none;
-        }
-        
-        .card-type-label {
-            display: block;
-            padding: 1rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            font-weight: 500;
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .card-type-label::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .card-type-label:hover {
-            border-color: var(--primary);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .card-type-label:hover::before {
-            opacity: 0.05;
-        }
-        
-        .card-type-radio:checked + .card-type-label {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-color: transparent;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .card-type-radio:checked + .card-type-label::before {
-            opacity: 0;
-        }
-        
-        .card-type-label .icon {
-            font-size: 1.25rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .card-type-label .label-text {
-            position: relative;
-            z-index: 1;
-        }
-
-        .additional-options-wrapper {
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 1.5rem; 
-            margin-bottom: 1.5rem; 
-        }
-
-        .options-config-section {
-            margin-bottom: 0; 
-        }
-
-        .options-config-grid {
-            display: grid;
-            gap: 0.75rem;
-            align-items: stretch; 
-        }
-
-        .card-number-options-grid {
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
-        }
-
-        .difficulty-options-grid {
-            grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
-        }
-
-        .option-config-item { 
-            position: relative;
-        }
-        .card-number-custom-item { /* Removed .difficulty-custom-item as custom difficulty is removed */
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem; 
-        }
-        .card-number-custom-item .option-config-label {
-             width: 100%;
-        }
-        .card-number-custom-item .custom-value-input {
-            width: 100%;
-        }
-
-        .option-config-input { /* Renamed from .option-config-radio */
-            display: none;
-        }
-
-        .option-config-label {
-            display: flex; 
-            align-items: center;
-            justify-content: center; 
-            padding: 0.8rem 1rem; 
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-            font-weight: 500;
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
-            min-height: 48px; 
-        }
-
-        .option-config-label::before { 
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        .option-config-label:hover {
-            border-color: var(--primary);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .option-config-label:hover::before {
-            opacity: 0.05;
-        }
-
-        .option-config-input:checked + .option-config-label { /* Changed selector */
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-color: transparent;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .option-config-input:checked + .option-config-label::before { /* Changed selector */
-            opacity: 0;
-        }
-        
-        .custom-value-input { /* Only for card number custom input now */
-            width: 100%; 
-            padding: 0.75rem; 
-            border: 2px solid var(--border-hover);
-            border-radius: var(--radius-sm); 
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            background: var(--bg-primary);
-            font-family: 'Inter', sans-serif;
-        }
-
-        .custom-value-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); 
-        }
-
-        .difficulty-label-box {
-            padding: 0.75rem; 
-            min-width: 40px; 
-            font-size: 0.9rem; 
-            aspect-ratio: 1 / 1; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Format Guide */
-        .format-guide {
-            background: var(--bg-tertiary);
-            border-radius: var(--radius);
-            padding: 1rem;
-            margin-top: 1rem;
-            border-left: 4px solid var(--primary);
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-        
-        .format-guide.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-        
-        .guide-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .guide-content {
-            background: var(--bg-primary);
-            padding: 0.75rem;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            line-height: 1.4;
-            color: var(--text-secondary);
-            white-space: pre-wrap;
-            overflow-x: auto;
-            border: 1px solid var(--border);
-            position: relative; 
-        }
-
-        .guide-copy-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.4rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            transition: background-color 0.2s ease, opacity 0.2s ease; 
-            opacity: 0.9;
-        }
-
-        .guide-copy-btn:hover {
-            opacity: 1;
-            background-color: var(--primary-dark);
-        }
-
-        .guide-copy-btn.copied {
-            background-color: var(--success);
-            opacity: 1; 
-        }
-        
-        .guide-description { 
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem; 
-            line-height: 1.4;
-        }
-        
-        /* Input Fields */
-        .input-section {
-            margin-bottom: 1.5rem;
-        }
-        
-        .input-group {
-            margin-bottom: 1.25rem;
-        }
-        
-        .input-label {
-            display: block;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s ease;
-            background: var(--bg-primary);
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        
-        .textarea-field {
-            min-height: 150px;
-            resize: vertical;
-            font-family: 'Inter', monospace; 
-            line-height: 1.5;
-        }
-        
-        /* Status Card */
-        .status-card {
-            background: var(--success);
-            color: white;
-            padding: 1rem;
-            border-radius: var(--radius);
-            margin-bottom: 1.5rem;
-            display: none;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
-        
-        .status-card.show {
-            display: flex;
-            animation: slideDown 0.3s ease;
-        }
-        
-        .status-card.error {
-            background: var(--error);
-        }
-        
-        .status-icon {
-            font-size: 1.25rem;
-            margin-top: 0.125rem;
-        }
-        
-        .status-content {
-            flex: 1;
-        }
-        
-        .status-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            font-size: 0.95rem;
-        }
-        
-        .status-details {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            line-height: 1.4;
-        }
-        
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 0.75rem;
-            flex-direction: column;
-        }
-        
-        .btn {
-            padding: 0.875rem 1.25rem;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .btn-success:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--border);
-            transform: translateY(-1px);
-        }
-        
-        /* Stats Card */
-        .info-card {
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            margin-top: 1.5rem;
-            display: none;
-        }
-        
-        .info-card.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-        
-        .card-header {
-            background: var(--bg-secondary);
-            padding: 1.25rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .card-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .card-body {
-            padding: 1.25rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
         
-        .stat-item {
+        .card-type-label {
             text-align: center;
-            padding: 1rem;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius);
+            flex-direction: column;
+            padding: 1.25rem;
         }
         
-        .stat-number {
+        .card-type-label .icon {
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-        
-        /* Footer */
-        .footer {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border);
-            padding: 1.5rem 1rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-        
-        /* Animations */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            margin-bottom: 0.5rem;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .additional-options-wrapper {
+            grid-template-columns: 1fr 1fr; 
+            gap: 1rem; 
         }
-        .spinner {
-            animation: spin 1s linear infinite;
+        .card-number-options-grid { 
+             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        }
+        .difficulty-options-grid { /* Max 6 items, can fit well */
+             grid-template-columns: repeat(6, 1fr); 
         }
         
-        /* Responsive Design */
-        @media (min-width: 768px) {
-            .header {
-                padding: 2rem 0;
-            }
-            
-            .header-title h1 {
-                font-size: 3rem;
-            }
-            
-            .header-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .main-content {
-                padding: 3rem 2rem;
-            }
-            
-            .form-header, .card-header {
-                padding: 2rem;
-            }
-            
-            .form-body, .card-body {
-                padding: 2rem;
-            }
-            
-            .card-type-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1rem;
-            }
-            
-            .card-type-label {
-                text-align: center;
-                flex-direction: column;
-                padding: 1.25rem;
-            }
-            
-            .card-type-label .icon {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
-            }
+        .action-buttons {
+            flex-direction: row;
+            gap: 1rem;
+        }
+        
+        .btn {
+            width: auto;
+        }
+        
+        .textarea-field {
+            min-height: 200px;
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        .content-grid {
+            grid-template-columns: 1fr; 
+        }
+        
+        .content-grid .sidebar {
+            display: none; 
+        }
+        
+        .info-card { 
+            margin-top: 0;
+        }
+    }
+    
+    @media (hover: hover) {
+        .btn:hover,
+        .card-type-label:hover,
+        .mode-label:hover,
+        .option-config-label:hover { 
+            transform: translateY(-2px);
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .header-title h1 {
+            font-size: 2rem;
+        }
+        .difficulty-options-grid { /* More responsive for small screens */
+             grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
+        }
+        
+        .form-header h2 {
+            font-size: 1.1rem;
+        }
+        
+        .input-field, .custom-value-input { 
+            font-size: 16px; 
+        }
+    }
+</style>
 
-            .additional-options-wrapper {
-                grid-template-columns: 1fr 1fr; 
-                gap: 1rem; 
-            }
-            .card-number-options-grid { 
-                 grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            }
-            .difficulty-options-grid { /* Max 6 items, can fit well */
-                 grid-template-columns: repeat(6, 1fr); 
-            }
-            
-            .action-buttons {
-                flex-direction: row;
-                gap: 1rem;
-            }
-            
-            .btn {
-                width: auto;
-            }
-            
-            .textarea-field {
-                min-height: 200px;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .content-grid {
-                grid-template-columns: 1fr; 
-            }
-            
-            .content-grid .sidebar {
-                display: none; 
-            }
-            
-            .info-card { 
-                margin-top: 0;
-            }
-        }
-        
-        @media (hover: hover) {
-            .btn:hover,
-            .card-type-label:hover,
-            .mode-label:hover,
-            .option-config-label:hover { 
-                transform: translateY(-2px);
-            }
-        }
-        
-        @media (max-width: 767px) {
-            .header-title h1 {
-                font-size: 2rem;
-            }
-            .difficulty-options-grid { /* More responsive for small screens */
-                 grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
-            }
-            
-            .form-header h2 {
-                font-size: 1.1rem;
-            }
-            
-            .input-field, .custom-value-input { 
-                font-size: 16px; 
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="header">
-            <div class="header-content">
-                <div class="header-title">
-                    <h1>GPTAnki</h1>
-                    <span style="font-size: 1.5rem;">✨</span>
+<div class="app-container">
+<header class="header">
+<div class="header-content">
+<div class="header-title">
+<h1>GPTAnki</h1>
+<span style="font-size: 1.5rem;">✨</span>
+</div>
+<p class="header-subtitle">Transform your content into powerful flashcards with AI</p>
+</div>
+</header>
+    <main class="main-content">
+        <div class="content-grid">
+            <div class="form-section">
+                <div class="form-header">
+                    <h2>
+                        <span style="font-size: 1.25rem;">🃏</span>
+                        Create Flashcards
+                    </h2>
+                    <p>Choose your mode, card type, and paste your content to generate CSV files for Anki</p>
                 </div>
-                <p class="header-subtitle">Transform your content into powerful flashcards with AI</p>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <div class="content-grid">
-                <div class="form-section">
-                    <div class="form-header">
-                        <h2>
-                            <span style="font-size: 1.25rem;">🃏</span>
-                            Create Flashcards
-                        </h2>
-                        <p>Choose your mode, card type, and paste your content to generate CSV files for Anki</p>
+                
+                <div class="form-body">
+                    <div class="mode-section">
+                        <h3 class="section-title">
+                            <span>⚙️</span>
+                            Mode
+                        </h3>
+                        <div class="mode-grid">
+                            <div class="mode-option">
+                                <input type="radio" id="generateMode" name="mode" class="mode-radio" value="generate" checked>
+                                <label for="generateMode" class="mode-label">
+                                    <span class="icon">✨</span>
+                                    <span class="label-text">Generate</span>
+                                    <span class="label-desc">Create new flashcards from content</span>
+                                </label>
+                            </div>
+                            <div class="mode-option">
+                                <input type="radio" id="extractMode" name="mode" class="mode-radio" value="extract">
+                                <label for="extractMode" class="mode-label">
+                                    <span class="icon">🔍</span>
+                                    <span class="label-text">Extract</span>
+                                    <span class="label-desc">Parse existing formatted cards</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="form-body">
-                        <div class="mode-section">
-                            <h3 class="section-title">
-                                <span>⚙️</span>
-                                Mode
-                            </h3>
-                            <div class="mode-grid">
-                                <div class="mode-option">
-                                    <input type="radio" id="generateMode" name="mode" class="mode-radio" value="generate" checked>
-                                    <label for="generateMode" class="mode-label">
-                                        <span class="icon">✨</span>
-                                        <span class="label-text">Generate</span>
-                                        <span class="label-desc">Create new flashcards from content</span>
-                                    </label>
+
+                    <div class="card-type-section">
+                        <h3 class="section-title">
+                            <span>📋</span>
+                            Card Type
+                        </h3>
+                        <div class="card-type-grid">
+                            <div class="card-type-option">
+                                <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
+                                <label for="mcqCardType" class="card-type-label">
+                                    <span class="icon">❓</span>
+                                    <span class="label-text">Multiple Choice</span>
+                                </label>
+                            </div>
+                            <div class="card-type-option">
+                                <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
+                                <label for="basicCardType" class="card-type-label">
+                                    <span class="icon">📝</span>
+                                    <span class="label-text">Basic Cards</span>
+                                </label>
+                            </div>
+                            <div class="card-type-option">
+                                <input type="radio" id="clozeDeletionCardType" name="cardType" class="card-type-radio" value="clozeDeletion">
+                                <label for="clozeDeletionCardType" class="card-type-label">
+                                    <span class="icon">🔤</span>
+                                    <span class="label-text">Cloze Deletion</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="additional-options-wrapper">
+                            <div class="options-config-section card-number-section">
+                                <h3 class="section-title">
+                                    <span>🔢</span>
+                                    Number of Cards
+                                </h3>
+                                <div class="options-config-grid card-number-options-grid">
+                                    <div class="option-config-item">
+                                        <input type="radio" id="cardNumber50" name="cardNumber" class="option-config-input" value="50" checked>
+                                        <label for="cardNumber50" class="option-config-label">50</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="radio" id="cardNumber100" name="cardNumber" class="option-config-input" value="100">
+                                        <label for="cardNumber100" class="option-config-label">100</label>
+                                    </div>
+                                    <div class="option-config-item card-number-custom-item">
+                                        <input type="radio" id="cardNumberCustomRadio" name="cardNumber" class="option-config-input" value="custom">
+                                        <label for="cardNumberCustomRadio" class="option-config-label">Custom</label>
+                                        <input type="number" id="customCardNumberInput" class="custom-value-input" placeholder="Qty" min="1" style="display: none;">
+                                    </div>
                                 </div>
-                                <div class="mode-option">
-                                    <input type="radio" id="extractMode" name="mode" class="mode-radio" value="extract">
-                                    <label for="extractMode" class="mode-label">
-                                        <span class="icon">🔍</span>
-                                        <span class="label-text">Extract</span>
-                                        <span class="label-desc">Parse existing formatted cards</span>
-                                    </label>
+                            </div>
+
+                            <div class="options-config-section difficulty-section">
+                                <h3 class="section-title">
+                                    <span>📊</span>
+                                    Difficulty Level(s)
+                                </h3>
+                                <div class="options-config-grid difficulty-options-grid">
+                                    <div class="option-config-item">
+                                        <input type="checkbox" id="difficulty1" name="difficultyLevel" class="option-config-input" value="1">
+                                        <label for="difficulty1" class="option-config-label difficulty-label-box">1</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="checkbox" id="difficulty2" name="difficultyLevel" class="option-config-input" value="2">
+                                        <label for="difficulty2" class="option-config-label difficulty-label-box">2</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="checkbox" id="difficulty3" name="difficultyLevel" class="option-config-input" value="3">
+                                        <label for="difficulty3" class="option-config-label difficulty-label-box">3</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="checkbox" id="difficulty4" name="difficultyLevel" class="option-config-input" value="4">
+                                        <label for="difficulty4" class="option-config-label difficulty-label-box">4</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="checkbox" id="difficulty5" name="difficultyLevel" class="option-config-input" value="5">
+                                        <label for="difficulty5" class="option-config-label difficulty-label-box">5</label>
+                                    </div>
+                                    <div class="option-config-item">
+                                        <input type="checkbox" id="difficulty6" name="difficultyLevel" class="option-config-input" value="6">
+                                        <label for="difficulty6" class="option-config-label difficulty-label-box">6</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="card-type-section">
-                            <h3 class="section-title">
-                                <span>📋</span>
-                                Card Type
-                            </h3>
-                            <div class="card-type-grid">
-                                <div class="card-type-option">
-                                    <input type="radio" id="mcqCardType" name="cardType" class="card-type-radio" value="mcq" checked>
-                                    <label for="mcqCardType" class="card-type-label">
-                                        <span class="icon">❓</span>
-                                        <span class="label-text">Multiple Choice</span>
-                                    </label>
-                                </div>
-                                <div class="card-type-option">
-                                    <input type="radio" id="basicCardType" name="cardType" class="card-type-radio" value="basic">
-                                    <label for="basicCardType" class="card-type-label">
-                                        <span class="icon">📝</span>
-                                        <span class="label-text">Basic Cards</span>
-                                    </label>
-                                </div>
-                                <div class="card-type-option">
-                                    <input type="radio" id="clozeDeletionCardType" name="cardType" class="card-type-radio" value="clozeDeletion">
-                                    <label for="clozeDeletionCardType" class="card-type-label">
-                                        <span class="icon">🔤</span>
-                                        <span class="label-text">Cloze Deletion</span>
-                                    </label>
-                                </div>
+                        
+                        <div id="generateMcqGuide" class="format-guide show">
+                            <div class="guide-title">
+                                <span>📖</span>
+                                Multiple Choice Generation Guide
                             </div>
-                            
-                            <div class="additional-options-wrapper">
-                                <div class="options-config-section card-number-section">
-                                    <h3 class="section-title">
-                                        <span>🔢</span>
-                                        Number of Cards
-                                    </h3>
-                                    <div class="options-config-grid card-number-options-grid">
-                                        <div class="option-config-item">
-                                            <input type="radio" id="cardNumber50" name="cardNumber" class="option-config-input" value="50" checked>
-                                            <label for="cardNumber50" class="option-config-label">50</label>
-                                        </div>
-                                        <div class="option-config-item">
-                                            <input type="radio" id="cardNumber100" name="cardNumber" class="option-config-input" value="100">
-                                            <label for="cardNumber100" class="option-config-label">100</label>
-                                        </div>
-                                        <div class="option-config-item card-number-custom-item">
-                                            <input type="radio" id="cardNumberCustomRadio" name="cardNumber" class="option-config-input" value="custom">
-                                            <label for="cardNumberCustomRadio" class="option-config-label">Custom</label>
-                                            <input type="number" id="customCardNumberInput" class="custom-value-input" placeholder="Qty" min="1" style="display: none;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="options-config-section difficulty-section">
-                                    <h3 class="section-title">
-                                        <span>📊</span>
-                                        Difficulty Level(s)
-                                    </h3>
-                                    <div class="options-config-grid difficulty-options-grid">
-                                        <div class="option-config-item">
-                                            <input type="checkbox" id="difficulty1" name="difficultyLevel" class="option-config-input" value="1">
-                                            <label for="difficulty1" class="option-config-label difficulty-label-box">1</label>
-                                        </div>
-                                        <div class="option-config-item">
-                                            <input type="checkbox" id="difficulty2" name="difficultyLevel" class="option-config-input" value="2">
-                                            <label for="difficulty2" class="option-config-label difficulty-label-box">2</label>
-                                        </div>
-                                        <div class="option-config-item">
-                                            <input type="checkbox" id="difficulty3" name="difficultyLevel" class="option-config-input" value="3">
-                                            <label for="difficulty3" class="option-config-label difficulty-label-box">3</label>
-                                        </div>
-                                        <div class="option-config-item">
-                                            <input type="checkbox" id="difficulty4" name="difficultyLevel" class="option-config-input" value="4">
-                                            <label for="difficulty4" class="option-config-label difficulty-label-box">4</label>
-                                        </div>
-                                        <div class="option-config-item">
-                                            <input type="checkbox" id="difficulty5" name="difficultyLevel" class="option-config-input" value="5">
-                                            <label for="difficulty5" class="option-config-label difficulty-label-box">5</label>
-                                        </div>
-                                        <div class="option-config-item">
-                                            <input type="checkbox" id="difficulty6" name="difficultyLevel" class="option-config-input" value="6">
-                                            <label for="difficulty6" class="option-config-label difficulty-label-box">6</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="generateMcqGuide" class="format-guide show">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Multiple Choice Generation Guide
-                                </div>
-                                <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> MCQs on the provided material<span class="guide-dynamic-bloom-info"></span>.
+                            <div class="guide-description">The AI will generate questions based on your pasted content.</div>
+                            <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> MCQs on the provided material<span class="guide-dynamic-bloom-info"></span>.
 
 Format strictly as:
-question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
-
+question|optionA|optionB|...|correctAnswerLetter|optionalExplanation
 Examples:
 What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
-What is 2 + 2?|3|4|5|6|||B 
-
-Note: Questions can have 3-6 options. Empty options are allowed with | separators.
-The last field is always the correct answer letter.
-Make it appear as code for easy copying.
-Don't number the questions.
-Don't add extra text.
-                                </div>
-                            </div>
-                            
-                            <div id="generateBasicGuide" class="format-guide">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Basic Cards Generation Guide
-                                </div>
-                                <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> basic flashcards from the provided material covering key concepts.
+What is 2 + 2?|3|4|5|6|||B
+Which route is fastest for antidotes?|Oral|Intravenous|Subcutaneous|B|The intravenous route is fastest.
+Note:
+ * Use 3-6 options per question.
+ * The correct answer letter (A-F) comes after the options.
+ * An optional explanation can be added as the very last field.
+ * Don't number the questions. Don't add extra text.
+   </div>
+   </div>
+                         <div id="generateBasicGuide" class="format-guide">
+                          <div class="guide-title">
+                              <span>📖</span>
+                              Basic Cards Generation Guide
+                          </div>
+                          <div class="guide-description"></div>
+                          <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> basic flashcards from the provided material covering key concepts.
 
 Format strictly as:
 question|answer
-
 Examples:
 What is the capital of France?|Paris
 What is the largest planet in our solar system?|Jupiter
 When did World War II end?|1945
-
 Note: Create clear, concise question-answer pairs.
 Make it appear as code for easy copying.
 Don't number the questions.
 Don't add extra text.
-                                </div>
+</div>
+</div>
+                        <div id="generateClozeGuide" class="format-guide">
+                            <div class="guide-title">
+                                <span>📖</span>
+                                Cloze Deletion Generation Guide
                             </div>
-                            
-                            <div id="generateClozeGuide" class="format-guide">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Cloze Deletion Generation Guide
-                                </div>
-                                <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> cloze deletion cards from the provided material with key terms hidden.
+                            <div class="guide-description"></div>
+                            <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Make <span class="guide-dynamic-card-count">50</span> cloze deletion cards from the provided material with key terms hidden.
 
 Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
-
 Examples:
 The capital of France is {{c1::Paris}}.
 {{c1::Photosynthesis}} is the process by which plants make food.
 The formula for water is {{c1::H2O::chemical formula}}.
 In {{c1::1969}}, humans first landed on the {{c2::moon}}.
-
 Note: Use {{c1::text}} for basic deletion, {{c1::text::hint}} for hints.
 Use {{c2::text}}, {{c3::text}} for multiple deletions in same sentence.
 Make it appear as code for easy copying.
 Don't number the sentences.
 Don't add extra text.
-                                </div>
+</div>
+</div>
+                        <div id="extractMcqGuide" class="format-guide">
+                            <div class="guide-title">
+                                <span>📖</span>
+                                Multiple Choice Extraction Guide
                             </div>
-
-                            <div id="extractMcqGuide" class="format-guide">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Multiple Choice Extraction Guide
-                                </div>
-                                <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract <span class="guide-dynamic-card-count">50</span> MCQs on the provided material following Bloom's taxonomy levels (1-6).
+                            <div class="guide-description">Paste your pre-formatted multiple choice questions here to convert to CSV.</div>
+                            <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>
 
 Format strictly as:
-question|answerA|answerB|answerC|answerD|answerE|answerF|correctAnswer
-
+question|optionA|optionB|...|correctAnswerLetter|optionalExplanation
 Examples:
 What is the capital of France?|Paris|London|Berlin|Madrid|Rome|Tokyo|A
+Which...overdose?|Intramuscular|Intravenous|Oral|Subcutaneous|Transdermal|||B|The intravenous route is most desirable because it achieves therapeutic plasma levels of the antidote rapidly.
 What is 2 + 2?|3|4|5|6|||B
-
-Note: Questions can have 3-6 options. Empty options are allowed with | separators.
-The last field is always the correct answer letter.
-Make it appear as code for easy copying.
-Don't number the questions.
-Don't add extra text.
-                                </div>
-                            </div>
-                            
-                            <div id="extractBasicGuide" class="format-guide">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Basic Cards Extraction Guide
-                                </div>
-                                <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract all the basic flashcards from the provided material.
+Note:
+ * Use 3-6 options per question. Use empty pipes || for unused option slots.
+ * The correct answer letter (A-F) comes after the options.
+ * An optional explanation can be added as the very last field.
+   </div>
+   </div>
+                         <div id="extractBasicGuide" class="format-guide">
+                          <div class="guide-title">
+                              <span>📖</span>
+                              Basic Cards Extraction Guide
+                          </div>
+                          <div class="guide-description"></div>
+                          <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract all the basic flashcards from the provided material.
 
 Format strictly as:
 question|answer
-
 Examples:
 What is the capital of France?|Paris
 What is the largest planet in our solar system?|Jupiter
 When did World War II end?|1945
-
 Note: Extract question-answer pairs from the material.
 Make it appear as code for easy copying.
 Don't number the questions.
 Don't add extra text.
-                                </div>
+</div>
+</div>
+                        <div id="extractClozeGuide" class="format-guide">
+                            <div class="guide-title">
+                                <span>📖</span>
+                                Cloze Deletion Extraction Guide
                             </div>
-                            
-                            <div id="extractClozeGuide" class="format-guide">
-                                <div class="guide-title">
-                                    <span>📖</span>
-                                    Cloze Deletion Extraction Guide
-                                </div>
-                                <div class="guide-description"></div>
-                                <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract all the cloze deletion cards from the provided material.
+                            <div class="guide-description"></div>
+                            <div class="guide-content"><button class="guide-copy-btn" onclick="copyGuideContent(this)"><svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy</button>Extract all the cloze deletion cards from the provided material.
 
 Format strictly as:
 {{c1::word/phrase}} or {{c1::word/phrase::hint}}
-
 Examples:
 The capital of France is {{c1::Paris}}.
 {{c1::Photosynthesis}} is the process by which plants make food.
 The formula for water is {{c1::H2O::chemical formula}}.
 In {{c1::1969}}, humans first landed on the {{c2::moon}}.
-
 Note: Extract sentences with cloze deletions from the material.
 Use {{c1::text}} for basic deletion, {{c1::text::hint}} for hints.
 Make it appear as code for easy copying.
 Don't number the sentences.
 Don't add extra text.
+</div>
+</div>
+</div>
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label for="filename" class="input-label">📁 Filename</label>
+                            <input type="text" id="filename" class="input-field" value="MCQ" placeholder="Enter filename without extension">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="mcqText" id="inputLabel" class="input-label">📄 Multiple-Choice Questions</label>
+                            <textarea id="mcqText" class="input-field textarea-field" placeholder="Paste your content here..."></textarea>
+                        </div>
+                    </div>
+
+                    <div id="validationMessage" class="status-card" role="status" aria-live="polite">
+                        <span class="status-icon">✅</span>
+                        <div class="status-content">
+                            <div class="status-title">Ready to Generate</div>
+                            <div class="status-details">Your content has been validated successfully</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="generateButton" class="btn btn-primary">
+                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                            </svg>
+                            Generate CSV
+                        </button>
+                        <a id="downloadButton" href="#" role="button" class="btn btn-success" style="display:none;">
+                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Download CSV
+                        </a>
+                        <button id="clearButton" class="btn btn-secondary">
+                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+                            </svg>
+                            Clear All
+                        </button>
+                    </div>
+                    
+                    <div class="info-card" id="cardCount">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>📊</span>
+                                Statistics
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-number" id="cardCountNumber">0</span>
+                                    <div class="stat-label">Valid Cards</div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="input-section">
-                            <div class="input-group">
-                                <label for="filename" class="input-label">📁 Filename</label>
-                                <input type="text" id="filename" class="input-field" value="MCQ" placeholder="Enter filename without extension">
-                            </div>
-
-                            <div class="input-group">
-                                <label for="mcqText" id="inputLabel" class="input-label">📄 Multiple-Choice Questions</label>
-                                <textarea id="mcqText" class="input-field textarea-field" placeholder="Paste your content here..."></textarea>
-                            </div>
-                        </div>
-
-                        <div id="validationMessage" class="status-card" role="status" aria-live="polite">
-                            <span class="status-icon">✅</span>
-                            <div class="status-content">
-                                <div class="status-title">Ready to Generate</div>
-                                <div class="status-details">Your content has been validated successfully</div>
-                            </div>
-                        </div>
-
-                        <div class="action-buttons">
-                            <button id="generateButton" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                                </svg>
-                                Generate CSV
-                            </button>
-                            <a id="downloadButton" href="#" role="button" class="btn btn-success" style="display:none;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                                </svg>
-                                Download CSV
-                            </a>
-                            <button id="clearButton" class="btn btn-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
-                                </svg>
-                                Clear All
-                            </button>
-                        </div>
-                        
-                        <div class="info-card" id="cardCount">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <span>📊</span>
-                                    Statistics
-                                </h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="stats-grid">
-                                    <div class="stat-item">
-                                        <span class="stat-number" id="cardCountNumber">0</span>
-                                        <div class="stat-label">Valid Cards</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number" id="optionStats">-</span>
-                                        <div class="stat-label">Avg Options</div>
-                                    </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="optionStats">-</span>
+                                    <div class="stat-label">Avg Options</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="sidebar"></div>
             </div>
-        </main>
 
-        <footer class="footer">
-            <p>GPTAnki - Create flashcards effortlessly with AI • Built with ❤️ for learners everywhere
-            By Muhammad Saadoon </p>
-        </footer>
-    </div>
+            <div class="sidebar"></div>
+        </div>
+    </main>
 
-    <script>
-        function copyGuideContent(button) {
-            const guide = button.closest('.format-guide');
-            const guideContentElement = guide.querySelector('.guide-content');
-            const tempClone = guideContentElement.cloneNode(true);
-            const btnInClone = tempClone.querySelector('.guide-copy-btn');
-            if (btnInClone) btnInClone.remove();
-            const guideContent = tempClone.textContent.trim();
-            
-            navigator.clipboard.writeText(guideContent).then(() => {
-                const originalHTML = button.innerHTML;
-                button.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <polyline points="20 6 9 17 4 12"></polyline> </svg>
-                    Copied!
-                `;
-                button.classList.add('copied');
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-                const textArea = document.createElement('textarea');
-                textArea.value = guideContent;
-                textArea.style.position = 'fixed'; 
-                textArea.style.opacity = '0'; 
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                } catch (err) {
-                    console.error('Fallback copy failed: ', err);
-                    alert('Copy failed, please copy the text manually.');
-                } finally {
-                    document.body.removeChild(textArea);
-                }
-            });
+    <footer class="footer">
+        <p>GPTAnki - Create flashcards effortlessly with AI • Built with ❤️ for learners everywhere
+        By Muhammad Saadoon </p>
+    </footer>
+</div>
+
+<script>
+    function copyGuideContent(button) {
+        const guide = button.closest('.format-guide');
+        const guideContentElement = guide.querySelector('.guide-content');
+        const tempClone = guideContentElement.cloneNode(true);
+        const btnInClone = tempClone.querySelector('.guide-copy-btn');
+        if (btnInClone) btnInClone.remove();
+        const guideContent = tempClone.textContent.trim();
+        
+        navigator.clipboard.writeText(guideContent).then(() => {
+            const originalHTML = button.innerHTML;
+            button.innerHTML = `
+                <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> <polyline points="20 6 9 17 4 12"></polyline> </svg>
+                Copied!
+            `;
+            button.classList.add('copied');
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            const textArea = document.createElement('textarea');
+            textArea.value = guideContent;
+            textArea.style.position = 'fixed'; 
+            textArea.style.opacity = '0'; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+                alert('Copy failed, please copy the text manually.');
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        });
+    }
+
+    const modeRadios = document.querySelectorAll('input[name="mode"]');
+    const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
+    const mcqText = document.getElementById('mcqText');
+    const inputLabel = document.getElementById('inputLabel');
+    const filenameInput = document.getElementById('filename');
+    const validationMessage = document.getElementById('validationMessage');
+    const cardCountInfo = document.getElementById('cardCount');
+    const cardCountNumberEl = document.getElementById('cardCountNumber');
+    const optionStats = document.getElementById('optionStats');
+    const generateButton = document.getElementById('generateButton');
+    const downloadButton = document.getElementById('downloadButton'); 
+    const clearButton = document.getElementById('clearButton');
+
+    const allGuides = document.querySelectorAll('.format-guide');
+    const guideMap = {
+        generate: {
+            mcq: document.getElementById('generateMcqGuide'),
+            basic: document.getElementById('generateBasicGuide'),
+            clozeDeletion: document.getElementById('generateClozeGuide')
+        },
+        extract: {
+            mcq: document.getElementById('extractMcqGuide'),
+            basic: document.getElementById('extractBasicGuide'),
+            clozeDeletion: document.getElementById('extractClozeGuide')
+        }
+    };
+    
+    const difficultySection = document.querySelector('.difficulty-section');
+    const customCardNumberRadio = document.getElementById('cardNumberCustomRadio');
+    const customCardNumberInput = document.getElementById('customCardNumberInput');
+    const cardNumberOptionInputs = document.querySelectorAll('input[name="cardNumber"]');
+    const difficultyOptionCheckboxes = document.querySelectorAll('input[name="difficultyLevel"]');
+
+    /**
+     * Parses a single line of MCQ text, handling optional explanations.
+     * @param {string} line - The line to parse.
+     * @returns {object} An object with parsed data or an error.
+     */
+    function parseMcqLine(line) {
+        const parts = line.split('|');
+        if (parts.length < 5) { // Minimum valid format: Question|OptA|OptB|OptC|CorrectAnswer
+            return { isValid: false, error: 'Incorrect number of fields. Expected at least 5.' };
         }
 
-        const modeRadios = document.querySelectorAll('input[name="mode"]');
-        const cardTypeRadios = document.querySelectorAll('input[name="cardType"]');
-        const mcqText = document.getElementById('mcqText');
-        const inputLabel = document.getElementById('inputLabel');
-        const filenameInput = document.getElementById('filename');
-        const validationMessage = document.getElementById('validationMessage');
-        const cardCountInfo = document.getElementById('cardCount'); // Renamed for clarity
-        const cardCountNumberEl = document.getElementById('cardCountNumber');
-        const optionStats = document.getElementById('optionStats');
-        const generateButton = document.getElementById('generateButton');
-        const downloadButton = document.getElementById('downloadButton'); 
-        const clearButton = document.getElementById('clearButton');
+        const question = parts[0].trim();
+        if (question === '') {
+            return { isValid: false, error: 'Question field cannot be empty.' };
+        }
 
-        const allGuides = document.querySelectorAll('.format-guide');
-        const guideMap = {
-            generate: {
-                mcq: document.getElementById('generateMcqGuide'),
-                basic: document.getElementById('generateBasicGuide'),
-                clozeDeletion: document.getElementById('generateClozeGuide')
-            },
-            extract: {
-                mcq: document.getElementById('extractMcqGuide'),
-                basic: document.getElementById('extractBasicGuide'),
-                clozeDeletion: document.getElementById('extractClozeGuide')
-            }
+        let correctAnswer = '';
+        let explanation = '';
+        let correctAnswerIndex = -1;
+        
+        const lastPart = parts[parts.length - 1].trim();
+        const secondLastPart = parts.length > 1 ? parts[parts.length - 2].trim().toUpperCase() : '';
+        const validAnswerRegex = /^[A-F]$/;
+
+        if (validAnswerRegex.test(secondLastPart)) {
+            // Case: Explanation is present. The second to last part is the answer.
+            correctAnswer = secondLastPart;
+            explanation = lastPart;
+            correctAnswerIndex = parts.length - 2;
+        } else if (validAnswerRegex.test(lastPart.toUpperCase())) {
+            // Case: No explanation. The last part is the answer.
+            correctAnswer = lastPart.toUpperCase();
+            explanation = '';
+            correctAnswerIndex = parts.length - 1;
+        } else {
+            return { isValid: false, error: 'Could not find a valid correct answer letter (A-F) in the last one or two fields.' };
+        }
+
+        const options = parts.slice(1, correctAnswerIndex).map(opt => opt.trim());
+        const nonEmptyOptions = options.filter(opt => opt !== '');
+
+        if (nonEmptyOptions.length < 3 || nonEmptyOptions.length > 6) {
+            return { isValid: false, error: `Found ${nonEmptyOptions.length} non-empty options (expected 3-6).` };
+        }
+
+        const answerLetterIndex = 'ABCDEF'.indexOf(correctAnswer);
+        if (answerLetterIndex < 0 || answerLetterIndex >= options.length || options[answerLetterIndex] === '') {
+            return { isValid: false, error: `Correct answer letter "${correctAnswer}" is invalid or points to an empty option.` };
+        }
+
+        return {
+            isValid: true,
+            question: question,
+            options: options, // Includes empty strings for alignment
+            correctAnswer: correctAnswer,
+            explanation: explanation,
+            nonEmptyOptionsCount: nonEmptyOptions.length
         };
-        
-        const difficultySection = document.querySelector('.difficulty-section');
-        const customCardNumberRadio = document.getElementById('cardNumberCustomRadio');
-        const customCardNumberInput = document.getElementById('customCardNumberInput');
-        const cardNumberOptionInputs = document.querySelectorAll('input[name="cardNumber"]'); // Radios + custom radio
-        const difficultyOptionCheckboxes = document.querySelectorAll('input[name="difficultyLevel"]');
+    }
 
 
-        function updateGuideDisplay() {
-            const currentMode = document.querySelector('input[name="mode"]:checked').value;
-            const currentCardType = document.querySelector('input[name="cardType"]:checked').value;
+    function updateGuideDisplay() {
+        const currentMode = document.querySelector('input[name="mode"]:checked').value;
+        const currentCardType = document.querySelector('input[name="cardType"]:checked').value;
 
-            allGuides.forEach(guide => guide.classList.remove('show'));
+        allGuides.forEach(guide => guide.classList.remove('show'));
 
-            if (guideMap[currentMode] && guideMap[currentMode][currentCardType]) {
-                guideMap[currentMode][currentCardType].classList.add('show');
-            }
-
-            let labelText = '';
-            if (currentMode === 'generate') {
-                switch(currentCardType) {
-                    case 'mcq': labelText = '📄 Content for Multiple-Choice Question Generation'; break;
-                    case 'basic': labelText = '📄 Content for Basic Card Generation'; break;
-                    case 'clozeDeletion': labelText = '📄 Content for Cloze Deletion Card Generation'; break;
-                }
-            } else { 
-                switch(currentCardType) {
-                    case 'mcq': labelText = '📄 Multiple-Choice Questions (to Extract)'; break;
-                    case 'basic': labelText = '📄 Basic Cards (to Extract)'; break;
-                    case 'clozeDeletion': labelText = '📄 Cloze Deletion Cards (to Extract)'; break;
-                }
-            }
-            inputLabel.textContent = labelText;
-            filenameInput.value = currentCardType === 'mcq' ? 'MCQ' : 
-                                currentCardType === 'basic' ? 'Basic' : 'ClozeDeletion';
-            
-            updateDynamicGuideContent();
+        if (guideMap[currentMode] && guideMap[currentMode][currentCardType]) {
+            guideMap[currentMode][currentCardType].classList.add('show');
         }
+
+        let labelText = '';
+        if (currentMode === 'generate') {
+            switch(currentCardType) {
+                case 'mcq': labelText = '📄 Content for Multiple-Choice Question Generation'; break;
+                case 'basic': labelText = '📄 Content for Basic Card Generation'; break;
+                case 'clozeDeletion': labelText = '📄 Content for Cloze Deletion Card Generation'; break;
+            }
+        } else { 
+            switch(currentCardType) {
+                case 'mcq': labelText = '📄 Multiple-Choice Questions (to Extract)'; break;
+                case 'basic': labelText = '📄 Basic Cards (to Extract)'; break;
+                case 'clozeDeletion': labelText = '📄 Cloze Deletion Cards (to Extract)'; break;
+            }
+        }
+        inputLabel.textContent = labelText;
+        filenameInput.value = currentCardType === 'mcq' ? 'MCQ' : 
+                            currentCardType === 'basic' ? 'Basic' : 'ClozeDeletion';
         
-        function toggleDifficultySectionVisibility() {
-            const currentMode = document.querySelector('input[name="mode"]:checked').value;
-            if (currentMode === 'generate') {
-                difficultySection.style.display = ''; 
+        updateDynamicGuideContent();
+    }
+    
+    function toggleDifficultySectionVisibility() {
+        const currentMode = document.querySelector('input[name="mode"]:checked').value;
+        difficultySection.style.display = (currentMode === 'generate') ? '' : 'none';
+    }
+
+    function updateDynamicGuideContent() {
+        const currentMode = document.querySelector('input[name="mode"]:checked').value;
+        const currentCardType = document.querySelector('input[name="cardType"]:checked').value;
+        const activeGuide = guideMap[currentMode]?.[currentCardType];
+
+        if (!activeGuide) return;
+
+        let cardNumberToDisplay = '50'; 
+        if (customCardNumberRadio.checked) {
+            cardNumberToDisplay = customCardNumberInput.value.trim() || 'a custom number of';
+        } else {
+            const checkedNumRadio = document.querySelector('input[name="cardNumber"]:checked');
+            if (checkedNumRadio) cardNumberToDisplay = checkedNumRadio.value;
+        }
+
+        const countSpan = activeGuide.querySelector('.guide-dynamic-card-count');
+        if (countSpan && currentMode === 'generate') {
+             countSpan.textContent = cardNumberToDisplay;
+        }
+
+        const bloomInfoSpan = activeGuide.querySelector('.guide-dynamic-bloom-info');
+        if (bloomInfoSpan) {
+            if (currentMode === 'generate' && currentCardType === 'mcq') {
+                const selectedDifficultyLevels = Array.from(difficultyOptionCheckboxes)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value)
+                    .sort((a, b) => parseInt(a) - parseInt(b));
+
+                let bloomTextPart = "";
+                if (selectedDifficultyLevels.length > 0) {
+                    const levelsString = selectedDifficultyLevels.join(', ');
+                    bloomTextPart = ` following Bloom's taxonomy level${selectedDifficultyLevels.length > 1 ? 's' : ''} ${levelsString}`;
+                }
+                bloomInfoSpan.textContent = bloomTextPart;
             } else {
-                difficultySection.style.display = 'none';
+                 bloomInfoSpan.textContent = "";
             }
         }
+    }
 
-        function updateDynamicGuideContent() {
-            const currentMode = document.querySelector('input[name="mode"]:checked').value;
-            const currentCardType = document.querySelector('input[name="cardType"]:checked').value;
-            const activeGuide = guideMap[currentMode]?.[currentCardType];
-
-            if (!activeGuide) return;
-
-            let cardNumberToDisplay = '50'; 
-            if (customCardNumberRadio.checked) {
-                cardNumberToDisplay = customCardNumberInput.value.trim() || 'a custom number of';
-            } else {
-                const checkedNumRadio = document.querySelector('input[name="cardNumber"]:checked');
-                if (checkedNumRadio) cardNumberToDisplay = checkedNumRadio.value;
-            }
-
-            const countSpan = activeGuide.querySelector('.guide-dynamic-card-count');
-            if (countSpan) {
-                if (currentMode === 'generate' || (currentMode === 'extract' && currentCardType === 'mcq')) {
-                    countSpan.textContent = cardNumberToDisplay;
-                } else {
-                    // For guides where count isn't dynamic (e.g. extract basic/cloze), ensure span isn't there or is static.
-                    // Current HTML has static text or no span for those.
-                }
-            }
-
-            const bloomInfoSpan = activeGuide.querySelector('.guide-dynamic-bloom-info');
-            if (bloomInfoSpan) { // This span should only be in generateMcqGuide
-                if (currentMode === 'generate' && currentCardType === 'mcq') {
-                    const selectedDifficultyLevels = [];
-                    difficultyOptionCheckboxes.forEach(checkbox => {
-                        if (checkbox.checked) {
-                            selectedDifficultyLevels.push(checkbox.value);
-                        }
-                    });
-
-                    let bloomTextPart = "following Bloom's taxonomy ";
-                    if (selectedDifficultyLevels.length > 0) {
-                        selectedDifficultyLevels.sort((a, b) => parseInt(a) - parseInt(b));
-                        const levelsString = selectedDifficultyLevels.join(', ');
-                        bloomTextPart += `level${selectedDifficultyLevels.length > 1 ? 's' : ''} ${levelsString}`;
-                    } else {
-                        bloomTextPart += "levels (1-6 suggested; select specific levels if desired)";
-                    }
-                    bloomInfoSpan.textContent = bloomTextPart + ".";
-                } else {
-                    // If the span exists but it's not generate MCQ, reset to a generic or its original static state.
-                    // Since this span is intended only for generate MCQ, this case might not be hit if HTML is structured correctly.
-                    // For safety, could set a default:
-                     bloomInfoSpan.textContent = " following Bloom's taxonomy (select levels if generating MCQs).";
-                }
-            }
-        }
-
-        modeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                updateGuideDisplay(); 
-                resetUIState();
-                toggleDifficultySectionVisibility(); 
-                // updateDynamicGuideContent(); // Now called by updateGuideDisplay
-            });
+    modeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateGuideDisplay(); 
+            resetUIState();
+            toggleDifficultySectionVisibility(); 
         });
+    });
 
-        cardTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                updateGuideDisplay(); 
-                resetUIState();
-                // updateDynamicGuideContent(); // Now called by updateGuideDisplay
-            });
+    cardTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateGuideDisplay(); 
+            resetUIState();
         });
-        
-        cardNumberOptionInputs.forEach(input => input.addEventListener('change', updateDynamicGuideContent));
-        customCardNumberInput.addEventListener('input', updateDynamicGuideContent);
-        difficultyOptionCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateDynamicGuideContent));
+    });
+    
+    cardNumberOptionInputs.forEach(input => input.addEventListener('change', updateDynamicGuideContent));
+    customCardNumberInput.addEventListener('input', updateDynamicGuideContent);
+    difficultyOptionCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateDynamicGuideContent));
 
-        function resetUIState() {
-            validationMessage.classList.remove('show', 'error', 'success');
-            validationMessage.innerHTML = ''; 
-            downloadButton.style.display = 'none';
-            downloadButton.removeAttribute('href'); 
+    function resetUIState() {
+        validationMessage.classList.remove('show', 'error', 'success');
+        validationMessage.innerHTML = ''; 
+        downloadButton.style.display = 'none';
+        downloadButton.removeAttribute('href'); 
+        cardCountInfo.classList.remove('show');
+        cardCountNumberEl.textContent = '0';
+        optionStats.textContent = '-';
+    }
+
+    function validateInput(text, cardType) {
+        const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+        let isValid = true;
+        let errorMessage = '';
+        let validLines = 0;
+        let totalOptions = 0;
+        let mcqCount = 0;
+        const invalidLinesList = []; 
+
+        if (lines.length === 0) {
+            validationMessage.innerHTML = `<span class="status-icon">⚠️</span><div class="status-content"><div class="status-title">Input Empty</div><div class="status-details">Please paste your content into the textarea.</div></div>`;
+            validationMessage.classList.remove('success'); 
+            validationMessage.classList.add('show', 'error'); 
             cardCountInfo.classList.remove('show');
-            cardCountNumberEl.textContent = '0';
-            optionStats.textContent = '-';
-        }
-
-        function validateInput(text, cardType) {
-            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
-            let isValid = true;
-            let errorMessage = '';
-            let validLines = 0;
-            let totalOptions = 0;
-            let mcqCount = 0;
-            const invalidLinesList = []; 
-
-            if (lines.length === 0) {
-                validationMessage.innerHTML = `<span class="status-icon">⚠️</span><div class="status-content"><div class="status-title">Input Empty</div><div class="status-details">Please paste your content into the textarea.</div></div>`;
-                validationMessage.classList.remove('success'); 
-                validationMessage.classList.add('show', 'error'); 
-                cardCountInfo.classList.remove('show');
-                downloadButton.style.display = 'none';
-                return false;
-            }
-
-            switch(cardType) {
-                case 'mcq':
-                    lines.forEach((line, index) => {
-                        const parts = line.split('|');
-                        const question = parts[0].trim();
-                        if (parts.length < 5 || parts.length > 8) { 
-                             invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - Incorrect number of fields. Expected 5-8.`);
-                             isValid = false; return; 
-                        }
-                        const correctAnswerLetter = parts[parts.length - 1].trim().toUpperCase();
-                        let numOptions = 0;
-                        for (let i = 1; i < parts.length - 1; i++) { if (parts[i].trim() !== '') numOptions++; }
-                        const optionFieldsCount = parts.length - 2;
-                        const isFormatValid = question !== '' && numOptions >= 3 && numOptions <= 6 && optionFieldsCount >= numOptions;
-                        const validAnswerLetters = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, optionFieldsCount); 
-                        const answerIndex = validAnswerLetters.indexOf(correctAnswerLetter);
-                        const isAnswerValid = answerIndex !== -1 && (1 + answerIndex < parts.length -1) && parts[1 + answerIndex].trim() !== '';
-
-                        if (isFormatValid && isAnswerValid) {
-                            validLines++; totalOptions += numOptions; mcqCount++;
-                        } else {
-                            let problem = '';
-                            if (question === '') problem += 'Missing question. ';
-                            if (numOptions < 3 || numOptions > 6) problem += `Found ${numOptions} options (exp. 3-6). `;
-                            if (!isAnswerValid && numOptions > 0) problem += `Invalid/empty answer "${correctAnswerLetter}". `;
-                            invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - ${problem.trim()}`);
-                            isValid = false;
-                        }
-                    });
-                    if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid MCQ Format</strong><br>• Format: Question|OptA|...|CorrectLetter (3-6 options).<br>• Correct letter must match a non-empty option.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
-                    break;
-                case 'basic':
-                     lines.forEach((line, index) => {
-                        const parts = line.split('|');
-                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') validLines++;
-                        else { invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`); isValid = false; }
-                    });
-                    if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid Basic Format</strong><br>• Format: Question|Answer.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
-                    break;
-                case 'clozeDeletion':
-                    const clozeRegex = /\{\{c\d+::.+?\}\}/; 
-                    lines.forEach((line, index) => {
-                        if (clozeRegex.test(line)) validLines++;
-                        else { invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`); isValid = false; }
-                    });
-                    if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid Cloze Format</strong><br>• Must contain {{c1::text}}.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
-                    break;
-            }
-
-            if (!isValid || (validLines === 0 && lines.length > 0) ) { 
-                validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">Validation Error</div><div class="status-details">${errorMessage || 'No valid cards. Check format.'}</div></div>`;
-                validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
-                cardCountInfo.classList.remove('show'); downloadButton.style.display = 'none';
-                return false;
-            }
-            if (validLines > 0) { 
-                let successDetails = `Total Valid Cards: ${validLines}`;
-                if (cardType === 'mcq' && mcqCount > 0) {
-                    const avgOptions = (totalOptions / mcqCount).toFixed(1);
-                    optionStats.textContent = avgOptions;
-                    successDetails += `<br>Avg non-empty options/MCQ: ${avgOptions}`;
-                } else optionStats.textContent = '-';
-                validationMessage.innerHTML = `<span class="status-icon">✅</span><div class="status-content"><div class="status-title">Validated!</div><div class="status-details">${successDetails}</div></div>`;
-                validationMessage.classList.remove('error'); validationMessage.classList.add('show', 'success');
-                cardCountInfo.classList.add('show'); cardCountNumberEl.textContent = validLines;
-            } else if (lines.length > 0 && validLines === 0) { 
-                validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">Validation Error</div><div class="status-details">${errorMessage || 'No valid cards. Check format.'}</div></div>`;
-                validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
-                cardCountInfo.classList.remove('show'); downloadButton.style.display = 'none';
-                return false;
-            }
-            return true;
-        }
-
-        function generateCSV() {
-            const text = mcqText.value;
-            const cardType = document.querySelector('input[name="cardType"]:checked').value;
-            let filename = filenameInput.value.trim() || 'AnkiCards';
-            
-            generateButton.disabled = true;
-            generateButton.innerHTML = `<svg class="spinner" style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...`;
             downloadButton.style.display = 'none';
-            validationMessage.classList.remove('show', 'error', 'success');
+            return false;
+        }
 
-            if (!validateInput(text, cardType)) {
-                generateButton.disabled = false;
-                generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
-                return;
-            }
-
-            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
-            let csvContent = '';
-            let validProcessedLines = 0;
-
-            lines.forEach(line => {
-                if (!line.trim()) return;
-                const parts = line.split('|');
-                const sanitizedParts = parts.map(part => {
-                    const trimmedPart = part.trim();
-                    const needsQuotes = trimmedPart.includes(',') || trimmedPart.includes('\n') || trimmedPart.includes('|') || trimmedPart.includes('"');
-                    let escapedPart = trimmedPart.replace(/"/g, '""');
-                    return needsQuotes ? `"${escapedPart}"` : escapedPart;
+        switch(cardType) {
+            case 'mcq':
+                lines.forEach((line, index) => {
+                    const parsed = parseMcqLine(line);
+                    if (parsed.isValid) {
+                        validLines++;
+                        totalOptions += parsed.nonEmptyOptionsCount;
+                        mcqCount++;
+                    } else {
+                        isValid = false;
+                        invalidLinesList.push(`Line ${index + 1}: "${line.substring(0, 50)}..." - ${parsed.error}`);
+                    }
                 });
+                if (invalidLinesList.length > 0) {
+                    errorMessage = `<strong>⚠️ Invalid MCQ Format</strong><br>• Format: Question|OptA|...|CorrectLetter|OptionalExplanation<br>• Must have 3-6 non-empty options, and a valid answer letter.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0, 3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
+                }
+                break;
+            case 'basic':
+                 lines.forEach((line, index) => {
+                    const parts = line.split('|');
+                    if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
+                        validLines++;
+                    } else { 
+                        invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`); 
+                        isValid = false; 
+                    }
+                });
+                if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid Basic Format</strong><br>• Format: Question|Answer.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
+                break;
+            case 'clozeDeletion':
+                const clozeRegex = /\{\{c\d+::.+?\}\}/; 
+                lines.forEach((line, index) => {
+                    if (clozeRegex.test(line)) {
+                        validLines++;
+                    } else { 
+                        invalidLinesList.push(`Line ${index + 1}: "${line.substring(0,50)}..."`); 
+                        isValid = false; 
+                    }
+                });
+                if (invalidLinesList.length > 0) errorMessage = `<strong>⚠️ Invalid Cloze Format</strong><br>• Must contain {{c1::text}}.<br><strong>Errors:</strong><br>${invalidLinesList.slice(0,3).join('<br>')}${invalidLinesList.length > 3 ? '...' : ''}`;
+                break;
+        }
 
-                let row = '';
-                let isValidRowForProcessing = false; // Use a different flag for CSV generation phase
-                switch(cardType) {
-                    case 'mcq':
-                        // Re-validate just enough for CSV structuring, primary validation done in validateInput
-                        if (parts.length >= 5 && parts.length <= 8 && parts[0].trim() !== '') {
-                            row += sanitizedParts[0]; 
-                            for (let i = 1; i <= 6; i++) { 
-                                row += `,${sanitizedParts[i] !== undefined ? sanitizedParts[i] : '""'}`;
-                            }
-                            row += `,"",""`; 
-                            row += `,${sanitizedParts[parts.length - 1]}`; 
-                            isValidRowForProcessing = true;
-                        }
-                        break;
-                    case 'basic':
-                        if (parts.length === 2 && parts[0].trim() !== '' && parts[1].trim() !== '') {
-                            row += `${sanitizedParts[0]},${sanitizedParts[1]}`;
-                            isValidRowForProcessing = true;
-                        }
-                        break;
-                    case 'clozeDeletion':
-                        const clozeRegex_csv = /\{\{c\d+::.+?\}\}/; 
-                        if (parts.length === 1 && clozeRegex_csv.test(parts[0])) { 
-                             row += sanitizedParts[0]; 
-                             isValidRowForProcessing = true;
-                        }
-                        break;
-                }
-                if(isValidRowForProcessing){
-                    csvContent += row + '\n';
-                    validProcessedLines++;
-                }
-            });
-            
-            if (validProcessedLines === 0) { // Should be caught by validateInput, but as a safeguard
-                validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">No Valid Data to Generate CSV</div><div class="status-details">Please check input and format.</div></div>`;
-                validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
-                generateButton.disabled = false;
-                generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
-                return;
+        if (!isValid || (validLines === 0 && lines.length > 0) ) { 
+            validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">Validation Error</div><div class="status-details">${errorMessage || 'No valid cards found. Please check the format.'}</div></div>`;
+            validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
+            cardCountInfo.classList.remove('show'); downloadButton.style.display = 'none';
+            return false;
+        }
+
+        if (validLines > 0) { 
+            let successDetails = `Total Valid Cards: ${validLines}`;
+            if (cardType === 'mcq' && mcqCount > 0) {
+                const avgOptions = (totalOptions / mcqCount).toFixed(1);
+                optionStats.textContent = avgOptions;
+            } else {
+                optionStats.textContent = '-';
             }
+            validationMessage.innerHTML = `<span class="status-icon">✅</span><div class="status-content"><div class="status-title">Validated!</div><div class="status-details">${successDetails}</div></div>`;
+            validationMessage.classList.remove('error'); validationMessage.classList.add('show', 'success');
+            cardCountInfo.classList.add('show'); cardCountNumberEl.textContent = validLines;
+        }
+        return true;
+    }
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            
-            downloadButton.href = url; 
-            downloadButton.setAttribute('download', `${filename}.csv`);
-            downloadButton.style.display = 'inline-flex';
-            downloadButton.classList.add('animate__animated', 'animate__fadeIn');
+    function generateCSV() {
+        const text = mcqText.value;
+        const cardType = document.querySelector('input[name="cardType"]:checked').value;
+        let filename = filenameInput.value.trim() || 'AnkiCards';
+        
+        generateButton.disabled = true;
+        generateButton.innerHTML = `<svg class="spinner" style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...`;
+        downloadButton.style.display = 'none';
+        validationMessage.classList.remove('show', 'error', 'success');
 
+        if (!validateInput(text, cardType)) {
             generateButton.disabled = false;
             generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
-
-            downloadButton.onclick = function() { 
-                 setTimeout(() => { URL.revokeObjectURL(url); }, 100);
-                downloadButton.classList.add('animate__animated', 'animate__pulse');
-                setTimeout(() => { downloadButton.classList.remove('animate__animated', 'animate__pulse'); }, 1000);
-            };
+            return;
         }
 
-        let validationTimeout;
-        mcqText.addEventListener('input', function() {
-            clearTimeout(validationTimeout);
-            downloadButton.style.display = 'none'; 
-            validationTimeout = setTimeout(() => {
-                if (this.value.trim().length > 0) { 
-                    const cardType = document.querySelector('input[name="cardType"]:checked').value;
-                    validateInput(this.value, cardType);
-                } else {
-                     resetUIState(); 
-                     validationMessage.classList.remove('show', 'error', 'success');
-                     cardCountInfo.classList.remove('show');
-                }
-            }, 500); 
+        const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+        let csvContent = '';
+        let validProcessedLines = 0;
+
+        const sanitize = (text) => {
+            const part = String(text || '').trim();
+            const needsQuotes = part.includes(',') || part.includes('\n') || part.includes('"');
+            const escapedPart = part.replace(/"/g, '""');
+            return needsQuotes ? `"${escapedPart}"` : part;
+        };
+
+        lines.forEach(line => {
+            let row = '';
+            let isValidRowForProcessing = false;
+            
+            switch(cardType) {
+                case 'mcq':
+                    const parsed = parseMcqLine(line);
+                    if (parsed.isValid) {
+                        row += sanitize(parsed.question);      // Column 1: Question
+                        for (let i = 0; i < 6; i++) {           // Columns 2-7: Options A-F
+                            row += `,${sanitize(parsed.options[i])}`;
+                        }
+                        row += `,"",""`;                         // Columns 8-9: Empty (for Anki field mapping)
+                        row += `,${sanitize(parsed.correctAnswer)}`;// Column 10: Correct Answer Letter
+                        row += `,${sanitize(parsed.explanation)}`; // Column 11: Explanation
+                        isValidRowForProcessing = true;
+                    }
+                    break;
+                case 'basic':
+                    const basicParts = line.split('|');
+                    if (basicParts.length === 2 && basicParts[0].trim() !== '' && basicParts[1].trim() !== '') {
+                        row = `${sanitize(basicParts[0])},${sanitize(basicParts[1])}`;
+                        isValidRowForProcessing = true;
+                    }
+                    break;
+                case 'clozeDeletion':
+                    const clozeRegex = /\{\{c\d+::.+?\}\}/;
+                    if (clozeRegex.test(line)) {
+                        row = sanitize(line);
+                        isValidRowForProcessing = true;
+                    }
+                    break;
+            }
+            
+            if(isValidRowForProcessing){
+                csvContent += row + '\n';
+                validProcessedLines++;
+            }
         });
+        
+        if (validProcessedLines === 0) {
+            validationMessage.innerHTML = `<span class="status-icon">❌</span><div class="status-content"><div class="status-title">No Valid Data to Generate CSV</div><div class="status-details">Please check input and format.</div></div>`;
+            validationMessage.classList.remove('success'); validationMessage.classList.add('show', 'error');
+            generateButton.disabled = false;
+            generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
+            return;
+        }
 
-        generateButton.addEventListener('click', generateCSV);
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // Added BOM for Excel
+        const url = URL.createObjectURL(blob);
+        
+        downloadButton.href = url; 
+        downloadButton.setAttribute('download', `${filename}.csv`);
+        downloadButton.style.display = 'inline-flex';
+        downloadButton.classList.add('animate__animated', 'animate__fadeIn');
 
-        clearButton.addEventListener('click', function() {
-            mcqText.value = '';
-            resetUIState();
-            // updateGuideDisplay(); // Called below after resetting options
-            validationMessage.classList.remove('show', 'error', 'success');
-            cardCountInfo.classList.remove('show');
-            
-            document.getElementById('cardNumber50').checked = true; // Reset card number
-            cardNumberOptionInputs.forEach(radio => { // Ensure other card number radios are unchecked if '50' is default
-                 if(radio.id !== 'cardNumber50') radio.checked = false;
-            });
-            customCardNumberInput.style.display = 'none';
-            customCardNumberInput.value = '';
-            
-            difficultyOptionCheckboxes.forEach(checkbox => checkbox.checked = false); // Uncheck all difficulty levels
-            
-            updateGuideDisplay(); // This will also call updateDynamicGuideContent
-            toggleDifficultySectionVisibility(); // Ensure correct visibility after mode reset (if any)
-        });
+        generateButton.disabled = false;
+        generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generate CSV`;
 
-        // JavaScript for custom card number input visibility
-        cardNumberOptionInputs.forEach(radio => {
-            radio.addEventListener('change', () => {
-                if (customCardNumberRadio.checked) {
-                    customCardNumberInput.style.display = 'block';
-                    if(document.activeElement !== customCardNumberInput) customCardNumberInput.focus();
-                } else {
-                    customCardNumberInput.style.display = 'none';
-                }
-            });
-        });
+        downloadButton.onclick = function() { 
+             setTimeout(() => { URL.revokeObjectURL(url); }, 100);
+            downloadButton.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => { downloadButton.classList.remove('animate__animated', 'animate__pulse'); }, 1000);
+        };
+    }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateGuideDisplay(); 
-            toggleDifficultySectionVisibility(); 
-            
-            if (customCardNumberRadio && customCardNumberRadio.checked) {
+    let validationTimeout;
+    mcqText.addEventListener('input', function() {
+        clearTimeout(validationTimeout);
+        downloadButton.style.display = 'none'; 
+        validationTimeout = setTimeout(() => {
+            if (this.value.trim().length > 0) { 
+                const cardType = document.querySelector('input[name="cardType"]:checked').value;
+                validateInput(this.value, cardType);
+            } else {
+                 resetUIState(); 
+                 validationMessage.classList.remove('show', 'error', 'success');
+                 cardCountInfo.classList.remove('show');
+            }
+        }, 500); 
+    });
+
+    generateButton.addEventListener('click', generateCSV);
+
+    clearButton.addEventListener('click', function() {
+        mcqText.value = '';
+        filenameInput.value = document.querySelector('input[name="cardType"]:checked').value === 'mcq' ? 'MCQ' : 
+                              document.querySelector('input[name="cardType"]:checked').value === 'basic' ? 'Basic' : 'ClozeDeletion';
+        resetUIState();
+        validationMessage.classList.remove('show', 'error', 'success');
+        cardCountInfo.classList.remove('show');
+        
+        document.getElementById('cardNumber50').checked = true;
+        customCardNumberInput.style.display = 'none';
+        customCardNumberInput.value = '';
+        
+        difficultyOptionCheckboxes.forEach(checkbox => checkbox.checked = false);
+        
+        updateGuideDisplay();
+        toggleDifficultySectionVisibility();
+    });
+
+    cardNumberOptionInputs.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (customCardNumberRadio.checked) {
                 customCardNumberInput.style.display = 'block';
-            } else if (customCardNumberInput) {
+                if(document.activeElement !== customCardNumberInput) customCardNumberInput.focus();
+            } else {
                 customCardNumberInput.style.display = 'none';
             }
-            // No custom difficulty input to manage visibility for anymore.
-            // updateDynamicGuideContent(); // Called by updateGuideDisplay
         });
-    </script>
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateGuideDisplay(); 
+        toggleDifficultySectionVisibility(); 
+        
+        if (customCardNumberRadio.checked) {
+            customCardNumberInput.style.display = 'block';
+        } else {
+            customCardNumberInput.style.display = 'none';
+        }
+    });
+</script>
+
 </body>
 </html>
